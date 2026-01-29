@@ -20,7 +20,8 @@ const isActive = (path: string) => {
 </script>
 
 <template>
-  <header class="bg-white/85 backdrop-blur-xl border-b border-black/5 sticky top-0 z-50 shadow-sm">
+  <!-- 更轻的方案 -->
+  <header class="bg-white/85 backdrop-blur-xl border-b border-b-black/[0.03] sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
       <router-link to="/" class="flex items-center gap-3">
         <div class="size-9 bg-slate-900 rounded-md flex items-center justify-center text-white text-lg font-bold shadow-md">

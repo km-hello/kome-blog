@@ -20,7 +20,7 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-  <article class="bg-white rounded-xl border border-black/5 shadow-sm p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 group cursor-pointer hover:border-black/10 transition-colors">
+  <article class="bento-card p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 group cursor-pointer">
     <!-- Date Column -->
     <div class="flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start w-full md:w-20 shrink-0 text-gray-400 border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-6">
       <div class="text-center md:text-left">

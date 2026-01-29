@@ -12,7 +12,7 @@ const defaultAvatar = 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'
 </script>
 
 <template>
-  <div class="bg-white rounded-xl border border-black/5 shadow-sm p-6">
+  <div class="bento-card p-6">
     <!-- Header -->
     <div class="flex items-center gap-4 mb-6">
       <div class="size-14 rounded-full p-1 bg-white border border-gray-100 shadow-sm overflow-hidden shrink-0">

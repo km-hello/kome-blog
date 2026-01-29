@@ -43,7 +43,7 @@ onMounted(async () => {
               :href="link.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="bg-white rounded-xl border border-black/5 shadow-sm p-4 flex items-center gap-4 group cursor-pointer hover:border-black/10 transition-colors"
+              class="bento-card p-4 flex items-center gap-4 group cursor-pointer"
           >
             <div class="size-12 rounded-full bg-slate-100 p-0.5 border border-slate-100 shrink-0 overflow-hidden">
               <img
@@ -72,7 +72,7 @@ onMounted(async () => {
           <SearchBox placeholder="Search links..." />
 
           <!-- Exchange Card -->
-          <div class="bg-white rounded-xl border border-black/5 shadow-sm px-5 py-6">
+          <div class="bento-card px-5 py-6">
             <div class="flex justify-between items-center mb-4">
               <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Exchange</h4>
             </div>

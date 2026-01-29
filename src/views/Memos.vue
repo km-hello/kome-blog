@@ -48,7 +48,7 @@ onMounted(async () => {
           <article
               v-for="memo in memos"
               :key="memo.id"
-              class="bg-white rounded-xl border border-black/5 shadow-sm p-6 flex gap-5"
+              class="bento-card p-6 flex gap-5"
           >
             <!-- Avatar -->
             <div class="shrink-0 pt-1">
