@@ -29,7 +29,7 @@ const isActive = (path: string) => {
         <h1 class="font-bold text-slate-900 text-base">Kome Blog</h1>
       </router-link>
 
-      <nav class="hidden md:flex gap-1 text-sm font-medium text-slate-500">
+      <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-500">
         <router-link
             v-for="item in navItems"
             :key="item.path"
