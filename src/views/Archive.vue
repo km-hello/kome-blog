@@ -89,7 +89,7 @@ onUnmounted(() => {
             v-for="yearGroup in archives"
             :key="yearGroup.year"
             :id="`year-${yearGroup.year}`"
-            class="bg-white rounded-xl border border-black/5 shadow-sm scroll-mt-32"
+            class="bento-card scroll-mt-32"
         >
           <!-- Year Header -->
           <div class="px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
@@ -158,7 +158,7 @@ onUnmounted(() => {
           <SearchBox placeholder="Filter archives..." />
 
           <!-- Timeline Nav -->
-          <div class="bg-white rounded-xl border border-black/5 shadow-sm px-5 py-5">
+          <div class="bento-card px-5 py-5">
             <div class="flex justify-between items-center mb-4">
               <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Timeline</h4>
             </div>

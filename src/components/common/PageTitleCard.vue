@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="bg-white rounded-xl border border-black/5 shadow-sm p-8 flex items-center justify-between">
+  <div class="bento-card p-8 flex items-center justify-between">
     <div>
       <h1 class="text-3xl font-bold text-slate-900">{{ title }}</h1>
       <p class="text-sm text-slate-500 mt-2">{{ subtitle }}</p>

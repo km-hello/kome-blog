@@ -63,7 +63,7 @@ onMounted(async () => {
       <main class="lg:col-span-8 flex flex-col gap-6">
 
         <!-- Hero Card -->
-        <div class="bg-white rounded-xl border border-black/5 shadow-sm p-8 md:p-10">
+        <div class="bento-card p-8 md:p-10">
           <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
             <div class="shrink-0">
               <div class="size-32 md:size-40 rounded-2xl p-1.5 bg-white border border-gray-100 shadow-lg overflow-hidden">
@@ -102,7 +102,7 @@ onMounted(async () => {
         </div>
 
         <!-- About Me -->
-        <div class="bg-white rounded-xl border border-black/5 shadow-sm p-8">
+        <div class="bento-card p-8">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">About Me</h2>
 
           <div class="prose prose-slate max-w-none">
@@ -122,7 +122,7 @@ onMounted(async () => {
         </div>
 
         <!-- Skills -->
-        <div class="bg-white rounded-xl border border-black/5 shadow-sm p-8">
+        <div class="bento-card p-8">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Skills & Technologies</h2>
 
           <div class="flex flex-wrap gap-2">
@@ -160,7 +160,7 @@ onMounted(async () => {
         </div>
 
         <!-- Timeline -->
-        <div class="bg-white rounded-xl border border-black/5 shadow-sm p-8">
+        <div class="bento-card p-8">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Journey</h2>
           <div class="relative">
             <div class="absolute left-[1.0625rem] top-2 bottom-2 w-px bg-slate-100"></div>
@@ -192,7 +192,7 @@ onMounted(async () => {
         </div>
 
         <!-- Hobbies -->
-        <div class="bg-white rounded-xl border border-black/5 shadow-sm p-8">
+        <div class="bento-card p-8">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">When I'm Not Coding</h2>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -220,7 +220,7 @@ onMounted(async () => {
         <div class="sticky top-24 space-y-5">
 
           <!-- Stats Card -->
-          <div class="bg-white rounded-xl border border-black/5 shadow-sm p-6">
+          <div class="bento-card p-6">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Site Stats</h4>
 
             <div class="grid grid-cols-2 gap-3">
@@ -252,7 +252,7 @@ onMounted(async () => {
           </div>
 
           <!-- Contact Card -->
-          <div class="bg-white rounded-xl border border-black/5 shadow-sm p-6">
+          <div class="bento-card p-6">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Get In Touch</h4>
 
             <div class="space-y-3">
@@ -288,7 +288,7 @@ onMounted(async () => {
           </div>
 
           <!-- Message Card -->
-          <div class="bg-white rounded-xl border border-black/5 shadow-sm p-6">
+          <div class="bento-card p-6">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Say Hello</h4>
 
             <p class="text-sm text-slate-500 leading-relaxed mb-4">

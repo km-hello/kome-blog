@@ -44,7 +44,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #f2f4f7;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -118,4 +118,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Bento Card 通用样式 */
+.bento-card {
+  @apply bg-white rounded-xl transition-all;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.bento-card:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
 }

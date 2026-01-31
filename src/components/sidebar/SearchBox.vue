@@ -21,7 +21,7 @@ const handleSearch = () => {
 </script>
 
 <template>
-  <div class="bg-white rounded-xl border border-black/5 shadow-sm px-5 py-4">
+  <div class="bento-card px-5 py-4">
     <div class="w-full bg-slate-50 rounded-md flex items-center px-3 py-2.5 transition-all group focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-100 border border-transparent focus-within:border-slate-200">
       <Search :size="14" class="text-gray-400 mr-3 group-focus-within:text-slate-800 transition-colors" />
       <input

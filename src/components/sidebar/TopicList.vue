@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="bg-white rounded-xl border border-black/5 shadow-sm px-5 py-5">
+  <div class="bento-card px-5 py-5">
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Topics</h4>
     </div>
