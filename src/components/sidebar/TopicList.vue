@@ -4,27 +4,51 @@ import type { TagPostCountResponse } from '@/api/tag'
 
 defineProps<{
   tags: TagPostCountResponse[]
+  activeTagId?: number | null
 }>()
+
+const emit = defineEmits<{
+  select: [tagId: number | null]
+}>()
+
+const handleTagClick = (tagId: number) => {
+  emit('select', tagId)
+}
 </script>
 
 <template>
   <div class="bento-card px-5 py-5">
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Topics</h4>
+      <button
+          v-if="activeTagId"
+          @click="emit('select', null)"
+          class="text-[10px] text-slate-400 hover:text-slate-600 transition-colors"
+      >
+        Clear
+      </button>
     </div>
 
     <div class="flex flex-wrap gap-2 max-h-60 overflow-y-auto pr-1">
-      <router-link
+      <button
           v-for="tag in tags"
           :key="tag.id"
-          :to="{ path: '/archive', query: { tagId: tag.id } }"
-          class="px-3 py-1.5 rounded-md flex items-center gap-2 cursor-pointer bg-slate-50 border border-slate-100 text-slate-600 hover:border-slate-300 hover:text-slate-900 transition-colors"
+          @click="handleTagClick(tag.id)"
+          class="px-3 py-1.5 rounded-md flex items-center gap-2 cursor-pointer border transition-colors"
+          :class="activeTagId === tag.id
+            ? 'bg-slate-800 border-slate-700 text-white'
+            : 'bg-slate-50 border-slate-100 text-slate-600 hover:border-slate-300 hover:text-slate-900'"
       >
         <span class="text-xs font-bold">{{ tag.name }}</span>
-        <span class="border border-slate-200 text-[10px] font-mono px-1.5 rounded text-slate-400 bg-white">
+        <span
+            class="text-[10px] font-mono px-1.5 rounded"
+            :class="activeTagId === tag.id
+              ? 'bg-slate-700 text-slate-300 border border-slate-600'
+              : 'bg-white text-slate-400 border border-slate-200'"
+        >
           {{ tag.postCount }}
         </span>
-      </router-link>
+      </button>
     </div>
 
     <div v-if="tags.length === 0" class="text-center py-4 text-xs text-slate-400">
