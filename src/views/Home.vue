@@ -23,6 +23,7 @@ const siteInfo = ref<SiteInfoResponse | null>(null)
 const currentPage = ref(1)
 const pageSize = 8
 const total = ref(0)
+const searchKeyword = ref('')
 
 const loading = ref(false)
 
@@ -32,12 +33,19 @@ const fetchPosts = async () => {
     const res = await getPostsApi({
       pageNum: currentPage.value,
       pageSize,
+      keyword: searchKeyword.value || undefined,
     })
     posts.value = res.records
     total.value = res.total
   } finally {
     loading.value = false
   }
+}
+
+const handleSearch = (keyword: string) => {
+  searchKeyword.value = keyword
+  currentPage.value = 1
+  fetchPosts()
 }
 
 const handlePageChange = (page: number) => {
@@ -82,7 +90,7 @@ onMounted(async () => {
               :stats="siteInfo.stats"
           />
 
-          <SearchBox placeholder="Search..." />
+          <SearchBox placeholder="Search..." @search="handleSearch" />
 
           <MemoPreview :memos="memos" />
 

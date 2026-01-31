@@ -1,6 +1,6 @@
 <!-- src/components/sidebar/SearchBox.vue -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Search } from 'lucide-vue-next'
 
 defineProps<{
@@ -14,10 +14,15 @@ const emit = defineEmits<{
 const keyword = ref('')
 
 const handleSearch = () => {
-  if (keyword.value.trim()) {
-    emit('search', keyword.value.trim())
-  }
+  emit('search', keyword.value.trim())
 }
+
+// 当输入框被清空时自动重置搜索
+watch(keyword, (val) => {
+  if (val.trim() === '') {
+    emit('search', '')
+  }
+})
 </script>
 
 <template>
