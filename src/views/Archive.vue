@@ -18,6 +18,7 @@ const tags = ref<TagPostCountResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
 const activeYear = ref<number | null>(null)
 const searchKeyword = ref('')
+const selectedTagId = ref<number | null>(null)
 
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
@@ -58,13 +59,19 @@ const fetchArchives = async () => {
     pageNum: 1,
     pageSize: 1000,
     keyword: searchKeyword.value || undefined,
+    tagId: selectedTagId.value ?? undefined,
   })
   archives.value = res
-  if (res.length > 0) activeYear.value = res[0].year
+  if (res.length > 0) activeYear.value = res[0]?.year ?? null
 }
 
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
+  fetchArchives()
+}
+
+const handleTagSelect = (tagId: number | null) => {
+  selectedTagId.value = tagId
   fetchArchives()
 }
 
@@ -196,7 +203,11 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <TopicList :tags="tags" />
+          <TopicList
+              :tags="tags"
+              :active-tag-id="selectedTagId"
+              @select="handleTagSelect"
+          />
         </div>
       </aside>
     </div>
