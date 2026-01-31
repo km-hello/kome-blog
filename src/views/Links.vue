@@ -12,10 +12,25 @@ import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
 
 const links = ref<LinkResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
+const searchKeyword = ref('')
+
+const fetchLinks = async () => {
+  const res = await getLinksApi({
+    pageNum: 1,
+    pageSize: 100,
+    keyword: searchKeyword.value || undefined,
+  })
+  links.value = res
+}
+
+const handleSearch = (keyword: string) => {
+  searchKeyword.value = keyword
+  fetchLinks()
+}
 
 onMounted(async () => {
   await Promise.all([
-    getLinksApi({ pageNum: 1, pageSize: 100 }).then(res => links.value = res),
+    fetchLinks(),
     getSiteInfoApi().then(res => siteInfo.value = res),
   ])
 })
@@ -69,7 +84,7 @@ onMounted(async () => {
         <div class="sticky top-24 space-y-5">
           <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
 
-          <SearchBox placeholder="Search links..." />
+          <SearchBox placeholder="Search links..." @search="handleSearch" />
 
           <!-- Exchange Card -->
           <div class="bento-card px-5 py-6">

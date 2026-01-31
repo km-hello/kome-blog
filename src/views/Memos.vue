@@ -13,17 +13,30 @@ import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
 const memos = ref<MemoResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
 const total = ref(0)
+const searchKeyword = ref('')
 
 const formatTime = (dateStr: string) => {
   return dateStr.replace('T', ' ').slice(0, 16)
 }
 
+const fetchMemos = async () => {
+  const res = await getMemosApi({
+    pageNum: 1,
+    pageSize: 50,
+    keyword: searchKeyword.value || undefined,
+  })
+  memos.value = res.records
+  total.value = res.total
+}
+
+const handleSearch = (keyword: string) => {
+  searchKeyword.value = keyword
+  fetchMemos()
+}
+
 onMounted(async () => {
   await Promise.all([
-    getMemosApi({ pageNum: 1, pageSize: 50 }).then(res => {
-      memos.value = res.records
-      total.value = res.total
-    }),
+    fetchMemos(),
     getSiteInfoApi().then(res => siteInfo.value = res),
   ])
 })
@@ -92,7 +105,7 @@ onMounted(async () => {
       <aside class="lg:col-span-4 relative hidden lg:block">
         <div class="sticky top-24 space-y-5">
           <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
-          <SearchBox placeholder="Search memos..." />
+          <SearchBox placeholder="Search memos..." @search="handleSearch" />
         </div>
       </aside>
     </div>

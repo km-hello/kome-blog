@@ -17,6 +17,7 @@ const archives = ref<PostArchiveResponse[]>([])
 const tags = ref<TagPostCountResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
 const activeYear = ref<number | null>(null)
+const searchKeyword = ref('')
 
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
@@ -52,12 +53,24 @@ const formatDay = (dateStr: string) => {
   return new Date(dateStr).getDate().toString().padStart(2, '0')
 }
 
+const fetchArchives = async () => {
+  const res = await getArchivePostsApi({
+    pageNum: 1,
+    pageSize: 1000,
+    keyword: searchKeyword.value || undefined,
+  })
+  archives.value = res
+  if (res.length > 0) activeYear.value = res[0].year
+}
+
+const handleSearch = (keyword: string) => {
+  searchKeyword.value = keyword
+  fetchArchives()
+}
+
 onMounted(async () => {
   await Promise.all([
-    getArchivePostsApi({ pageNum: 1, pageSize: 1000 }).then(res => {
-      archives.value = res
-      if (res.length > 0) activeYear.value = res[0].year
-    }),
+    fetchArchives(),
     getTagsApi().then(res => tags.value = res),
     getSiteInfoApi().then(res => siteInfo.value = res),
   ])
@@ -101,12 +114,12 @@ onUnmounted(() => {
 
           <!-- Timeline Body -->
           <div class="p-8 relative">
-            <div class="absolute left-[2rem] top-6 bottom-2 w-px bg-slate-100"></div>
+            <div class="absolute left-8 top-6 bottom-2 w-px bg-slate-100"></div>
 
             <div class="flex flex-col gap-8">
               <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-16">
                 <!-- Month Node -->
-                <div class="absolute left-[2rem] top-[-0.2rem] -translate-x-1/2">
+                <div class="absolute left-8 top-[-0.2rem] -translate-x-1/2">
                   <span class="inline-flex items-center justify-center font-mono text-[0.65rem] font-semibold text-slate-400 bg-white border border-slate-100 rounded-full px-2.5 py-0.5 shadow-sm">
                     {{ MONTH_NAMES[monthGroup.month - 1] }}
                   </span>
@@ -155,7 +168,7 @@ onUnmounted(() => {
         <div class="sticky top-24 space-y-5">
           <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
 
-          <SearchBox placeholder="Filter archives..." />
+          <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 
           <!-- Timeline Nav -->
           <div class="bento-card px-5 py-5">
@@ -163,7 +176,7 @@ onUnmounted(() => {
               <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Timeline</h4>
             </div>
             <div class="relative pl-1">
-              <div class="absolute left-[17px] top-2 bottom-2 w-px bg-slate-100"></div>
+              <div class="absolute left-4.25 top-2 bottom-2 w-px bg-slate-100"></div>
               <div class="flex flex-col gap-1">
                 <a
                     v-for="yearGroup in archives"
