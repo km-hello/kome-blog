@@ -24,6 +24,7 @@ const currentPage = ref(1)
 const pageSize = 8
 const total = ref(0)
 const searchKeyword = ref('')
+const selectedTagId = ref<number | null>(null)
 
 const loading = ref(false)
 
@@ -34,6 +35,7 @@ const fetchPosts = async () => {
       pageNum: currentPage.value,
       pageSize,
       keyword: searchKeyword.value || undefined,
+      tagId: selectedTagId.value ?? undefined,
     })
     posts.value = res.records
     total.value = res.total
@@ -44,6 +46,12 @@ const fetchPosts = async () => {
 
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
+  currentPage.value = 1
+  fetchPosts()
+}
+
+const handleTagSelect = (tagId: number | null) => {
+  selectedTagId.value = tagId
   currentPage.value = 1
   fetchPosts()
 }
@@ -94,7 +102,11 @@ onMounted(async () => {
 
           <MemoPreview :memos="memos" />
 
-          <TopicList :tags="tags" />
+          <TopicList
+              :tags="tags"
+              :active-tag-id="selectedTagId"
+              @select="handleTagSelect"
+          />
 
           <SiteFooter />
         </div>
