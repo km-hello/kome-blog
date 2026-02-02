@@ -16,7 +16,23 @@ const total = ref(0)
 const searchKeyword = ref('')
 
 const formatTime = (dateStr: string) => {
-  return dateStr.replace('T', ' ').slice(0, 16)
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diff = now.getTime() - date.getTime()
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+  if (days === 0) {
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    if (hours === 0) {
+      const minutes = Math.floor(diff / (1000 * 60))
+      return minutes <= 1 ? 'Just now' : `${minutes}m ago`
+    }
+    return `${hours}h ago`
+  }
+  if (days === 1) return 'Yesterday'
+  if (days < 7) return `${days}d ago`
+
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 const fetchMemos = async () => {
@@ -57,47 +73,43 @@ onMounted(async () => {
         />
 
         <!-- Memo List -->
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-4">
           <article
               v-for="memo in memos"
               :key="memo.id"
-              class="bento-card p-6 flex gap-5"
+              class="bento-card p-5"
           >
-            <!-- Avatar -->
-            <div class="shrink-0 pt-1">
-              <div class="size-10 rounded-full bg-slate-100 p-0.5 border border-slate-100">
-                <img
-                    :src="siteInfo?.owner.avatar || 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'"
-                    class="size-full rounded-full bg-white"
-                >
+            <!-- Header: Avatar + Name + Time -->
+            <div class="flex items-center gap-3 mb-3">
+              <img
+                  :src="siteInfo?.owner.avatar"
+                  class="size-8 rounded-full ring-1 ring-slate-100"
+                  alt="avatar"
+              />
+              <div class="flex items-center gap-2 flex-1 min-w-0">
+                <span class="text-sm font-medium text-slate-800 truncate">
+                  {{ siteInfo?.owner.nickname || 'Admin' }}
+                </span>
+                <span class="text-slate-300">·</span>
+                <span class="text-xs text-slate-400">{{ formatTime(memo.createTime) }}</span>
               </div>
+              <Pin
+                  v-if="memo.isPinned"
+                  :size="14"
+                  class="text-slate-300 shrink-0"
+              />
             </div>
 
             <!-- Content -->
-            <div class="flex-1 flex flex-col">
-              <div class="flex justify-between items-center mb-3">
-                <div class="flex items-center gap-3">
-                  <span class="text-sm font-bold text-slate-900">{{ siteInfo?.owner.nickname || 'Admin' }}</span>
-                  <span
-                      v-if="memo.isPinned"
-                      class="text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded flex items-center gap-1"
-                  >
-                    <Pin :size="9" /> TOP
-                  </span>
-                </div>
-                <span class="text-xs text-slate-400 font-mono">{{ formatTime(memo.createTime) }}</span>
-              </div>
-
-              <div class="text-[15px] leading-7 text-slate-600 whitespace-pre-wrap">
-                {{ memo.content }}
-              </div>
+            <div class="text-[15px] leading-relaxed text-slate-600 whitespace-pre-wrap pl-11">
+              {{ memo.content }}
             </div>
           </article>
         </div>
 
         <!-- End -->
         <div class="text-center py-8">
-          <span class="text-xs font-mono text-slate-300">End of Stream</span>
+          <span class="text-xs font-mono text-slate-300 tracking-wide">— End of Stream —</span>
         </div>
       </main>
 
