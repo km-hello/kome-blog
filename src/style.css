@@ -248,13 +248,14 @@
 
 /* 行内代码 */
 .markdown-body code:not(pre code) {
-  background-color: #f8fafc;
-  border: 1px solid #f1f5f9;
-  color: #ef4444;
-  padding: 0.2em 0.4em;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.2em 0.45em;
   border-radius: 0.25rem;
   font-size: 0.85em;
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  font-weight: 500;
 }
 
 /* 代码块 */
