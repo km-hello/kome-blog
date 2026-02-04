@@ -23,19 +23,19 @@ function escapeHtml(s: string): string {
 /**
  * 预处理 Markdown 内容：
  * 1) 修复后端返回的 fenced code block 写法：``` \n lang \n -> ```lang\n
- * 2) 修复标题缺空格：##标题 -> ## 标题
- * 3) 修复 “## Key Changes- ...” 这种标题后直接连列表符号的情况（尽量兼容）
+ * 2) 修复标题缺空格：##标题 -> ## 标题（但不处理 ### 这种连续#号的情况）
+ * 3) 修复 "## Key Changes- ..." 这种标题后直接连列表符号的情况
  */
 function preprocessMarkdown(content: string): string {
     // 1) ```\nlang\n -> ```lang\n
     content = content.replace(/```[ \t]*\n([A-Za-z0-9_-]+)[ \t]*\n/g, '```$1\n')
 
-    // 2) 标题补空格：^(#{1,6})(\S) => "$1 $2"
-    content = content.replace(/^(#{1,6})(\S)/gm, '$1 $2')
+    // 2) 标题补空格：##标题 -> ## 标题
+    // 只在 # 后面紧跟非 # 非空白字符时添加空格
+    content = content.replace(/^(#{1,6})([^#\s])/gm, '$1 $2')
 
-    // 3) 如果有人写成 "## Key Changes- Added ..."，尝试拆成两行：
-    // 仅在 `- ` 紧跟在标题文字后时处理，避免误伤
-    content = content.replace(/^(#{1,6}\s+.+?)(- )/gm, '$1\n\n$2')
+    // 3) 修复标题后直接连列表符号：## Key Changes- xxx -> ## Key Changes\n\n- xxx
+    content = content.replace(/^(#{1,6}\s+[^-\n]+)(- )/gm, '$1\n\n$2')
 
     return content
 }
@@ -105,8 +105,9 @@ export function useMarkdown() {
             renderer: {
                 heading(token) {
                     const depth = token.depth
+                    const rawText = token.text
                     const inner = this.parser.parseInline(token.tokens)
-                    const plainText = inner.replace(/<[^>]+>/g, '').replace(/[*_`]/g, '')
+                    const plainText = rawText.replace(/<[^>]+>/g, '').replace(/[*_`]/g, '')
                     const id = plainText
                         .toLowerCase()
                         .replace(/\s+/g, '-')
@@ -246,15 +247,9 @@ export function useMarkdown() {
                     return `<img src="${href}" alt="${escapeHtml(text)}" loading="lazy">${caption}`
                 },
 
-                // 可选：为了安全/稳定，禁用 markdown 中的原生 HTML（否则 <div> <style> 同样可能破坏布局）
-                // 如果你希望支持文章里写原生 HTML，把这里改回 `return token.text`
+                // 禁用 markdown 中的原生 HTML，防止 XSS 和布局破坏
                 html(token) {
                     return escapeHtml(token.text)
-                },
-
-                // text 不需要 escape，marked 默认已经正确处理了
-                text(token) {
-                    return token.text
                 },
             },
         })
