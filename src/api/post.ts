@@ -18,6 +18,22 @@ export interface PostSimpleResponse {
     tags?: TagResponse[]
 }
 
+export interface PostDetailResponse {
+    id: number
+    title: string
+    slug: string
+    summary?: string
+    content: string
+    coverImage?: string
+    views: number
+    readTime?: number
+    isPinned: boolean
+    status: number
+    createTime: string
+    updateTime: string
+    tags?: TagResponse[]
+}
+
 export interface PostQueryRequest extends BaseQuery {
     keyword?: string
     tagId?: number
@@ -56,4 +72,8 @@ export const getPostsApi = (params: PostQueryRequest): Promise<PageResult<PostSi
 
 export const getArchivePostsApi = (params: PostQueryRequest): Promise<PostArchiveResponse[]> => {
     return request.get<PostArchiveResponse[]>('/api/posts/archive', { params })
+}
+
+export const getPostDetailApi = (slug: string): Promise<PostDetailResponse> => {
+    return request.get<PostDetailResponse>(`/api/posts/${slug}`)
 }
