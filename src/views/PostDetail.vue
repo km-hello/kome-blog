@@ -31,6 +31,13 @@ const renderedContent = computed(() => {
   return render(post.value.content)
 })
 
+// 监听内容渲染完成后，渲染 Mermaid 图表
+watch(renderedContent, async (newVal) => {
+  if (!newVal) return
+  await nextTick()
+  await renderMermaidCharts()
+})
+
 // 滚动到指定锚点
 const scrollTo = (id: string) => {
   activeSection.value = id
@@ -93,8 +100,6 @@ const fetchData = async () => {
     post.value = await getPostDetailApi(slug)
 
     await nextTick()
-    // 渲染 Mermaid 图表
-    await renderMermaidCharts()
     handleScroll()
   } catch (error) {
     console.error('Failed to fetch post:', error)
