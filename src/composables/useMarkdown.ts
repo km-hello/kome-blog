@@ -234,9 +234,19 @@ export function useMarkdown() {
                         return `<div class="mermaid-container" data-code="${escapeHtml(code)}"></div>\n`
                     }
 
-                    const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext'
+                    // 语言别名映射（highlight.js 不直接支持的语言）
+                    const langAliases: Record<string, string> = {
+                        vue: 'xml',
+                        jsx: 'javascript',
+                        tsx: 'typescript',
+                        sh: 'bash',
+                        shell: 'bash',
+                        yml: 'yaml',
+                    }
+                    const hljsLang = langAliases[lang] || lang
+                    const language = hljsLang && hljs.getLanguage(hljsLang) ? hljsLang : 'plaintext'
+                    const displayLang = lang || (language !== 'plaintext' ? language : 'text')
                     const highlighted = hljs.highlight(code, { language }).value
-                    const displayLang = language !== 'plaintext' ? language : 'text'
                     const copyBtn = `<button class="code-copy-btn" data-code="${escapeHtml(code)}" title="复制代码"><span class="code-lang-text">${displayLang}</span><span class="code-copied-text">copied!</span></button>`
                     return `<div class="code-block"><div class="code-header">${copyBtn}</div><pre><code class="hljs language-${language}">${highlighted}</code></pre></div>\n`
                 },
