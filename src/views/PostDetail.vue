@@ -273,7 +273,7 @@ watch(
                 <ul
                     ref="tocContainer"
                     class="space-y-0 relative custom-scroll pr-2"
-                    style="max-height: calc(100vh - 300px)"
+                    style="max-height: calc(100vh - 400px)"
                 >
                   <div class="absolute left-0 top-0 bottom-0 w-px bg-slate-100"></div>
                   <li v-for="item in toc" :key="item.id">
