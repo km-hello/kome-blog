@@ -109,13 +109,34 @@ const fetchData = async () => {
   }
 }
 
+// 代码块复制按钮（事件委托）
+const handleCopyClick = (e: MouseEvent) => {
+  const btn = (e.target as HTMLElement).closest('.code-copy-btn') as HTMLElement | null
+  if (!btn) return
+
+  const code = btn.getAttribute('data-code')
+    ?.replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+  if (!code) return
+
+  navigator.clipboard.writeText(code).then(() => {
+    btn.classList.add('copied')
+    setTimeout(() => btn.classList.remove('copied'), 2000)
+  })
+}
+
 onMounted(() => {
   fetchData()
   window.addEventListener('scroll', handleScroll)
+  document.addEventListener('click', handleCopyClick)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  document.removeEventListener('click', handleCopyClick)
 })
 
 // 监听路由变化

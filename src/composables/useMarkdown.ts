@@ -236,7 +236,9 @@ export function useMarkdown() {
 
                     const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext'
                     const highlighted = hljs.highlight(code, { language }).value
-                    return `<pre><code class="hljs language-${language}">${highlighted}</code></pre>\n`
+                    const displayLang = language !== 'plaintext' ? language : 'text'
+                    const copyBtn = `<button class="code-copy-btn" data-code="${escapeHtml(code)}" title="复制代码"><span class="code-lang-text">${displayLang}</span><span class="code-copied-text">copied!</span></button>`
+                    return `<div class="code-block"><div class="code-header">${copyBtn}</div><pre><code class="hljs language-${language}">${highlighted}</code></pre></div>\n`
                 },
 
                 image(token) {

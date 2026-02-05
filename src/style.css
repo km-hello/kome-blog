@@ -259,6 +259,65 @@
 }
 
 /* 代码块 */
+.markdown-body .code-block {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.markdown-body .code-block .code-header {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.markdown-body .code-block:hover .code-header {
+  opacity: 1;
+}
+
+.markdown-body .code-block .code-copy-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #e2e8f0;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: lowercase;
+  user-select: none;
+}
+
+.markdown-body .code-block .code-copy-btn:hover {
+  background-color: #cbd5e1;
+  color: #475569;
+}
+
+.markdown-body .code-block .code-copy-btn .code-copied-text {
+  display: none;
+}
+
+.markdown-body .code-block .code-copy-btn.copied {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.markdown-body .code-block .code-copy-btn.copied .code-lang-text {
+  display: none;
+}
+
+.markdown-body .code-block .code-copy-btn.copied .code-copied-text {
+  display: inline;
+}
+
+.markdown-body .code-block pre {
+  margin: 0;
+}
+
 .markdown-body pre {
   background-color: #f8fafc;
   border: 1px solid #f1f5f9;
