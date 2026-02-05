@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye } from 'lucide-vue-next'
+import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, X, ZoomIn, ZoomOut, RotateCcw } from 'lucide-vue-next'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
@@ -15,6 +15,67 @@ const post = ref<PostDetailResponse | null>(null)
 const loading = ref(true)
 const activeSection = ref('')
 const tocContainer = ref<HTMLElement | null>(null)
+
+// Mermaid 放大查看
+const mermaidModalOpen = ref(false)
+const mermaidModalContent = ref('')
+const mermaidZoom = ref(1)
+const mermaidSvgOriginalWidth = ref(0)
+const mermaidSvgOriginalHeight = ref(0)
+
+const openMermaidModal = (svgContent: string) => {
+  // 解析原始 SVG 尺寸
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(svgContent, 'image/svg+xml')
+  const svg = doc.querySelector('svg')
+  if (!svg) return
+
+  // 获取原始尺寸，优先从 width/height 属性读取，否则从 viewBox 读取
+  let w = parseFloat(svg.getAttribute('width') || '0')
+  let h = parseFloat(svg.getAttribute('height') || '0')
+  if (!w || !h) {
+    const vb = svg.getAttribute('viewBox')?.split(/\s+/).map(Number)
+    if (vb && vb.length === 4) {
+      w = vb[2]
+      h = vb[3]
+    }
+  }
+
+  mermaidSvgOriginalWidth.value = w || 600
+  mermaidSvgOriginalHeight.value = h || 400
+
+  // 移除 SVG 上的固定尺寸，改用 CSS 控制
+  svg.removeAttribute('width')
+  svg.removeAttribute('height')
+  svg.setAttribute('style', 'width: 100%; height: 100%;')
+
+  mermaidModalContent.value = svg.outerHTML
+  mermaidZoom.value = 1
+  mermaidModalOpen.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeMermaidModal = () => {
+  mermaidModalOpen.value = false
+  mermaidModalContent.value = ''
+  mermaidZoom.value = 1
+  document.body.style.overflow = ''
+}
+
+const mermaidDisplayWidth = computed(() => mermaidSvgOriginalWidth.value * mermaidZoom.value)
+const mermaidDisplayHeight = computed(() => mermaidSvgOriginalHeight.value * mermaidZoom.value)
+
+const zoomIn = () => {
+  mermaidZoom.value = Math.min(mermaidZoom.value + 0.25, 5)
+}
+
+const zoomOut = () => {
+  mermaidZoom.value = Math.max(mermaidZoom.value - 0.25, 0.25)
+}
+
+const resetZoom = () => {
+  mermaidZoom.value = 1
+}
 
 // 格式化日期
 const formatDate = (dateStr: string) => {
@@ -128,15 +189,52 @@ const handleCopyClick = (e: MouseEvent) => {
   })
 }
 
+// Mermaid 图表点击放大（事件委托）
+const handleMermaidClick = (e: MouseEvent) => {
+  const container = (e.target as HTMLElement).closest('.mermaid-container.mermaid-rendered') as HTMLElement | null
+  if (!container) return
+
+  const svg = container.querySelector('svg')
+  if (svg) {
+    openMermaidModal(svg.outerHTML)
+  }
+}
+
+// ESC 键关闭模态框
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && mermaidModalOpen.value) {
+    closeMermaidModal()
+  }
+}
+
+// 鼠标滚轮缩放
+const handleWheel = (e: WheelEvent) => {
+  if (!mermaidModalOpen.value) return
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault()
+    // 根据滚轮 delta 计算缩放，每次变化约 5%
+    const delta = -e.deltaY * 0.001
+    const newZoom = Math.min(5, Math.max(0.25, mermaidZoom.value + delta))
+    mermaidZoom.value = Math.round(newZoom * 100) / 100
+  }
+}
+
 onMounted(() => {
   fetchData()
   window.addEventListener('scroll', handleScroll)
   document.addEventListener('click', handleCopyClick)
+  document.addEventListener('click', handleMermaidClick)
+  document.addEventListener('keydown', handleKeydown)
+  document.addEventListener('wheel', handleWheel, { passive: false })
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('click', handleCopyClick)
+  document.removeEventListener('click', handleMermaidClick)
+  document.removeEventListener('keydown', handleKeydown)
+  document.removeEventListener('wheel', handleWheel)
+  document.body.style.overflow = ''
 })
 
 // 监听路由变化
@@ -298,6 +396,65 @@ watch(
         </div>
       </template>
     </div>
+
+    <!-- Mermaid 放大模态框 -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div
+            v-if="mermaidModalOpen"
+            class="fixed inset-0 z-50 flex items-center justify-center"
+            @click.self="closeMermaidModal"
+        >
+          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeMermaidModal"></div>
+          <div class="relative w-[70vw] h-[70vh] bg-white rounded-xl shadow-2xl flex flex-col">
+            <!-- 工具栏 -->
+            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <button
+                    class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                    title="Ctrl + Scroll Down"
+                    @click="zoomOut"
+                >
+                  <ZoomOut :size="18" />
+                </button>
+                <span class="text-sm text-slate-600 min-w-[4rem] text-center">{{ Math.round(mermaidZoom * 100) }}%</span>
+                <button
+                    class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                    title="Ctrl + Scroll Up"
+                    @click="zoomIn"
+                >
+                  <ZoomIn :size="18" />
+                </button>
+                <button
+                    class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                    title="Reset"
+                    @click="resetZoom"
+                >
+                  <RotateCcw :size="18" />
+                </button>
+              </div>
+              <button
+                  class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                  title="Close (Esc)"
+                  @click="closeMermaidModal"
+              >
+                <X :size="18" />
+              </button>
+            </div>
+            <!-- 内容区 -->
+            <div class="flex-1 overflow-auto p-6 bg-slate-50">
+              <div class="inline-flex min-h-full min-w-full items-center justify-center">
+                <div
+                    class="mermaid-modal-content shrink-0 transition-[width,height] duration-200"
+                    :style="{ width: mermaidDisplayWidth + 'px', height: mermaidDisplayHeight + 'px' }"
+                    v-html="mermaidModalContent"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -321,5 +478,22 @@ watch(
 }
 .custom-scroll:hover::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
+}
+
+/* Modal 动画 */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+/* Mermaid 模态框内容 */
+.mermaid-modal-content :deep(svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 </style>

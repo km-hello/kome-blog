@@ -437,6 +437,15 @@
   overflow-x: auto;
 }
 
+.markdown-body .mermaid-container.mermaid-rendered {
+  cursor: zoom-in;
+  transition: box-shadow 0.2s ease;
+}
+
+.markdown-body .mermaid-container.mermaid-rendered:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 .markdown-body .mermaid-container svg {
   max-width: 100%;
   height: auto;
