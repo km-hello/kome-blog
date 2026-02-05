@@ -1,7 +1,7 @@
 <!-- src/components/home/PostCard.vue -->
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Clock, Eye } from 'lucide-vue-next'
+import { Clock, Eye, Pin } from 'lucide-vue-next'
 import type { PostSimpleResponse } from '@/api/post'
 
 const props = defineProps<{
@@ -43,6 +43,7 @@ const formattedDate = computed(() => {
         <div class="flex-1 flex flex-col justify-start">
           <router-link :to="`/post/${post.slug}`">
             <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-3 leading-tight decoration-2 decoration-slate-300 underline-offset-4 group-hover:underline transition-all">
+              <Pin v-if="post.isPinned" :size="16" class="inline-block mr-1.5 -mt-0.5 text-slate-400" />
               {{ post.title }}
             </h2>
           </router-link>
