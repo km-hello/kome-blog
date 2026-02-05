@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, X, ZoomIn, ZoomOut, RotateCcw } from 'lucide-vue-next'
+import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, X, ZoomIn, ZoomOut, RotateCcw, AlertTriangle } from 'lucide-vue-next'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
@@ -85,6 +85,21 @@ const formatDate = (dateStr: string) => {
     day: '2-digit',
   }).replace(/\//g, '-')
 }
+
+// 只比较日期部分（YYYY-MM-DD），判断更新日期是否与发布日期不同
+const showUpdateDate = computed(() => {
+  if (!post.value?.updateTime || !post.value?.createTime) return false
+  return post.value.updateTime.slice(0, 10) !== post.value.createTime.slice(0, 10)
+})
+
+// 内容过期提醒：距上次更新超过 180 天
+const isOutdated = computed(() => {
+  if (!post.value) return false
+  const ref = post.value.updateTime || post.value.createTime
+  if (!ref) return false
+  const diffMs = Date.now() - new Date(ref).getTime()
+  return diffMs > 180 * 24 * 60 * 60 * 1000
+})
 
 // 渲染 Markdown
 const renderedContent = computed(() => {
@@ -271,9 +286,7 @@ watch(
             {{ post.title }}
           </h1>
 
-          <div
-              class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-500 border-t border-slate-100 pt-4 mt-1"
-          >
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-500 border-t border-slate-100 pt-4 mt-1">
             <!-- Published Date -->
             <div class="flex items-center gap-2 text-xs" title="Published">
               <Calendar :size="12" class="text-slate-400" />
@@ -282,7 +295,7 @@ watch(
 
             <!-- Updated Date -->
             <div
-                v-if="post.updateTime && post.updateTime !== post.createTime"
+                v-if="showUpdateDate"
                 class="flex items-center gap-2 text-xs"
                 title="Last Updated"
             >
@@ -307,12 +320,23 @@ watch(
               <span
                   v-for="tag in post.tags"
                   :key="tag.id"
-                  class="px-2 py-0.5 rounded bg-slate-50 border border-slate-100 text-[10px] font-bold uppercase tracking-wide text-slate-600"
+                  class="px-2.5 py-1 rounded-md bg-slate-100 text-[10px] font-bold uppercase tracking-wide text-slate-500"
               >
                 {{ tag.name }}
               </span>
             </div>
           </div>
+        </div>
+
+        <!-- Outdated Warning Banner -->
+        <div
+            v-if="isOutdated"
+            class="flex items-center gap-3 px-5 py-4 mb-6 rounded-xl bg-amber-50 border border-amber-200 text-amber-800"
+        >
+          <AlertTriangle :size="18" class="shrink-0 text-amber-500" />
+          <p class="text-sm">
+            This article was last updated over 6 months ago. Some content may be outdated.
+          </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
