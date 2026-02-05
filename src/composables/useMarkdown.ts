@@ -168,9 +168,9 @@ export function useMarkdown() {
                     return `<li>${prefix}${body}</li>\n`
                 },
 
-                checkbox(token) {
-                    const checked = token.checked ? ' checked' : ''
-                    return `<input type="checkbox"${checked} disabled> `
+                checkbox() {
+                    // checkbox 已在 listitem 中处理，这里返回空避免重复
+                    return ''
                 },
 
                 table(token) {
