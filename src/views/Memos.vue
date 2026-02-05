@@ -6,9 +6,12 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
+import { useMarkdown } from '@/composables/useMarkdown'
 
 import { getMemosApi, type MemoResponse } from '@/api/memo'
 import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
+
+const { render } = useMarkdown()
 
 const memos = ref<MemoResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
@@ -101,9 +104,7 @@ onMounted(async () => {
             </div>
 
             <!-- Content -->
-            <div class="text-[15px] leading-relaxed text-slate-600 whitespace-pre-wrap pl-11">
-              {{ memo.content }}
-            </div>
+            <div class="memo-content markdown-body pl-11" v-html="render(memo.content)"></div>
           </article>
         </div>
 
@@ -123,3 +124,57 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Memo 内容样式覆盖，使其更紧凑 */
+.memo-content :deep(p) {
+  margin: 0.5em 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.memo-content :deep(p:first-child) {
+  margin-top: 0;
+}
+
+.memo-content :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.memo-content :deep(ul),
+.memo-content :deep(ol) {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.memo-content :deep(li) {
+  margin: 0.25em 0;
+  font-size: 15px;
+}
+
+.memo-content :deep(code):not(pre code) {
+  font-size: 13px;
+  padding: 0.15em 0.4em;
+}
+
+.memo-content :deep(.code-block) {
+  margin: 0.75em 0;
+}
+
+.memo-content :deep(blockquote) {
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+  font-size: 14px;
+}
+
+.memo-content :deep(a) {
+  color: #64748b;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.memo-content :deep(a:hover) {
+  color: #334155;
+}
+</style>
