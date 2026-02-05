@@ -18,6 +18,12 @@ export interface PostSimpleResponse {
     tags?: TagResponse[]
 }
 
+export interface PostNavigation {
+    id: number
+    title: string
+    slug: string
+}
+
 export interface PostDetailResponse {
     id: number
     title: string
@@ -32,6 +38,8 @@ export interface PostDetailResponse {
     createTime: string
     updateTime: string
     tags?: TagResponse[]
+    previous?: PostNavigation | null
+    next?: PostNavigation | null
 }
 
 export interface PostQueryRequest extends BaseQuery {

@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Calendar, PenLine, Clock, ArrowLeft, Eye } from 'lucide-vue-next'
+import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye } from 'lucide-vue-next'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
@@ -224,14 +224,40 @@ watch(
               <div class="markdown-body" v-html="renderedContent"></div>
             </div>
 
-            <!-- Back to Home -->
-            <div class="bento-card p-6 md:p-8 mt-6">
+            <!-- Previous / Next Navigation -->
+            <div
+                v-if="post.previous || post.next"
+                class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6"
+            >
+              <!-- Previous -->
               <router-link
-                  to="/"
-                  class="group flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 transition-colors"
+                  v-if="post.previous"
+                  :to="{ name: 'PostDetail', params: { slug: post.previous.slug } }"
+                  class="bento-card p-5 group hover:shadow-md transition-all"
               >
-                <ArrowLeft :size="14" class="transition-transform group-hover:-translate-x-1" />
-                <span>Back to Home</span>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-2">
+                  <ArrowLeft :size="12" class="transition-transform group-hover:-translate-x-1" />
+                  <span>Previous</span>
+                </div>
+                <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900 line-clamp-2 transition-colors">
+                  {{ post.previous.title }}
+                </p>
+              </router-link>
+              <div v-else></div>
+
+              <!-- Next -->
+              <router-link
+                  v-if="post.next"
+                  :to="{ name: 'PostDetail', params: { slug: post.next.slug } }"
+                  class="bento-card p-5 group hover:shadow-md transition-all text-right"
+              >
+                <div class="flex items-center justify-end gap-2 text-xs text-slate-400 mb-2">
+                  <span>Next</span>
+                  <ArrowRight :size="12" class="transition-transform group-hover:translate-x-1" />
+                </div>
+                <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900 line-clamp-2 transition-colors">
+                  {{ post.next.title }}
+                </p>
               </router-link>
             </div>
           </article>
