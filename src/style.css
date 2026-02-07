@@ -1,132 +1,44 @@
-/* src/style.css */
-@import "tailwindcss";
-@import "tw-animate-css";
+/* ================================================================
+   kome-blog 全局样式
+   ================================================================
+   结构：
+   1. 外部依赖导入（Tailwind、highlight.js、KaTeX）
+   2. 全局基础样式（@layer base）
+   3. 工具类（@layer utilities）
+   4. Markdown 排版（.markdown-body）
+   5. Memo Markdown 覆盖（.markdown-compact / .markdown-mini）
+   ================================================================ */
 
-/* highlight.js 样式 */
+/* ---------- 1. 外部依赖导入 ---------- */
+
+/* Tailwind CSS v4 核心 */
+@import "tailwindcss";
+
+/* highlight.js 代码高亮主题 */
 @import "highlight.js/styles/github.css";
 
-/* KaTeX 样式 */
+/* KaTeX 数学公式渲染样式 */
 @import "katex/dist/katex.min.css";
 
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-:root {
-  --radius: 0.625rem;
-  --background: #f2f4f7;
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
+/* ---------- 2. 全局基础样式 ---------- */
 
 @layer base {
+  /* 统一所有元素的默认边框和轮廓颜色 */
   * {
-    @apply border-border outline-ring/50;
+    border-color: oklch(0.922 0 0);       /* slate-200 */
+    outline-color: oklch(0.708 0 0 / 50%); /* slate-400 半透明 */
   }
+
+  /* 页面背景和文字颜色 */
   body {
-    @apply bg-background text-foreground;
+    background-color: #f2f4f7;     /* 浅灰蓝背景 */
+    color: oklch(0.145 0 0);       /* 接近纯黑的正文色 */
   }
+
+  /* 全局页面滚动条：细窄风格 */
   html {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(226 232 240) transparent;
+    scrollbar-width: thin;                             /* Firefox */
+    scrollbar-color: rgb(226 232 240) transparent;     /* Firefox：滑块色 / 轨道色 */
     &::-webkit-scrollbar {
       width: 4px;
     }
@@ -134,17 +46,23 @@
       background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: rgb(226 232 240);
+      background-color: rgb(226 232 240);  /* slate-200 */
       border-radius: 4px;
     }
     &:hover::-webkit-scrollbar-thumb {
-      background-color: rgb(203 213 225);
+      background-color: rgb(203 213 225);  /* slate-300，hover 加深 */
     }
   }
 }
 
-/* 滚动条样式 */
+/* ---------- 3. 工具类 ---------- */
+
 @layer utilities {
+  /*
+   * .scrollbar-thin — 局部细滚动条
+   * 用于侧边栏、代码区等需要独立滚动的容器
+   * 同时兼容 Webkit（Chrome/Safari/Edge）和 Firefox
+   */
   .scrollbar-thin {
     &::-webkit-scrollbar {
       width: 4px;
@@ -163,36 +81,49 @@
     scrollbar-width: thin;
     scrollbar-color: rgb(226 232 240) transparent;
   }
+
+  /*
+   * .bento-card — 卡片容器通用样式
+   * 白底圆角 + 微弱边框和阴影，hover 时边框加深、阴影扩散
+   * 用于首页文章卡片、侧边栏组件、Memo 卡片等
+   */
+  .bento-card {
+    @apply bg-white rounded-xl transition-all;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+
+    &:hover {
+      border-color: rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+    }
+  }
 }
 
-/* Bento Card 通用样式 */
-.bento-card {
-  @apply bg-white rounded-xl transition-all;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
+/* ================================================================
+   4. Markdown 排版（.markdown-body）
+   用于文章详情页和 Memo 内容的富文本渲染
+   由 useMarkdown composable 输出的 HTML 使用此 class
+   ================================================================ */
 
-.bento-card:hover {
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-}
+/* --- 基础排版 --- */
 
-/* ==================== Markdown Typography ==================== */
 .markdown-body {
-  color: #334155;
+  color: #334155;        /* slate-700 */
   line-height: 1.85;
   font-size: 1.05rem;
 }
 
 .markdown-body strong {
   font-weight: 700 !important;
-  color: #0f172a;
+  color: #0f172a;        /* slate-900 */
 }
 
 .markdown-body em {
   font-style: italic !important;
-  color: #64748b;
+  color: #64748b;        /* slate-500 */
 }
+
+/* --- 标题 h1 ~ h4 --- */
 
 .markdown-body h1,
 .markdown-body h2,
@@ -203,7 +134,7 @@
   margin-top: 2.5rem;
   margin-bottom: 1.2rem;
   line-height: 1.3;
-  scroll-margin-top: 6rem;
+  scroll-margin-top: 6rem;  /* 锚点跳转时预留顶部空间 */
 }
 
 .markdown-body h1 {
@@ -224,22 +155,27 @@
   font-size: 1.15rem;
 }
 
+/* 文章开头第一个标题不需要顶部间距 */
 .markdown-body > h1:first-child,
 .markdown-body > h2:first-child,
 .markdown-body > h3:first-child {
   margin-top: 0;
 }
 
+/* --- 段落 --- */
+
 .markdown-body p {
   margin-bottom: 1.5rem;
-  text-align: justify;
+  text-align: justify;   /* 两端对齐 */
 }
+
+/* --- 列表 --- */
 
 .markdown-body ul {
   list-style-type: disc;
   padding-left: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #475569;
+  color: #475569;        /* slate-600 */
 }
 
 .markdown-body ol {
@@ -253,14 +189,17 @@
   margin-bottom: 0.5rem;
 }
 
+/* 嵌套列表：消除多余下边距 */
 .markdown-body li > ul,
 .markdown-body li > ol {
   margin-top: 0.5rem;
   margin-bottom: 0;
 }
 
+/* --- 链接 --- */
+
 .markdown-body a {
-  color: #3b82f6;
+  color: #3b82f6;        /* blue-500 */
   text-decoration: none;
   font-weight: 500;
   border-bottom: 1px solid transparent;
@@ -271,9 +210,11 @@
   border-bottom-color: #3b82f6;
 }
 
+/* --- 引用块 --- */
+
 .markdown-body blockquote {
-  border-left: 4px solid #cbd5e1;
-  background-color: #f8fafc;
+  border-left: 4px solid #cbd5e1;   /* slate-300 */
+  background-color: #f8fafc;        /* slate-50 */
   padding: 1rem 1.5rem;
   border-radius: 0 0.5rem 0.5rem 0;
   margin: 2rem 0;
@@ -285,7 +226,8 @@
   margin-bottom: 0;
 }
 
-/* 行内代码 */
+/* --- 行内代码 --- */
+
 .markdown-body code:not(pre code) {
   background-color: #f1f5f9;
   border: 1px solid #e2e8f0;
@@ -297,12 +239,14 @@
   font-weight: 500;
 }
 
-/* 代码块 */
+/* --- 代码块（由 useMarkdown 包裹为 .code-block > .code-header + pre）--- */
+
 .markdown-body .code-block {
   position: relative;
   margin: 1.5rem 0;
 }
 
+/* 复制按钮容器：默认隐藏，hover 代码块时显示 */
 .markdown-body .code-block .code-header {
   position: absolute;
   top: 0.5rem;
@@ -315,6 +259,7 @@
   opacity: 1;
 }
 
+/* 复制按钮 */
 .markdown-body .code-block .code-copy-btn {
   display: flex;
   align-items: center;
@@ -336,13 +281,14 @@
   color: #475569;
 }
 
+/* 复制按钮：已复制 / 未复制 状态切换 */
 .markdown-body .code-block .code-copy-btn .code-copied-text {
   display: none;
 }
 
 .markdown-body .code-block .code-copy-btn.copied {
-  background-color: #d1fae5;
-  color: #059669;
+  background-color: #d1fae5;  /* green-100 */
+  color: #059669;             /* green-600 */
 }
 
 .markdown-body .code-block .code-copy-btn.copied .code-lang-text {
@@ -353,10 +299,12 @@
   display: inline;
 }
 
+/* .code-block 内的 pre 不需要额外 margin */
 .markdown-body .code-block pre {
   margin: 0;
 }
 
+/* pre 块通用样式 */
 .markdown-body pre {
   background-color: #f8fafc;
   border: 1px solid #f1f5f9;
@@ -376,7 +324,9 @@
   color: inherit;
 }
 
-/* 表格 */
+/* --- 表格 --- */
+
+/* 外层容器处理横向溢出滚动 */
 .markdown-body .table-wrapper {
   overflow-x: auto;
   margin: 2rem 0;
@@ -401,11 +351,13 @@
   color: #1e293b;
 }
 
+/* 斑马纹 */
 .markdown-body tr:nth-child(even) {
   background-color: #fcfcfc;
 }
 
-/* 图片 */
+/* --- 图片 --- */
+
 .markdown-body img {
   max-width: 100%;
   height: auto;
@@ -415,6 +367,7 @@
   display: block;
 }
 
+/* 图片说明文字（由 useMarkdown 生成） */
 .markdown-body .img-caption {
   text-align: center;
   display: block;
@@ -424,14 +377,16 @@
   font-style: normal;
 }
 
-/* 分割线 */
+/* --- 分割线 --- */
+
 .markdown-body hr {
   border: none;
   border-top: 1px solid #e2e8f0;
   margin: 3rem 0;
 }
 
-/* 任务列表 */
+/* --- 任务列表复选框 --- */
+
 .markdown-body input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -452,6 +407,7 @@
   border-color: #64748b;
 }
 
+/* 勾选标记（纯 CSS 绘制） */
 .markdown-body input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
@@ -464,7 +420,8 @@
   transform: rotate(45deg);
 }
 
-/* Mermaid 图表 */
+/* --- Mermaid 图表 --- */
+
 .markdown-body .mermaid-container {
   display: flex;
   justify-content: center;
@@ -476,6 +433,7 @@
   overflow-x: auto;
 }
 
+/* 渲染完成后支持点击放大 */
 .markdown-body .mermaid-container.mermaid-rendered {
   cursor: zoom-in;
   transition: box-shadow 0.2s ease;
@@ -490,7 +448,8 @@
   height: auto;
 }
 
-/* KaTeX 数学公式 */
+/* --- KaTeX 数学公式 --- */
+
 .markdown-body .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
@@ -502,7 +461,8 @@
   font-size: 1.1em;
 }
 
-/* Markdown 横向滚动条 */
+/* --- Markdown 内可横向滚动区域的统一细滚动条 --- */
+
 .markdown-body pre,
 .markdown-body .table-wrapper,
 .markdown-body .mermaid-container,
@@ -519,4 +479,138 @@
     background-color: rgb(226 232 240);
     border-radius: 4px;
   }
+}
+
+/* ================================================================
+   5. Memo Markdown 覆盖
+   在 .markdown-body 基础上叠加，缩小间距和字号
+   ================================================================ */
+
+/*
+ * .markdown-compact — Memos 页面（中等尺寸）
+ * 配合 .markdown-body 使用：<div class="markdown-body markdown-compact">
+ * 正文 15px，间距比文章详情页更紧凑
+ */
+
+.markdown-compact p {
+  margin: 0.5em 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.markdown-compact p:first-child {
+  margin-top: 0;
+}
+
+.markdown-compact p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-compact ul,
+.markdown-compact ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.markdown-compact li {
+  margin: 0.25em 0;
+  font-size: 15px;
+}
+
+.markdown-compact code:not(pre code) {
+  font-size: 13px;
+  padding: 0.15em 0.4em;
+}
+
+.markdown-compact .code-block {
+  margin: 0.75em 0;
+}
+
+.markdown-compact blockquote {
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+  font-size: 14px;
+}
+
+/* Memo 链接使用低调灰色 + 下划线，区别于文章正文的蓝色链接 */
+.markdown-compact a {
+  color: #64748b;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown-compact a:hover {
+  color: #334155;
+}
+
+/*
+ * .markdown-mini — 首页侧边栏 MemoPreview（小尺寸）
+ * 配合 .markdown-body 使用：<div class="markdown-body markdown-mini">
+ * 正文 12px，极致紧凑，用于预览摘要
+ */
+
+.markdown-mini {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.markdown-mini p {
+  margin: 0.25em 0;
+}
+
+.markdown-mini p:first-child {
+  margin-top: 0;
+}
+
+.markdown-mini ul,
+.markdown-mini ol {
+  margin: 0.25em 0;
+  padding-left: 1.25em;
+}
+
+.markdown-mini li {
+  margin: 0.125em 0;
+}
+
+.markdown-mini code:not(pre code) {
+  font-size: 11px;
+  padding: 0.1em 0.3em;
+}
+
+.markdown-mini .code-block {
+  margin: 0.5em 0;
+}
+
+.markdown-mini pre {
+  font-size: 11px;
+  padding: 0.5em;
+}
+
+.markdown-mini blockquote {
+  margin: 0.25em 0;
+  padding: 0.25em 0.75em;
+  font-size: 11px;
+}
+
+/* 预览中所有标题统一为正文大小，避免视觉跳跃 */
+.markdown-mini h1,
+.markdown-mini h2,
+.markdown-mini h3,
+.markdown-mini h4,
+.markdown-mini h5,
+.markdown-mini h6 {
+  font-size: 12px;
+  margin: 0.25em 0;
+}
+
+.markdown-mini a {
+  color: #64748b;
+}
+
+/* 预览中图片限制高度，防止撑开容器 */
+.markdown-mini img {
+  max-height: 3em;
+  border-radius: 4px;
 }
