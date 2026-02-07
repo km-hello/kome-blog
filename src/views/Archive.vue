@@ -143,7 +143,7 @@ onUnmounted(() => {
                     <span class="text-sm font-mono font-bold text-slate-300 group-hover:text-slate-500 transition-colors sm:w-8 shrink-0">
                       {{ formatDay(post.createTime) }}
                     </span>
-                    <h3 class="flex-1 text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">
+                    <h3 class="flex-1 text-sm font-bold text-slate-700 group-hover:text-slate-900 group-hover:underline decoration-slate-300 decoration-2 underline-offset-4 transition-colors">
                       {{ post.title }}
                     </h3>
                     <div class="flex flex-wrap gap-2 shrink-0">
