@@ -1,4 +1,4 @@
-<!-- src/components/sidebar/TopicList.vue -->
+<!-- src/components/sidebar/TagList.vue -->
 <script setup lang="ts">
 import type { TagPostCountResponse } from '@/api/tag'
 
@@ -19,7 +19,7 @@ const handleTagClick = (tagId: number) => {
 <template>
   <div class="bento-card px-5 py-5">
     <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Topics</h4>
+      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tags</h4>
       <button
           v-if="activeTagId"
           @click="emit('select', null)"

@@ -2,12 +2,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
-import SiteFooter from '@/components/layout/SiteFooter.vue'
+import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
-import TopicList from '@/components/sidebar/TopicList.vue'
-import MemoPreview from '@/components/sidebar/MemoPreview.vue'
-import PostCard from '@/components/home/PostCard.vue'
+import TagList from '@/components/sidebar/TagList.vue'
+import LatestMemo from '@/components/sidebar/LatestMemo.vue'
+import PostCard from '@/components/post/PostCard.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 import { getPostsApi, type PostSimpleResponse } from '@/api/post'
@@ -100,9 +100,9 @@ onMounted(async () => {
 
           <SearchBox placeholder="Search..." @search="handleSearch" />
 
-          <MemoPreview :memos="memos" />
+          <LatestMemo :memos="memos" />
 
-          <TopicList
+          <TagList
               :tags="tags"
               :active-tag-id="selectedTagId"
               @select="handleTagSelect"

@@ -1,4 +1,4 @@
-<!-- src/components/sidebar/MemoPreview.vue -->
+<!-- src/components/sidebar/LatestMemo.vue -->
 <script setup lang="ts">
 import { StickyNote } from 'lucide-vue-next'
 import type { MemoResponse } from '@/api/memo'
