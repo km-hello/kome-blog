@@ -124,6 +124,45 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(226 232 240) transparent;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(226 232 240);
+      border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: rgb(203 213 225);
+    }
+  }
+}
+
+/* 滚动条样式 */
+@layer utilities {
+  .scrollbar-thin {
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(226 232 240);
+      border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: rgb(203 213 225);
+    }
+    scrollbar-width: thin;
+    scrollbar-color: rgb(226 232 240) transparent;
+  }
 }
 
 /* Bento Card 通用样式 */
@@ -461,4 +500,23 @@
 
 .markdown-body .katex {
   font-size: 1.1em;
+}
+
+/* Markdown 横向滚动条 */
+.markdown-body pre,
+.markdown-body .table-wrapper,
+.markdown-body .mermaid-container,
+.markdown-body .katex-display {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(226 232 240) transparent;
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(226 232 240);
+    border-radius: 4px;
+  }
 }
