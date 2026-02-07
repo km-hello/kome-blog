@@ -1,4 +1,4 @@
-<!-- src/components/home/PostCard.vue -->
+<!-- src/components/post/PostCard.vue -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Clock, Eye, Pin } from 'lucide-vue-next'

@@ -1,4 +1,4 @@
-<!-- src/components/layout/SiteFooter.vue -->
+<!-- src/components/sidebar/SiteFooter.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { LoaderCircle } from 'lucide-vue-next'
