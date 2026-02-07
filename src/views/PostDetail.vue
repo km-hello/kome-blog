@@ -3,7 +3,7 @@
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, X, ZoomIn, ZoomOut, RotateCcw, AlertTriangle } from 'lucide-vue-next'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppHeader from '@/components/common/AppHeader.vue'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
 

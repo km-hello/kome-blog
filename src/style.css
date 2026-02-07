@@ -545,7 +545,7 @@
 }
 
 /*
- * .markdown-mini — 首页侧边栏 MemoPreview（小尺寸）
+ * .markdown-mini — 首页侧边栏 LatestMemo（小尺寸）
  * 配合 .markdown-body 使用：<div class="markdown-body markdown-mini">
  * 正文 12px，极致紧凑，用于预览摘要
  */

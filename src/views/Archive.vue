@@ -1,10 +1,11 @@
 <!-- src/views/Archive.vue -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
-import TopicList from '@/components/sidebar/TopicList.vue'
+import TagList from '@/components/sidebar/TagList.vue'
+import TimelineNav from '@/components/sidebar/TimelineNav.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import { getArchivePostsApi, type PostArchiveResponse } from '@/api/post'
@@ -23,8 +24,6 @@ const selectedTagId = ref<number | null>(null)
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
 })
-
-const getYearCount = (yearGroup: PostArchiveResponse) => yearGroup.total
 
 const scrollToYear = (year: number) => {
   activeYear.value = year
@@ -115,7 +114,7 @@ onUnmounted(() => {
           <div class="px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
             <h2 class="text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
             <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
-              {{ getYearCount(yearGroup) }} Posts
+              {{ yearGroup.total }} Posts
             </span>
           </div>
 
@@ -177,33 +176,9 @@ onUnmounted(() => {
 
           <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 
-          <!-- Timeline Nav -->
-          <div class="bento-card px-5 py-5">
-            <div class="flex justify-between items-center mb-4">
-              <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Timeline</h4>
-            </div>
-            <div class="relative pl-1">
-              <div class="absolute left-4.25 top-2 bottom-2 w-px bg-slate-100"></div>
-              <div class="flex flex-col gap-1">
-                <a
-                    v-for="yearGroup in archives"
-                    :key="yearGroup.year"
-                    class="relative pl-4 flex justify-between items-center py-1.5 cursor-pointer text-sm font-medium transition-all border-l-2"
-                    :class="activeYear === yearGroup.year
-                    ? 'border-slate-900 text-slate-900 font-semibold pl-5'
-                    : 'border-transparent text-slate-400 hover:text-slate-600 hover:pl-5'"
-                    @click="scrollToYear(yearGroup.year)"
-                >
-                  <span>{{ yearGroup.year }}</span>
-                  <span class="text-[10px] font-mono bg-slate-50 text-slate-400 border border-slate-100 px-1.5 rounded">
-                    {{ getYearCount(yearGroup) }}
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TimelineNav :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
 
-          <TopicList
+          <TagList
               :tags="tags"
               :active-tag-id="selectedTagId"
               @select="handleTagSelect"

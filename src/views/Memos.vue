@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { Pin } from 'lucide-vue-next'
 import { useInfiniteScroll } from '@vueuse/core'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
