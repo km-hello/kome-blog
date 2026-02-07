@@ -1,7 +1,7 @@
 <!-- src/views/Links.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import LinkExchange from '@/components/sidebar/LinkExchange.vue'

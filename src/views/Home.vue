@@ -1,7 +1,7 @@
 <!-- src/views/Home.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppHeader from '@/components/common/AppHeader.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
