@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Pin } from 'lucide-vue-next'
+import { useInfiniteScroll } from '@vueuse/core'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
@@ -17,6 +18,10 @@ const memos = ref<MemoResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
 const total = ref(0)
 const searchKeyword = ref('')
+const pageNum = ref(1)
+const pageSize = 10
+const loading = ref(false)
+const noMore = ref(false)
 
 const formatTime = (dateStr: string) => {
   const date = new Date(dateStr)
@@ -39,19 +44,39 @@ const formatTime = (dateStr: string) => {
 }
 
 const fetchMemos = async () => {
-  const res = await getMemosApi({
-    pageNum: 1,
-    pageSize: 50,
-    keyword: searchKeyword.value || undefined,
-  })
-  memos.value = res.records
-  total.value = res.total
+  if (loading.value) return
+  loading.value = true
+  try {
+    const res = await getMemosApi({
+      pageNum: pageNum.value,
+      pageSize,
+      keyword: searchKeyword.value || undefined,
+    })
+    memos.value.push(...res.records)
+    total.value = res.total
+    if (pageNum.value * pageSize >= res.total) {
+      noMore.value = true
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+const loadMore = async () => {
+  if (loading.value || noMore.value) return
+  pageNum.value++
+  await fetchMemos()
 }
 
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
+  pageNum.value = 1
+  noMore.value = false
+  memos.value = []
   fetchMemos()
 }
+
+useInfiniteScroll(document, loadMore, { distance: 200 })
 
 onMounted(async () => {
   await Promise.all([
@@ -108,9 +133,10 @@ onMounted(async () => {
           </article>
         </div>
 
-        <!-- End -->
+        <!-- Loading / End -->
         <div class="text-center py-8">
-          <span class="text-xs font-mono text-slate-300 tracking-wide">— End of Stream —</span>
+          <span v-if="loading" class="text-xs font-mono text-slate-400 tracking-wide">Loading...</span>
+          <span v-else-if="noMore" class="text-xs font-mono text-slate-300 tracking-wide">— End of Stream —</span>
         </div>
       </main>
 
