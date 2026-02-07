@@ -1,4 +1,4 @@
-<!-- src/components/ui/Pagination.vue -->
+<!-- src/components/common/Pagination.vue -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
