@@ -180,7 +180,7 @@ onUnmounted(() => {
           <!-- Timeline Nav -->
           <div class="bento-card px-5 py-5">
             <div class="flex justify-between items-center mb-4">
-              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Timeline</h4>
+              <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Timeline</h4>
             </div>
             <div class="relative pl-1">
               <div class="absolute left-4.25 top-2 bottom-2 w-px bg-slate-100"></div>

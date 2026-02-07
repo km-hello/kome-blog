@@ -389,7 +389,7 @@ watch(
             <div class="sticky top-24 space-y-6">
               <!-- Table of Contents -->
               <div v-if="toc.length > 0" class="bento-card p-6">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">
                   Table of Contents
                 </h3>
                 <ul
