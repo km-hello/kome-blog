@@ -17,6 +17,13 @@ export interface MemoQueryRequest extends BaseQuery {
     ignorePinned?: boolean
 }
 
+export interface MemoStatsResponse {
+    totalCount: number
+    totalWords: number
+    thisMonthCount: number
+    latestDate: string | null
+}
+
 // ==================== API 接口 ====================
 
 export const getMemosApi = (params: MemoQueryRequest): Promise<PageResult<MemoResponse>> => {
@@ -25,4 +32,8 @@ export const getMemosApi = (params: MemoQueryRequest): Promise<PageResult<MemoRe
 
 export const getLatestMemosApi = (limit: number = 2): Promise<MemoResponse[]> => {
     return request.get<MemoResponse[]>('/api/memos/latest', { params: { limit } })
+}
+
+export const getMemoStatsApi = (): Promise<MemoStatsResponse> => {
+    return request.get<MemoStatsResponse>('/api/memos/stats')
 }

@@ -6,16 +6,18 @@ import { useInfiniteScroll } from '@vueuse/core'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
+import MemoStats from '@/components/sidebar/MemoStats.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useMarkdown } from '@/composables/useMarkdown'
 
-import { getMemosApi, type MemoResponse } from '@/api/memo'
+import { getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse } from '@/api/memo'
 import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
 
 const { render } = useMarkdown()
 
 const memos = ref<MemoResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
+const memoStats = ref<MemoStatsResponse | null>(null)
 const total = ref(0)
 const searchKeyword = ref('')
 const pageNum = ref(1)
@@ -82,6 +84,7 @@ onMounted(async () => {
   await Promise.all([
     fetchMemos(),
     getSiteInfoApi().then(res => siteInfo.value = res),
+    getMemoStatsApi().then(res => memoStats.value = res),
   ])
 })
 </script>
@@ -145,6 +148,7 @@ onMounted(async () => {
         <div class="sticky top-24 space-y-5">
           <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
           <SearchBox placeholder="Search memos..." @search="handleSearch" />
+          <MemoStats v-if="memoStats" :stats="memoStats" />
         </div>
       </aside>
     </div>
