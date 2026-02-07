@@ -1,6 +1,6 @@
 <!-- src/components/sidebar/ProfileCard.vue -->
 <script setup lang="ts">
-import { Github, Twitter, Mail, Rss } from 'lucide-vue-next'
+import { Github, Globe, Mail, Rss } from 'lucide-vue-next'
 import type { OwnerInfo, SiteStats } from '@/api/site'
 
 defineProps<{
@@ -61,7 +61,7 @@ const defaultAvatar = 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'
     <!-- Social Links -->
     <div class="grid grid-cols-4 gap-2">
       <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="GitHub"><Github :size="18" /></a>
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="Twitter"><Twitter :size="18" /></a>
+      <a href="https://km-o.com" target="_blank" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="Homepage"><Globe :size="18" /></a>
       <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="Email"><Mail :size="18" /></a>
       <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="RSS"><Rss :size="18" /></a>
     </div>

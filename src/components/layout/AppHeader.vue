@@ -10,7 +10,10 @@ const navItems = [
   { label: 'Archive', path: '/archive' },
   { label: 'Memos', path: '/memos' },
   { label: 'Links', path: '/links' },
-  { label: 'About', path: '/about' },
+]
+
+const externalLinks = [
+  { label: 'About', href: 'https://km-o.com' },
 ]
 
 const isActive = (path: string) => {
@@ -40,6 +43,16 @@ const isActive = (path: string) => {
         >
           {{ item.label }}
         </router-link>
+        <a
+            v-for="link in externalLinks"
+            :key="link.href"
+            :href="link.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-3 py-2 rounded-md transition-colors hover:text-slate-900 hover:bg-slate-100"
+        >
+          {{ link.label }}
+        </a>
       </nav>
 
       <button class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
