@@ -394,7 +394,7 @@ watch(
                 </h3>
                 <ul
                     ref="tocContainer"
-                    class="space-y-0 relative custom-scroll pr-2"
+                    class="space-y-0 relative scrollbar-thin overflow-y-auto scroll-smooth pr-2"
                     style="max-height: calc(100vh - 400px)"
                 >
                   <div class="absolute left-0 top-0 bottom-0 w-px bg-slate-100"></div>
@@ -466,7 +466,7 @@ watch(
               </button>
             </div>
             <!-- 内容区 -->
-            <div class="flex-1 overflow-auto p-6 bg-slate-50">
+            <div class="flex-1 overflow-auto scrollbar-thin p-6 bg-slate-50">
               <div class="inline-flex min-h-full min-w-full items-center justify-center">
                 <div
                     class="mermaid-modal-content shrink-0 transition-[width,height] duration-200"
@@ -483,27 +483,6 @@ watch(
 </template>
 
 <style scoped>
-/* Custom Scrollbar */
-.custom-scroll {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #e2e8f0 transparent;
-  scroll-behavior: smooth;
-}
-.custom-scroll::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #e2e8f0;
-  border-radius: 4px;
-}
-.custom-scroll:hover::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-}
-
 /* Modal 动画 */
 .modal-enter-active,
 .modal-leave-active {
