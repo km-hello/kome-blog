@@ -138,7 +138,7 @@ onUnmounted(() => {
                       v-for="post in monthGroup.posts"
                       :key="post.id"
                       :to="`/post/${post.slug}`"
-                      class="px-3 py-2.5 -ml-3 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 cursor-pointer group rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-100 transition-all"
+                      class="px-3 py-2.5 -ml-3 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 cursor-pointer group rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-all"
                   >
                     <span class="text-sm font-mono font-bold text-slate-300 group-hover:text-slate-500 transition-colors sm:w-8 shrink-0">
                       {{ formatDay(post.createTime) }}
@@ -150,7 +150,7 @@ onUnmounted(() => {
                       <span
                           v-for="tag in post.tags"
                           :key="tag.id"
-                          class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-slate-50 border border-slate-100 text-slate-300 group-hover:text-slate-500 group-hover:border-slate-200 transition-colors"
+                          class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-slate-50 border border-slate-100 text-slate-300 group-hover:text-slate-500 group-hover:border-slate-300 transition-colors"
                       >
                         {{ tag.name }}
                       </span>

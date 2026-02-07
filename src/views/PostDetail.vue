@@ -264,7 +264,7 @@ watch(
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f2f4f7]">
+  <div class="min-h-screen flex flex-col">
     <AppHeader />
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full">

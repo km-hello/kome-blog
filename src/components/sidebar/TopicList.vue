@@ -37,7 +37,7 @@ const handleTagClick = (tagId: number) => {
           class="px-3 py-1.5 rounded-md flex items-center gap-2 cursor-pointer border transition-colors"
           :class="activeTagId === tag.id
             ? 'bg-slate-800 border-slate-700 text-white'
-            : 'bg-slate-50 border-slate-100 text-slate-600 hover:border-slate-300 hover:text-slate-900'"
+            : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900'"
       >
         <span class="text-xs font-bold">{{ tag.name }}</span>
         <span
