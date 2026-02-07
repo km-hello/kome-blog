@@ -29,7 +29,7 @@ const handleTagClick = (tagId: number) => {
       </button>
     </div>
 
-    <div class="flex flex-wrap gap-2 max-h-60 overflow-y-auto pr-1">
+    <div class="flex flex-wrap gap-2 max-h-60 overflow-y-auto scrollbar-thin pr-1">
       <button
           v-for="tag in tags"
           :key="tag.id"

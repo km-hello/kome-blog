@@ -8,7 +8,7 @@ import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TopicList from '@/components/sidebar/TopicList.vue'
 import MemoPreview from '@/components/sidebar/MemoPreview.vue'
 import PostCard from '@/components/home/PostCard.vue'
-import Pagination from '@/components/ui/Pagination.vue'
+import Pagination from '@/components/common/Pagination.vue'
 
 import { getPostsApi, type PostSimpleResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
