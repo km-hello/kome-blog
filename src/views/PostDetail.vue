@@ -264,7 +264,7 @@ watch(
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f2f4f7]">
+  <div class="min-h-screen flex flex-col">
     <AppHeader />
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full">
@@ -389,7 +389,7 @@ watch(
             <div class="sticky top-24 space-y-6">
               <!-- Table of Contents -->
               <div v-if="toc.length > 0" class="bento-card p-6">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">
                   Table of Contents
                 </h3>
                 <ul

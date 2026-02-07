@@ -18,7 +18,7 @@ const formatDate = (dateStr: string): string => {
 <template>
   <div class="bento-card px-5 py-5">
     <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Latest Memos</h4>
+      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Latest Memos</h4>
     </div>
 
     <div class="space-y-3">
@@ -26,7 +26,7 @@ const formatDate = (dateStr: string): string => {
           v-for="memo in memos"
           :key="memo.id"
           to="/memos"
-          class="p-3 rounded-lg block bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors group"
+          class="p-3 rounded-lg block bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors group"
       >
         <div class="flex gap-3 items-start">
           <StickyNote :size="12" class="text-slate-300 mt-1 shrink-0" />

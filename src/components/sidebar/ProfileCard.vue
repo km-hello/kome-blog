@@ -1,6 +1,6 @@
 <!-- src/components/sidebar/ProfileCard.vue -->
 <script setup lang="ts">
-import { Github, Twitter, Mail, Rss } from 'lucide-vue-next'
+import { Github, Globe, Mail, Rss } from 'lucide-vue-next'
 import type { OwnerInfo, SiteStats } from '@/api/site'
 
 defineProps<{
@@ -30,25 +30,25 @@ const defaultAvatar = 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'
 
     <!-- Stats -->
     <div class="grid grid-cols-4 gap-2">
-      <div class="text-center py-2 rounded-lg cursor-default group hover:bg-slate-50 transition-colors">
+      <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedPostCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">POSTS</div>
       </div>
-      <div class="text-center py-2 rounded-lg cursor-default group hover:bg-slate-50 transition-colors">
+      <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.usedTagCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">TAGS</div>
       </div>
-      <div class="text-center py-2 rounded-lg cursor-default group hover:bg-slate-50 transition-colors">
+      <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedMemoCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">MEMOS</div>
       </div>
-      <div class="text-center py-2 rounded-lg cursor-default group hover:bg-slate-50 transition-colors">
+      <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedLinkCount }}
         </div>
@@ -60,10 +60,10 @@ const defaultAvatar = 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'
 
     <!-- Social Links -->
     <div class="grid grid-cols-4 gap-2">
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="GitHub"><Github :size="18" /></a>
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="Twitter"><Twitter :size="18" /></a>
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="Email"><Mail :size="18" /></a>
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 hover:text-slate-900 transition-colors" title="RSS"><Rss :size="18" /></a>
+      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="GitHub"><Github :size="18" /></a>
+      <a href="https://km-o.com" target="_blank" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="Homepage"><Globe :size="18" /></a>
+      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="Email"><Mail :size="18" /></a>
+      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="RSS"><Rss :size="18" /></a>
     </div>
   </div>
 </template>

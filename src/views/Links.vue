@@ -89,7 +89,7 @@ onMounted(async () => {
           <!-- Exchange Card -->
           <div class="bento-card px-5 py-6">
             <div class="flex justify-between items-center mb-4">
-              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Exchange</h4>
+              <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Exchange</h4>
             </div>
 
             <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">

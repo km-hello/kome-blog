@@ -19,7 +19,7 @@ const handleTagClick = (tagId: number) => {
 <template>
   <div class="bento-card px-5 py-5">
     <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Topics</h4>
+      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Topics</h4>
       <button
           v-if="activeTagId"
           @click="emit('select', null)"
@@ -37,7 +37,7 @@ const handleTagClick = (tagId: number) => {
           class="px-3 py-1.5 rounded-md flex items-center gap-2 cursor-pointer border transition-colors"
           :class="activeTagId === tag.id
             ? 'bg-slate-800 border-slate-700 text-white'
-            : 'bg-slate-50 border-slate-100 text-slate-600 hover:border-slate-300 hover:text-slate-900'"
+            : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900'"
       >
         <span class="text-xs font-bold">{{ tag.name }}</span>
         <span

@@ -24,7 +24,7 @@ const formattedDate = computed(() => {
     <!-- Date Column -->
     <div class="flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start w-full md:w-20 shrink-0 text-gray-400 border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-6">
       <div class="text-center md:text-left">
-        <span class="text-3xl block font-bold text-slate-800 leading-none group-hover:text-slate-900 transition-colors">
+        <span class="text-2xl block font-semibold text-slate-800 leading-none group-hover:text-slate-900 transition-colors">
           {{ formattedDate.day }}
         </span>
         <span class="text-[10px] font-bold uppercase tracking-widest mt-1.5 block text-gray-400">
@@ -42,7 +42,7 @@ const formattedDate = computed(() => {
       <div class="flex flex-col md:flex-row gap-6 mb-5">
         <div class="flex-1 flex flex-col justify-start">
           <router-link :to="`/post/${post.slug}`">
-            <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-3 leading-tight decoration-2 decoration-slate-300 underline-offset-4 group-hover:underline transition-all">
+            <h2 class="text-xl md:text-2xl font-semibold text-slate-900 mb-3 leading-tight decoration-2 decoration-slate-300 underline-offset-4 group-hover:underline transition-all">
               <Pin v-if="post.isPinned" :size="16" class="inline-block mr-1.5 -mt-0.5 text-slate-400" />
               {{ post.title }}
             </h2>
@@ -75,7 +75,7 @@ const formattedDate = computed(() => {
           <span
               v-for="tag in post.tags"
               :key="tag.id"
-              class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-50 border border-slate-100 text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-colors cursor-pointer"
+              class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-700 transition-colors cursor-pointer"
           >
             {{ tag.name }}
           </span>
