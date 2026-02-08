@@ -6,6 +6,7 @@ import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TagList from '@/components/sidebar/TagList.vue'
 import TimelineNav from '@/components/sidebar/TimelineNav.vue'
+import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import { getArchivePostsApi, type PostArchiveResponse } from '@/api/post'
@@ -183,6 +184,8 @@ onUnmounted(() => {
               :active-tag-id="selectedTagId"
               @select="handleTagSelect"
           />
+
+          <SiteFooter />
         </div>
       </aside>
     </div>
