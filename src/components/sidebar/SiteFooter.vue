@@ -1,7 +1,7 @@
 <!-- src/components/sidebar/SiteFooter.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { LoaderCircle } from 'lucide-vue-next'
+import { Timer } from 'lucide-vue-next'
 
 const runningDays = ref(0)
 
@@ -13,11 +13,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="text-center py-2 flex flex-col gap-1">
-    <span class="text-[10px] text-gray-400">© 2025 Kome Blog</span>
-    <span class="text-[10px] text-gray-300 font-mono flex items-center justify-center gap-1">
-      <LoaderCircle :size="8" class="animate-spin" />
-      Running for {{ runningDays }} days
-    </span>
+  <div class="bento-card px-5 py-4">
+    <div class="flex items-center justify-between">
+      <a href="https://github.com/kome-blog" target="_blank" class="text-[10px] font-semibold text-slate-400 tracking-widest hover:text-slate-600 transition-colors">
+        © 2026 Kome Blog
+      </a>
+      <span class="text-[10px] font-semibold text-slate-400 tracking-widest flex items-center gap-1">
+        <Timer :size="10" />
+        Running {{ runningDays }} days
+      </span>
+    </div>
   </div>
 </template>
