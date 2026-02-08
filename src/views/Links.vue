@@ -5,6 +5,7 @@ import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import LinkExchange from '@/components/sidebar/LinkExchange.vue'
+import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import { getLinksApi, type LinkResponse } from '@/api/link'
@@ -87,6 +88,8 @@ onMounted(async () => {
           <SearchBox placeholder="Search links..." @search="handleSearch" />
 
           <LinkExchange />
+
+          <SiteFooter />
         </div>
       </aside>
     </div>

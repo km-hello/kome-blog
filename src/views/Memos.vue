@@ -7,6 +7,7 @@ import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
+import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useMarkdown } from '@/composables/useMarkdown'
 
@@ -149,6 +150,8 @@ onMounted(async () => {
           <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
           <SearchBox placeholder="Search memos..." @search="handleSearch" />
           <MemoStats v-if="memoStats" :stats="memoStats" />
+
+          <SiteFooter />
         </div>
       </aside>
     </div>
