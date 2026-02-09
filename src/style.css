@@ -533,15 +533,17 @@
   font-size: 14px;
 }
 
-/* Memo 链接使用低调灰色 + 下划线，区别于文章正文的蓝色链接 */
+/* Memo 链接：蓝色 + hover 下划线动画，与 .markdown-body a 保持一致 */
 .markdown-compact a {
-  color: #64748b;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
 }
 
 .markdown-compact a:hover {
-  color: #334155;
+  border-bottom-color: #3b82f6;
 }
 
 /*
@@ -606,7 +608,15 @@
 }
 
 .markdown-mini a {
-  color: #64748b;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.markdown-mini a:hover {
+  border-bottom-color: #3b82f6;
 }
 
 /* 预览中图片限制高度，防止撑开容器 */
