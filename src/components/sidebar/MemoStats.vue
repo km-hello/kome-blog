@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import type { MemoStatsResponse } from '@/api/memo'
 
-const props = defineProps<{
+defineProps<{
   stats: MemoStatsResponse
 }>()
 

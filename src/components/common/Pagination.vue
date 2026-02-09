@@ -46,7 +46,7 @@ const goToPage = (page: number) => {
 <template>
   <div v-if="totalPages > 1" class="flex justify-center items-center gap-2 py-6">
     <button
-        class="size-9 rounded-md flex items-center justify-center bg-white border border-black/[0.04] text-slate-600 font-medium text-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:bg-slate-900 hover:text-white hover:border-slate-900 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-600 disabled:hover:border-black/[0.04]"
+        class="size-9 rounded-md flex items-center justify-center bg-white border border-black/4 text-slate-600 font-medium text-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:bg-slate-900 hover:text-white hover:border-slate-900 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-600 disabled:hover:border-black/4"
         :disabled="current === 1"
         @click="goToPage(current - 1)"
     >
@@ -56,15 +56,15 @@ const goToPage = (page: number) => {
     <button
         v-for="page in pageNumbers"
         :key="page"
-        class="size-9 rounded-md flex items-center justify-center bg-white border border-black/[0.04] text-slate-600 font-medium text-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:bg-slate-900 hover:text-white hover:border-slate-900"
-        :class="{ '!bg-slate-900 !text-white !border-slate-900': current === page }"
+        class="size-9 rounded-md flex items-center justify-center bg-white border border-black/4 text-slate-600 font-medium text-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:bg-slate-900 hover:text-white hover:border-slate-900"
+        :class="{ 'bg-slate-900! text-white! border-slate-900!': current === page }"
         @click="goToPage(page)"
     >
       {{ page }}
     </button>
 
     <button
-        class="size-9 rounded-md flex items-center justify-center bg-white border border-black/[0.04] text-slate-600 font-medium text-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:bg-slate-900 hover:text-white hover:border-slate-900 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-600 disabled:hover:border-black/[0.04]"
+        class="size-9 rounded-md flex items-center justify-center bg-white border border-black/4 text-slate-600 font-medium text-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all hover:bg-slate-900 hover:text-white hover:border-slate-900 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-600 disabled:hover:border-black/4"
         :disabled="current === totalPages"
         @click="goToPage(current + 1)"
     >

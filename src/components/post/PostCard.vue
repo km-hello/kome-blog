@@ -34,7 +34,7 @@ const formattedDate = computed(() => {
           {{ formattedDate.year }}
         </span>
       </div>
-      <div class="hidden md:block w-1 h-8 bg-gradient-to-b from-gray-200 to-transparent mt-4"></div>
+      <div class="hidden md:block w-1 h-8 bg-linear-to-b from-gray-200 to-transparent mt-4"></div>
     </div>
 
     <!-- Content -->

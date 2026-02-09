@@ -36,8 +36,8 @@ const openMermaidModal = (svgContent: string) => {
   if (!w || !h) {
     const vb = svg.getAttribute('viewBox')?.split(/\s+/).map(Number)
     if (vb && vb.length === 4) {
-      w = vb[2]
-      h = vb[3]
+      w = vb[2] ?? 0
+      h = vb[3] ?? 0
     }
   }
 
@@ -179,7 +179,7 @@ const fetchData = async () => {
     handleScroll()
   } catch (error) {
     console.error('Failed to fetch post:', error)
-    router.push('/')
+    await router.push('/')
   } finally {
     loading.value = false
   }
@@ -342,7 +342,7 @@ watch(
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <!-- Article Content -->
           <article class="lg:col-span-9">
-            <div class="bento-card p-8 md:p-10 min-h-[600px]">
+            <div class="bento-card p-8 md:p-10 min-h-150">
               <div class="markdown-body" v-html="renderedContent"></div>
             </div>
 
@@ -394,17 +394,16 @@ watch(
                 </h3>
                 <ul
                     ref="tocContainer"
-                    class="space-y-0 relative scrollbar-thin overflow-y-auto scroll-smooth pr-2"
+                    class="space-y-0 relative scrollbar-thin overflow-y-auto scroll-smooth pr-2 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-slate-100"
                     style="max-height: calc(100vh - 400px)"
                 >
-                  <div class="absolute left-0 top-0 bottom-0 w-px bg-slate-100"></div>
                   <li v-for="item in toc" :key="item.id">
                     <a
                         :href="'#' + item.id"
                         class="toc-link block py-1.5 text-sm text-slate-500 hover:text-slate-800 cursor-pointer truncate transition-all border-l-2 border-transparent"
                         :class="[
                         activeSection === item.id
-                          ? 'active text-slate-900 font-semibold !border-l-slate-900 bg-slate-50'
+                          ? 'active text-slate-900 font-semibold border-l-slate-900! bg-slate-50'
                           : '',
                         item.level === 3 ? 'pl-6' : 'pl-4',
                       ]"
@@ -423,7 +422,12 @@ watch(
 
     <!-- Mermaid 放大模态框 -->
     <Teleport to="body">
-      <Transition name="modal">
+      <Transition
+          enter-active-class="transition-opacity duration-200 ease-in-out"
+          leave-active-class="transition-opacity duration-200 ease-in-out"
+          enter-from-class="opacity-0"
+          leave-to-class="opacity-0"
+      >
         <div
             v-if="mermaidModalOpen"
             class="fixed inset-0 z-50 flex items-center justify-center"
@@ -441,7 +445,7 @@ watch(
                 >
                   <ZoomOut :size="18" />
                 </button>
-                <span class="text-sm text-slate-600 min-w-[4rem] text-center">{{ Math.round(mermaidZoom * 100) }}%</span>
+                <span class="text-sm text-slate-600 min-w-16 text-center">{{ Math.round(mermaidZoom * 100) }}%</span>
                 <button
                     class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
                     title="Ctrl + Scroll Up"
@@ -469,7 +473,7 @@ watch(
             <div class="flex-1 overflow-auto scrollbar-thin p-6 bg-slate-50">
               <div class="inline-flex min-h-full min-w-full items-center justify-center">
                 <div
-                    class="mermaid-modal-content shrink-0 transition-[width,height] duration-200"
+                    class="shrink-0 transition-[width,height] duration-200 [&_svg]:block [&_svg]:size-full"
                     :style="{ width: mermaidDisplayWidth + 'px', height: mermaidDisplayHeight + 'px' }"
                     v-html="mermaidModalContent"
                 ></div>
@@ -481,22 +485,3 @@ watch(
     </Teleport>
   </div>
 </template>
-
-<style scoped>
-/* Modal 动画 */
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.2s ease;
-}
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-
-/* Mermaid 模态框内容 */
-.mermaid-modal-content :deep(svg) {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-</style>

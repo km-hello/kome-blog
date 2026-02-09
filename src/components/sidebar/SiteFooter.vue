@@ -15,7 +15,7 @@ onMounted(() => {
 <template>
   <div class="bento-card px-5 py-4">
     <div class="flex items-center justify-between">
-      <a href="https://github.com/kome-blog" target="_blank" class="text-[10px] font-semibold text-slate-400 tracking-widest hover:text-slate-600 transition-colors">
+      <a href="https://github.com/kome-blog" target="_blank" class="text-[10px] font-semibold text-slate-400 tracking-widest hover:text-slate-700 transition-colors">
         © 2026 Kome Blog
       </a>
       <span class="text-[10px] font-semibold text-slate-400 tracking-widest flex items-center gap-1">

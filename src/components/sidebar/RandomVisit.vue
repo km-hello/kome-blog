@@ -13,7 +13,7 @@ const picked = ref<LinkResponse | null>(null)
 const roll = () => {
   if (props.links.length === 0) return
   const idx = Math.floor(Math.random() * props.links.length)
-  picked.value = props.links[idx]
+  picked.value = props.links[idx] ?? null
 }
 </script>
 
@@ -38,7 +38,7 @@ const roll = () => {
         <span class="text-xs font-bold text-slate-600 truncate block group-hover:text-blue-600 transition-colors">{{ picked.name }}</span>
         <span class="text-[11px] text-slate-400 truncate block">{{ picked.description }}</span>
       </div>
-      <ExternalLink :size="12" class="text-slate-300 group-hover:text-blue-500 shrink-0 transition-colors" />
+      <ExternalLink :size="12" class="text-slate-300 group-hover:text-blue-600 shrink-0 transition-colors" />
     </a>
 
     <button

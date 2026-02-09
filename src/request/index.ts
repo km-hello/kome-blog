@@ -55,10 +55,6 @@ class Request {
     get<T = any>(url: string, config?: any): Promise<T> {
         return service.get(url, config);
     }
-
-    post<T = any>(url: string, data?: any, config?: any): Promise<T> {
-        return service.post(url, data, config);
-    }
 }
 
 export default new Request();
