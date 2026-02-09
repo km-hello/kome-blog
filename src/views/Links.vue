@@ -1,32 +1,44 @@
 <!-- src/views/Links.vue -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import {onMounted, ref} from 'vue'
+import {Globe} from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import LinkExchange from '@/components/sidebar/LinkExchange.vue'
+import RandomVisit from '@/components/sidebar/RandomVisit.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
-import { getLinksApi, type LinkResponse } from '@/api/link'
-import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
+import {getLinksApi, type LinkResponse} from '@/api/link'
+import {getSiteInfoApi, type SiteInfoResponse} from '@/api/site'
 
 const links = ref<LinkResponse[]>([])
 const siteInfo = ref<SiteInfoResponse | null>(null)
 const searchKeyword = ref('')
+const loading = ref(true)
 
 const fetchLinks = async () => {
-  const res = await getLinksApi({
+  loading.value = true
+  links.value = await getLinksApi({
     pageNum: 1,
     pageSize: 100,
     keyword: searchKeyword.value || undefined,
   })
-  links.value = res
+  loading.value = false
 }
 
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
   fetchLinks()
+}
+
+const extractDomain = (url: string) => {
+  try {
+    return new URL(url).hostname
+  } catch {
+    return url
+  }
 }
 
 onMounted(async () => {
@@ -51,30 +63,45 @@ onMounted(async () => {
             count-label="Total Links"
         />
 
+        <!-- Skeleton Loading -->
+        <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div v-for="i in 6" :key="i" class="bento-card p-5 flex flex-col items-center animate-pulse">
+            <div class="size-16 rounded-full bg-slate-200 mb-3"></div>
+            <div class="h-4 bg-slate-200 rounded w-2/3 mb-2"></div>
+            <div class="h-3 bg-slate-100 rounded w-full mb-1"></div>
+            <div class="h-3 bg-slate-100 rounded w-4/5"></div>
+            <div class="mt-3 pt-3 border-t border-slate-100 w-full flex justify-center">
+              <div class="h-3 bg-slate-100 rounded w-1/2"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Links Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <a
               v-for="link in links"
               :key="link.id"
               :href="link.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="bento-card p-4 flex items-center gap-4 group cursor-pointer"
+              class="bento-card p-5 h-full flex flex-col items-center text-center group cursor-pointer"
           >
-            <div class="size-12 rounded-full bg-slate-100 p-0.5 border border-slate-100 shrink-0 overflow-hidden">
+            <div class="size-16 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 shrink-0 overflow-hidden mb-3 group-hover:scale-105 transition-transform">
               <img
                   :src="link.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${link.name}`"
                   :alt="link.name"
                   class="size-full rounded-full bg-white object-cover"
               >
             </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-sm font-bold text-slate-900 truncate pr-2 group-hover:text-blue-600 transition-colors">
-                {{ link.name }}
-              </h3>
-              <p class="text-xs text-slate-500 line-clamp-1 leading-relaxed">
-                {{ link.description }}
-              </p>
+            <h3 class="text-sm font-bold text-slate-900 truncate w-full group-hover:text-blue-600 transition-colors">
+              {{ link.name }}
+            </h3>
+            <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mt-1 min-h-10">
+              {{ link.description }}
+            </p>
+            <div class="mt-3 pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+              <Globe :size="12" />
+              <span class="truncate max-w-[80%]">{{ extractDomain(link.url) }}</span>
             </div>
           </a>
         </div>
@@ -88,6 +115,8 @@ onMounted(async () => {
           <SearchBox placeholder="Search links..." @search="handleSearch" />
 
           <LinkExchange />
+
+          <RandomVisit :links="links" />
 
           <SiteFooter />
         </div>
