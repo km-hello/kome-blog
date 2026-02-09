@@ -1,45 +1,61 @@
 <!-- src/components/sidebar/LinkExchange.vue -->
 <script setup lang="ts">
-import { Send } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { Copy, Check } from 'lucide-vue-next'
+
+const copied = ref(false)
+
+const fields = [
+  { label: 'Name', value: 'Kome Blog' },
+  { label: 'Desc', value: 'A collection of thoughts.' },
+  { label: 'Link', value: 'https://kome.blog' },
+  { label: 'Avatar', value: 'https://api.dicebear.com/7.x/shapes/svg?seed=Kome' },
+]
+
+const copyAll = async () => {
+  const text = fields.map(f => `${f.label}: ${f.value}`).join('\n')
+  await navigator.clipboard.writeText(text)
+  copied.value = true
+  setTimeout(() => (copied.value = false), 2000)
+}
+
+const copiedField = ref('')
+
+const copyField = async (field: typeof fields[number]) => {
+  await navigator.clipboard.writeText(field.value)
+  copiedField.value = field.label
+  setTimeout(() => (copiedField.value = ''), 1500)
+}
 </script>
 
 <template>
-  <!-- Exchange Card -->
-  <div class="bento-card px-5 py-6">
-    <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Exchange</h4>
-    </div>
+  <div class="bento-card px-5 py-5">
+    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Exchange</h4>
 
-    <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
-      <p class="text-sm text-slate-700 leading-relaxed mb-4 font-medium">
-        Welcome to exchange links. Please ensure your site is accessible.
-      </p>
-      <div class="space-y-2.5">
-        <div class="flex items-center gap-2 text-xs text-slate-600 font-mono bg-white px-2 py-1.5 rounded border border-slate-100">
-          <span class="size-1.5 bg-slate-300 rounded-full shrink-0"></span>
-          <span class="opacity-50">Name:</span>
-          <span class="font-bold text-slate-800">Kome Blog</span>
-        </div>
-        <div class="flex items-center gap-2 text-xs text-slate-600 font-mono bg-white px-2 py-1.5 rounded border border-slate-100">
-          <span class="size-1.5 bg-slate-300 rounded-full shrink-0"></span>
-          <span class="opacity-50">Desc:</span>
-          <span class="font-bold text-slate-800 truncate">A collection of thoughts.</span>
-        </div>
-        <div class="flex items-center gap-2 text-xs text-slate-600 font-mono bg-white px-2 py-1.5 rounded border border-slate-100">
-          <span class="size-1.5 bg-slate-300 rounded-full shrink-0"></span>
-          <span class="opacity-50">Link:</span>
-          <span class="font-bold text-slate-800 truncate">https://kome.blog</span>
-        </div>
+    <div class="space-y-2">
+      <div
+          v-for="field in fields"
+          :key="field.label"
+          @click="copyField(field)"
+          class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors cursor-pointer group"
+      >
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest w-10 shrink-0">{{ field.label }}</span>
+        <span class="text-xs text-slate-700 font-medium truncate flex-1">{{ field.value }}</span>
+        <component
+            :is="copiedField === field.label ? Check : Copy"
+            :size="11"
+            class="shrink-0 transition-colors"
+            :class="copiedField === field.label ? 'text-emerald-500' : 'text-slate-300 group-hover:text-slate-500'"
+        />
       </div>
     </div>
 
-    <div class="mt-5">
-      <a
-          href="mailto:contact@kome.blog"
-          class="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 py-2.5 rounded-md text-xs font-bold uppercase tracking-wide transition-all"
-      >
-        <Send :size="12" /> Send Request
-      </a>
-    </div>
+    <button
+        @click="copyAll"
+        class="mt-3 w-full flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-100 hover:border-slate-300 text-slate-500 hover:text-slate-700 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-wide transition-all cursor-pointer"
+    >
+      <component :is="copied ? Check : Copy" :size="11" />
+      {{ copied ? 'Copied!' : 'Copy All' }}
+    </button>
   </div>
 </template>
