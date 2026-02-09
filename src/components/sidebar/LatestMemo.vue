@@ -11,7 +11,7 @@ defineProps<{
 const { render } = useMarkdown()
 
 const formatDate = (dateStr: string): string => {
-  return dateStr.split('T')[0]
+  return dateStr.split('T')[0] ?? dateStr
 }
 </script>
 
