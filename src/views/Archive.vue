@@ -11,13 +11,14 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import { getArchivePostsApi, type PostArchiveResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
-import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
+import { useSiteStore } from '@/stores/useSiteStore'
+
+const siteStore = useSiteStore()
 
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
 const archives = ref<PostArchiveResponse[]>([])
 const tags = ref<TagPostCountResponse[]>([])
-const siteInfo = ref<SiteInfoResponse | null>(null)
 const activeYear = ref<number | null>(null)
 const searchKeyword = ref('')
 const selectedTagId = ref<number | null>(null)
@@ -79,7 +80,7 @@ onMounted(async () => {
   await Promise.all([
     fetchArchives(),
     getTagsApi().then(res => tags.value = res),
-    getSiteInfoApi().then(res => siteInfo.value = res),
+    siteStore.fetchSiteInfo(),
   ])
 
   window.addEventListener('scroll', handleScroll)
@@ -173,7 +174,7 @@ onUnmounted(() => {
       <!-- Sidebar -->
       <aside class="lg:col-span-4 relative hidden lg:block">
         <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
+          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
 
           <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 
