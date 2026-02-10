@@ -11,10 +11,11 @@ import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import {getLinksApi, type LinkResponse} from '@/api/link'
-import {getSiteInfoApi, type SiteInfoResponse} from '@/api/site'
+import { useSiteStore } from '@/stores/useSiteStore'
+
+const siteStore = useSiteStore()
 
 const links = ref<LinkResponse[]>([])
-const siteInfo = ref<SiteInfoResponse | null>(null)
 const searchKeyword = ref('')
 const loading = ref(true)
 
@@ -44,7 +45,7 @@ const extractDomain = (url: string) => {
 onMounted(async () => {
   await Promise.all([
     fetchLinks(),
-    getSiteInfoApi().then(res => siteInfo.value = res),
+    siteStore.fetchSiteInfo(),
   ])
 })
 </script>
@@ -110,7 +111,7 @@ onMounted(async () => {
       <!-- Sidebar -->
       <aside class="lg:col-span-4 relative hidden lg:block">
         <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
+          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
 
           <SearchBox placeholder="Search links..." @search="handleSearch" />
 

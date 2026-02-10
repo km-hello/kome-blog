@@ -13,12 +13,13 @@ import Pagination from '@/components/common/Pagination.vue'
 import { getPostsApi, type PostSimpleResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { getLatestMemosApi, type MemoResponse } from '@/api/memo'
-import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
+import { useSiteStore } from '@/stores/useSiteStore'
+
+const siteStore = useSiteStore()
 
 const posts = ref<PostSimpleResponse[]>([])
 const tags = ref<TagPostCountResponse[]>([])
 const memos = ref<MemoResponse[]>([])
-const siteInfo = ref<SiteInfoResponse | null>(null)
 
 const currentPage = ref(1)
 const pageSize = 8
@@ -67,7 +68,7 @@ onMounted(async () => {
     fetchPosts(),
     getTagsApi().then(res => tags.value = res),
     getLatestMemosApi(2).then(res => memos.value = res),
-    getSiteInfoApi().then(res => siteInfo.value = res),
+    siteStore.fetchSiteInfo(),
   ])
 })
 </script>
@@ -93,9 +94,9 @@ onMounted(async () => {
       <aside class="lg:col-span-4 relative">
         <div class="sticky top-24 space-y-5">
           <ProfileCard
-              v-if="siteInfo"
-              :owner="siteInfo.owner"
-              :stats="siteInfo.stats"
+              v-if="siteStore.siteInfo"
+              :owner="siteStore.siteInfo.owner"
+              :stats="siteStore.siteInfo.stats"
           />
 
           <SearchBox placeholder="Search..." @search="handleSearch" />

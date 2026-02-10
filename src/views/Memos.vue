@@ -12,12 +12,12 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useMarkdown } from '@/composables/useMarkdown'
 
 import { getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse } from '@/api/memo'
-import { getSiteInfoApi, type SiteInfoResponse } from '@/api/site'
+import { useSiteStore } from '@/stores/useSiteStore'
 
+const siteStore = useSiteStore()
 const { render } = useMarkdown()
 
 const memos = ref<MemoResponse[]>([])
-const siteInfo = ref<SiteInfoResponse | null>(null)
 const memoStats = ref<MemoStatsResponse | null>(null)
 const total = ref(0)
 const searchKeyword = ref('')
@@ -84,7 +84,7 @@ useInfiniteScroll(document, loadMore, { distance: 200 })
 onMounted(async () => {
   await Promise.all([
     fetchMemos(),
-    getSiteInfoApi().then(res => siteInfo.value = res),
+    siteStore.fetchSiteInfo(),
     getMemoStatsApi().then(res => memoStats.value = res),
   ])
 })
@@ -114,13 +114,13 @@ onMounted(async () => {
             <!-- Header: Avatar + Name + Time -->
             <div class="flex items-center gap-3 mb-3">
               <img
-                  :src="siteInfo?.owner.avatar"
+                  :src="siteStore.siteInfo?.owner.avatar"
                   class="size-8 rounded-full ring-1 ring-slate-100"
                   alt="avatar"
               />
               <div class="flex items-center gap-2 flex-1 min-w-0">
                 <span class="text-sm font-medium text-slate-800 truncate">
-                  {{ siteInfo?.owner.nickname || 'Admin' }}
+                  {{ siteStore.siteInfo?.owner.nickname || 'Admin' }}
                 </span>
                 <span class="text-slate-300">·</span>
                 <span class="text-xs text-slate-400">{{ formatTime(memo.createTime) }}</span>
@@ -147,7 +147,7 @@ onMounted(async () => {
       <!-- Sidebar -->
       <aside class="lg:col-span-4 relative hidden lg:block">
         <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteInfo" :owner="siteInfo.owner" :stats="siteInfo.stats" />
+          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
           <SearchBox placeholder="Search memos..." @search="handleSearch" />
           <MemoStats v-if="memoStats" :stats="memoStats" />
 
