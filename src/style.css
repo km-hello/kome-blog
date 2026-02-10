@@ -31,7 +31,7 @@
 
   /* 页面背景和文字颜色 */
   body {
-    background-color: #f2f4f7;     /* 浅灰蓝背景 */
+    background-color: oklch(0.965 0.003 261.0);     /* 浅灰蓝背景 */
     color: oklch(0.145 0 0);       /* 接近纯黑的正文色 */
   }
 
