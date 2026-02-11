@@ -31,6 +31,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/PostDetail.vue'),
         meta: { title: '文章' },
     },
+    {
+        path: '/preview',
+        name: 'Preview',
+        component: () => import('@/views/Preview.vue'),
+        meta: { title: '预览' },
+    },
 ]
 
 const router = createRouter({
