@@ -6,6 +6,7 @@
     - 分页加载 Memo 列表，配合 useInfiniteScroll 实现无限滚动
     - 关键词搜索（重置分页后重新加载）
     - Markdown 渲染（compact 密度），支持代码块一键复制
+    - Mermaid 图表点击放大（由 MermaidModal 组件提供）
     - 右侧栏：个人资料卡片、搜索框、Memo 统计
 -->
 <script setup lang="ts">
@@ -18,6 +19,7 @@ import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
+import MermaidModal from '@/components/common/MermaidModal.vue'
 import { useMarkdown } from '@/composables/useMarkdown'
 import { useCodeCopy } from '@/composables/useCodeCopy'
 
@@ -25,7 +27,7 @@ import { getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse
 import { useSiteStore } from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
-const { render } = useMarkdown()
+const { render, renderMermaidCharts } = useMarkdown()
 
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
@@ -101,6 +103,8 @@ const fetchMemos = async () => {
     }
   } finally {
     loading.value = false
+    // 脱离 Vue 更新队列，等 DOM 稳定后渲染 Mermaid 图表
+    setTimeout(() => renderMermaidCharts(), 0)
   }
 }
 
@@ -215,5 +219,8 @@ onMounted(async () => {
         </div>
       </aside>
     </div>
+
+    <!-- Mermaid 图表放大模态框 -->
+    <MermaidModal />
   </div>
 </template>

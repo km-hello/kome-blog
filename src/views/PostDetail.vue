@@ -6,22 +6,23 @@
     - 根据 slug 获取文章数据并渲染 Markdown 正文
     - 右侧 TOC 目录：自动跟随滚动高亮、点击平滑跳转
     - 代码块一键复制（由 useCodeCopy composable 提供）
-    - Mermaid 图表点击放大：模态框 + 缩放控制（按钮 / Ctrl+滚轮）
+    - Mermaid 图表点击放大（由 MermaidModal 组件提供）
     - 文章过期提醒（距上次更新超过 180 天）
     - 上一篇 / 下一篇导航
 -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, X, ZoomIn, ZoomOut, RotateCcw, AlertTriangle } from 'lucide-vue-next'
+import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle } from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
+import MermaidModal from '@/components/common/MermaidModal.vue'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
 import { useCodeCopy } from '@/composables/useCodeCopy'
 
 const route = useRoute()
 const router = useRouter()
-const { render, toc, renderMermaidCharts } = useMarkdown()
+const { render, toc, renderMermaidCharts } = useMarkdown({ collectToc: true })
 
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
@@ -34,82 +35,6 @@ const loading = ref(true)
 const activeSection = ref('')
 /** TOC 容器 DOM 引用，用于自动滚动 TOC 列表到当前活跃项 */
 const tocContainer = ref<HTMLElement | null>(null)
-
-/* ==================== Mermaid 图表放大查看 ==================== */
-
-const mermaidModalOpen = ref(false)
-/** 模态框中渲染的 SVG 字符串（已移除固定尺寸，改由 CSS 控制） */
-const mermaidModalContent = ref('')
-/** 当前缩放倍率，默认 1 = 100% */
-const mermaidZoom = ref(1)
-/** SVG 原始宽高，作为缩放计算的基准 */
-const mermaidSvgOriginalWidth = ref(0)
-const mermaidSvgOriginalHeight = ref(0)
-
-/**
- * 打开 Mermaid 放大模态框
- * 1. 解析 SVG 字符串，提取原始宽高（优先 width/height 属性，其次 viewBox）
- * 2. 移除 SVG 的固定尺寸属性，改为 100% 填充容器
- * 3. 锁定 body 滚动，防止背景页面跟随滚动
- */
-const openMermaidModal = (svgContent: string) => {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(svgContent, 'image/svg+xml')
-  const svg = doc.querySelector('svg')
-  if (!svg) return
-
-  // 提取原始尺寸：优先读取 width/height 属性，回退到 viewBox
-  let w = parseFloat(svg.getAttribute('width') || '0')
-  let h = parseFloat(svg.getAttribute('height') || '0')
-  if (!w || !h) {
-    const vb = svg.getAttribute('viewBox')?.split(/\s+/).map(Number)
-    if (vb && vb.length === 4) {
-      w = vb[2] ?? 0
-      h = vb[3] ?? 0
-    }
-  }
-
-  // 兜底默认值，避免 0 宽高导致不可见
-  mermaidSvgOriginalWidth.value = w || 600
-  mermaidSvgOriginalHeight.value = h || 400
-
-  // 移除固定尺寸，改为自适应容器
-  svg.removeAttribute('width')
-  svg.removeAttribute('height')
-  svg.setAttribute('style', 'width: 100%; height: 100%;')
-
-  mermaidModalContent.value = svg.outerHTML
-  mermaidZoom.value = 1
-  mermaidModalOpen.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-/** 关闭模态框并恢复页面滚动 */
-const closeMermaidModal = () => {
-  mermaidModalOpen.value = false
-  mermaidModalContent.value = ''
-  mermaidZoom.value = 1
-  document.body.style.overflow = ''
-}
-
-/** 根据缩放倍率计算实际显示尺寸 */
-const mermaidDisplayWidth = computed(() => mermaidSvgOriginalWidth.value * mermaidZoom.value)
-const mermaidDisplayHeight = computed(() => mermaidSvgOriginalHeight.value * mermaidZoom.value)
-
-/** 放大：每次 +25%，上限 500% */
-const zoomIn = () => {
-  mermaidZoom.value = Math.min(mermaidZoom.value + 0.25, 5)
-}
-
-/** 缩小：每次 -25%，下限 25% */
-const zoomOut = () => {
-  mermaidZoom.value = Math.max(mermaidZoom.value - 0.25, 0.25)
-}
-
-/** 重置缩放为 100% */
-const resetZoom = () => {
-  mermaidZoom.value = 1
-}
 
 /* ==================== 工具函数 ==================== */
 
@@ -246,60 +171,15 @@ const fetchData = async () => {
   }
 }
 
-/* ==================== 全局事件处理器（事件委托） ==================== */
-
-/**
- * Mermaid 图表点击放大
- * 通过事件委托监听 document 的 click 事件，匹配已渲染的 .mermaid-container
- */
-const handleMermaidClick = (e: MouseEvent) => {
-  const container = (e.target as HTMLElement).closest('.mermaid-container.mermaid-rendered') as HTMLElement | null
-  if (!container) return
-
-  const svg = container.querySelector('svg')
-  if (svg) {
-    openMermaidModal(svg.outerHTML)
-  }
-}
-
-/** ESC 键关闭 Mermaid 模态框 */
-const handleKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && mermaidModalOpen.value) {
-    closeMermaidModal()
-  }
-}
-
-/**
- * Ctrl/Cmd + 滚轮 缩放 Mermaid 图表
- * passive: false 允许 preventDefault 阻止浏览器默认缩放行为
- */
-const handleWheel = (e: WheelEvent) => {
-  if (!mermaidModalOpen.value) return
-  if (e.ctrlKey || e.metaKey) {
-    e.preventDefault()
-    // deltaY 转换为缩放增量，每次变化约 0.1%（连续滚动体验更平滑）
-    const delta = -e.deltaY * 0.001
-    const newZoom = Math.min(5, Math.max(0.25, mermaidZoom.value + delta))
-    mermaidZoom.value = Math.round(newZoom * 100) / 100
-  }
-}
-
 /* ==================== 生命周期 ==================== */
 
 onMounted(() => {
   fetchData()
   window.addEventListener('scroll', handleScroll)
-  document.addEventListener('click', handleMermaidClick)
-  document.addEventListener('keydown', handleKeydown)
-  document.addEventListener('wheel', handleWheel, { passive: false })
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
-  document.removeEventListener('click', handleMermaidClick)
-  document.removeEventListener('keydown', handleKeydown)
-  document.removeEventListener('wheel', handleWheel)
-  document.body.style.overflow = ''
 })
 
 /** 监听路由参数变化，支持文章间直接跳转（如上一篇/下一篇）而不重建组件 */
@@ -476,73 +356,7 @@ watch(
       </template>
     </div>
 
-    <!-- ==================== Mermaid 图表放大模态框 ==================== -->
-    <!-- 使用 Teleport 挂载到 body，避免被父容器 overflow 裁切 -->
-    <Teleport to="body">
-      <Transition
-          enter-active-class="transition-opacity duration-200 ease-in-out"
-          leave-active-class="transition-opacity duration-200 ease-in-out"
-          enter-from-class="opacity-0"
-          leave-to-class="opacity-0"
-      >
-        <div
-            v-if="mermaidModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center"
-            @click.self="closeMermaidModal"
-        >
-          <!-- 半透明遮罩 -->
-          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeMermaidModal"></div>
-
-          <!-- 模态框主体 -->
-          <div class="relative w-[70vw] h-[70vh] bg-white rounded-xl shadow-2xl flex flex-col">
-            <!-- 顶部工具栏：缩放控制 + 关闭按钮 -->
-            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-              <div class="flex items-center gap-2">
-                <button
-                    class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                    title="Ctrl + Scroll Down"
-                    @click="zoomOut"
-                >
-                  <ZoomOut :size="18" />
-                </button>
-                <span class="text-sm text-slate-600 min-w-16 text-center">{{ Math.round(mermaidZoom * 100) }}%</span>
-                <button
-                    class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                    title="Ctrl + Scroll Up"
-                    @click="zoomIn"
-                >
-                  <ZoomIn :size="18" />
-                </button>
-                <button
-                    class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                    title="Reset"
-                    @click="resetZoom"
-                >
-                  <RotateCcw :size="18" />
-                </button>
-              </div>
-              <button
-                  class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                  title="Close (Esc)"
-                  @click="closeMermaidModal"
-              >
-                <X :size="18" />
-              </button>
-            </div>
-
-            <!-- SVG 内容区域：支持滚动和缩放 -->
-            <div class="flex-1 overflow-auto scrollbar-thin p-6 bg-slate-50">
-              <div class="inline-flex min-h-full min-w-full items-center justify-center">
-                <div
-                    class="shrink-0 transition-[width,height] duration-200 [&_svg]:block [&_svg]:size-full"
-                    :style="{ width: mermaidDisplayWidth + 'px', height: mermaidDisplayHeight + 'px' }"
-                    v-html="mermaidModalContent"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
+    <!-- Mermaid 图表放大模态框 -->
+    <MermaidModal />
   </div>
 </template>
