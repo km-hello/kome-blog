@@ -25,7 +25,7 @@ import { getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse
 import { useSiteStore } from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
-const { render } = useMarkdown()
+const { render, renderMermaidCharts } = useMarkdown()
 
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
@@ -101,6 +101,8 @@ const fetchMemos = async () => {
     }
   } finally {
     loading.value = false
+    // 脱离 Vue 更新队列，等 DOM 稳定后渲染 Mermaid 图表
+    setTimeout(() => renderMermaidCharts(), 0)
   }
 }
 
