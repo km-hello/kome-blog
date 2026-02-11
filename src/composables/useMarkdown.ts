@@ -88,11 +88,15 @@ export const renderMermaidCharts = async () => {
     }
 }
 
-export function useMarkdown() {
+export function useMarkdown(options: { collectToc?: boolean } = {}) {
+    const { collectToc = false } = options
     const toc: Ref<TocItem[]> = ref([])
 
     const render = (content: string): string => {
-        toc.value = []
+        // 仅在需要收集目录时重置 toc，避免在渲染循环中触发响应式更新
+        if (collectToc) {
+            toc.value = []
+        }
         content = preprocessMarkdown(content)
 
         const marked = new Marked({
@@ -113,7 +117,7 @@ export function useMarkdown() {
                         .replace(/\s+/g, '-')
                         .replace(/[^\w\-\u4e00-\u9fa5]+/g, '')
 
-                    if (depth === 2 || depth === 3) {
+                    if (collectToc && (depth === 2 || depth === 3)) {
                         toc.value.push({ id, text: plainText, level: depth })
                     }
 

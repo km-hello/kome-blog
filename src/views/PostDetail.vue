@@ -22,7 +22,7 @@ import { useCodeCopy } from '@/composables/useCodeCopy'
 
 const route = useRoute()
 const router = useRouter()
-const { render, toc, renderMermaidCharts } = useMarkdown()
+const { render, toc, renderMermaidCharts } = useMarkdown({ collectToc: true })
 
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
