@@ -21,7 +21,7 @@ const props = defineProps<{
   memos: MemoResponse[]
 }>()
 
-const { render } = useMarkdown()
+const { render, renderMermaidCharts } = useMarkdown()
 
 /**
  * 缓存每个 Memo 内容容器的 DOM 引用
@@ -65,6 +65,7 @@ const checkOverflow = () => {
 watch(() => props.memos, async () => {
   await nextTick()
   checkOverflow()
+  setTimeout(() => renderMermaidCharts(), 0)
 }, { flush: 'post' })
 
 /** 从 ISO 日期字符串中提取 YYYY-MM-DD 部分 */

@@ -628,3 +628,11 @@
   margin: 0.25em 0;
   box-shadow: none;
 }
+
+/* 预览中 Mermaid 图表紧凑显示 */
+.markdown-mini .mermaid-container {
+  padding: 0.25em;
+  margin: 0.25em 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
