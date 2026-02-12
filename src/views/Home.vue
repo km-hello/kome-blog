@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TagList from '@/components/sidebar/TagList.vue'
 import LatestMemo from '@/components/sidebar/LatestMemo.vue'
@@ -98,6 +99,7 @@ onMounted(async () => {
               :owner="siteStore.siteInfo.owner"
               :stats="siteStore.siteInfo.stats"
           />
+          <SetupHint v-else-if="siteStore.initialized === false" />
 
           <SearchBox placeholder="Search..." @search="handleSearch" />
 

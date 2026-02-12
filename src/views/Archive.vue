@@ -3,6 +3,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TagList from '@/components/sidebar/TagList.vue'
 import TimelineNav from '@/components/sidebar/TimelineNav.vue'
@@ -175,6 +176,7 @@ onUnmounted(() => {
       <aside class="lg:col-span-4 relative hidden lg:block">
         <div class="sticky top-24 space-y-5">
           <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+          <SetupHint v-else-if="siteStore.initialized === false" />
 
           <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 

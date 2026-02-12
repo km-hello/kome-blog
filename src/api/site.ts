@@ -26,6 +26,16 @@ export interface SiteInfoResponse {
 
 // ==================== API 接口 ====================
 
+/**
+ * 获取站点公开信息
+ */
 export const getSiteInfoApi = (): Promise<SiteInfoResponse> => {
     return request.get<SiteInfoResponse>('/api/site/info')
+}
+
+/**
+ * 检查系统是否已初始化
+ */
+export const checkInitializedApi = (): Promise<boolean> => {
+    return request.get<boolean>('/api/site/initialized')
 }
