@@ -166,7 +166,7 @@ onMounted(async () => {
         />
 
         <!-- ==================== Memo 列表 ==================== -->
-        <div class="flex flex-col gap-4">
+        <div v-if="memos.length > 0" class="flex flex-col gap-4">
           <article
               v-for="memo in memos"
               :key="memo.id"
@@ -199,8 +199,13 @@ onMounted(async () => {
           </article>
         </div>
 
+        <!-- ==================== 空状态 ==================== -->
+        <div v-else-if="!loading && noMore" class="text-center py-16 text-sm text-slate-400">
+          {{ searchKeyword ? 'No matching memos.' : 'No memos yet.' }}
+        </div>
+
         <!-- ==================== 加载状态 / 底部提示 ==================== -->
-        <div class="text-center py-8">
+        <div v-if="memos.length > 0 || loading" class="text-center py-8">
           <span v-if="loading" class="text-xs font-mono text-slate-400 tracking-wide">Loading...</span>
           <span v-else-if="noMore" class="text-xs font-mono text-slate-300 tracking-wide">&mdash; End of Stream &mdash;</span>
         </div>

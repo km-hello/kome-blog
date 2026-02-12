@@ -81,14 +81,22 @@ onMounted(async () => {
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
       <!-- Main Content -->
       <main class="lg:col-span-8 flex flex-col gap-6">
-        <PostCard v-for="post in posts" :key="post.id" :post="post" />
+        <!-- Posts List -->
+        <template v-if="posts.length > 0">
+          <PostCard v-for="post in posts" :key="post.id" :post="post" />
 
-        <Pagination
-            :current="currentPage"
-            :total="total"
-            :page-size="pageSize"
-            @change="handlePageChange"
-        />
+          <Pagination
+              :current="currentPage"
+              :total="total"
+              :page-size="pageSize"
+              @change="handlePageChange"
+          />
+        </template>
+
+        <!-- Empty State -->
+        <div v-else-if="!loading" class="text-center py-16 text-sm text-slate-400">
+          {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
+        </div>
       </main>
 
       <!-- Sidebar -->
