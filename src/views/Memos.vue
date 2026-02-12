@@ -15,6 +15,7 @@ import { Pin } from 'lucide-vue-next'
 import { useInfiniteScroll } from '@vueuse/core'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
@@ -210,6 +211,7 @@ onMounted(async () => {
         <div class="sticky top-24 space-y-5">
           <!-- 个人资料卡片 -->
           <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+          <SetupHint v-else-if="siteStore.initialized === false" />
           <!-- 搜索框 -->
           <SearchBox placeholder="Search memos..." @search="handleSearch" />
           <!-- Memo 统计（热力图等） -->
