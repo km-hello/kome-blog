@@ -7,8 +7,6 @@ defineProps<{
   owner: OwnerInfo
   stats: SiteStats
 }>()
-
-const defaultAvatar = 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'
 </script>
 
 <template>
@@ -17,7 +15,7 @@ const defaultAvatar = 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'
     <div class="flex items-center gap-4 mb-6">
       <div class="size-14 rounded-full p-1 bg-white border border-gray-100 shadow-sm overflow-hidden shrink-0">
         <img
-            :src="owner.avatar || defaultAvatar"
+            :src="owner.avatar"
             :alt="owner.nickname"
             class="size-full bg-slate-50 rounded-full"
         >
