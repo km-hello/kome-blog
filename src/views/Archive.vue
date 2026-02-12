@@ -23,6 +23,7 @@ const tags = ref<TagPostCountResponse[]>([])
 const activeYear = ref<number | null>(null)
 const searchKeyword = ref('')
 const selectedTagId = ref<number | null>(null)
+const loading = ref(true)
 
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
@@ -57,6 +58,7 @@ const formatDay = (dateStr: string) => {
 }
 
 const fetchArchives = async () => {
+  loading.value = true
   const res = await getArchivePostsApi({
     pageNum: 1,
     pageSize: 1000,
@@ -65,6 +67,7 @@ const fetchArchives = async () => {
   })
   archives.value = res
   if (res.length > 0) activeYear.value = res[0]?.year ?? null
+  loading.value = false
 }
 
 const handleSearch = (keyword: string) => {
@@ -107,68 +110,75 @@ onUnmounted(() => {
         />
 
         <!-- Year Blocks -->
-        <div
-            v-for="yearGroup in archives"
-            :key="yearGroup.year"
-            :id="`year-${yearGroup.year}`"
-            class="bento-card scroll-mt-32"
-        >
-          <!-- Year Header -->
-          <div class="px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
-            <h2 class="text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
-            <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
-              {{ yearGroup.total }} Posts
-            </span>
-          </div>
+        <template v-if="archives.length > 0">
+          <div
+              v-for="yearGroup in archives"
+              :key="yearGroup.year"
+              :id="`year-${yearGroup.year}`"
+              class="bento-card scroll-mt-32"
+          >
+            <!-- Year Header -->
+            <div class="px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
+              <h2 class="text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
+              <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
+                {{ yearGroup.total }} Posts
+              </span>
+            </div>
 
-          <!-- Timeline Body -->
-          <div class="p-8 relative">
-            <div class="absolute left-8 top-6 bottom-2 w-px bg-slate-100"></div>
+            <!-- Timeline Body -->
+            <div class="p-8 relative">
+              <div class="absolute left-8 top-6 bottom-2 w-px bg-slate-100"></div>
 
-            <div class="flex flex-col gap-8">
-              <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-16">
-                <!-- Month Node -->
-                <div class="absolute left-8 top-[-0.2rem] -translate-x-1/2">
-                  <span class="inline-flex items-center justify-center font-mono text-[0.65rem] font-semibold text-slate-400 bg-white border border-slate-100 rounded-full px-2.5 py-0.5 shadow-sm">
-                    {{ MONTH_NAMES[monthGroup.month - 1] }}
-                  </span>
-                </div>
-
-                <!-- Posts -->
-                <div class="flex flex-col gap-1 pt-1">
-                  <router-link
-                      v-for="post in monthGroup.posts"
-                      :key="post.id"
-                      :to="`/post/${post.slug}`"
-                      class="px-3 py-2.5 -ml-3 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 cursor-pointer group rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-all"
-                  >
-                    <span class="text-sm font-mono font-bold text-slate-300 group-hover:text-slate-500 transition-colors sm:w-8 shrink-0">
-                      {{ formatDay(post.createTime) }}
+              <div class="flex flex-col gap-8">
+                <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-16">
+                  <!-- Month Node -->
+                  <div class="absolute left-8 top-[-0.2rem] -translate-x-1/2">
+                    <span class="inline-flex items-center justify-center font-mono text-[0.65rem] font-semibold text-slate-400 bg-white border border-slate-100 rounded-full px-2.5 py-0.5 shadow-sm">
+                      {{ MONTH_NAMES[monthGroup.month - 1] }}
                     </span>
-                    <h3 class="flex-1 text-sm font-bold text-slate-700 group-hover:text-slate-900 group-hover:underline decoration-slate-300 decoration-2 underline-offset-4 transition-colors">
-                      {{ post.title }}
-                    </h3>
-                    <div class="flex flex-wrap gap-2 shrink-0">
-                      <span
-                          v-for="tag in post.tags"
-                          :key="tag.id"
-                          class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-slate-50 border border-slate-100 text-slate-300 group-hover:text-slate-500 group-hover:border-slate-300 transition-colors"
-                      >
-                        {{ tag.name }}
+                  </div>
+
+                  <!-- Posts -->
+                  <div class="flex flex-col gap-1 pt-1">
+                    <router-link
+                        v-for="post in monthGroup.posts"
+                        :key="post.id"
+                        :to="`/post/${post.slug}`"
+                        class="px-3 py-2.5 -ml-3 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 cursor-pointer group rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-all"
+                    >
+                      <span class="text-sm font-mono font-bold text-slate-300 group-hover:text-slate-500 transition-colors sm:w-8 shrink-0">
+                        {{ formatDay(post.createTime) }}
                       </span>
-                    </div>
-                  </router-link>
+                      <h3 class="flex-1 text-sm font-bold text-slate-700 group-hover:text-slate-900 group-hover:underline decoration-slate-300 decoration-2 underline-offset-4 transition-colors">
+                        {{ post.title }}
+                      </h3>
+                      <div class="flex flex-wrap gap-2 shrink-0">
+                        <span
+                            v-for="tag in post.tags"
+                            :key="tag.id"
+                            class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-slate-50 border border-slate-100 text-slate-300 group-hover:text-slate-500 group-hover:border-slate-300 transition-colors"
+                        >
+                          {{ tag.name }}
+                        </span>
+                      </div>
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- End Note -->
-        <div class="text-center text-xs text-slate-300 font-mono pb-8 flex items-center justify-center gap-2">
-          <span class="size-1 rounded-full bg-slate-300"></span>
-          <span>THE BEGINNING</span>
-          <span class="size-1 rounded-full bg-slate-300"></span>
+          <!-- End Note -->
+          <div class="text-center text-xs text-slate-300 font-mono pb-8 flex items-center justify-center gap-2">
+            <span class="size-1 rounded-full bg-slate-300"></span>
+            <span>THE BEGINNING</span>
+            <span class="size-1 rounded-full bg-slate-300"></span>
+          </div>
+        </template>
+
+        <!-- Empty State -->
+        <div v-else-if="!loading" class="text-center py-16 text-sm text-slate-400">
+          {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
         </div>
       </main>
 

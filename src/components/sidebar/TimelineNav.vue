@@ -18,7 +18,9 @@ const emit = defineEmits<{
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Timeline</h4>
     </div>
-    <div class="relative pl-1">
+
+    <!-- Timeline List -->
+    <div v-if="archives.length > 0" class="relative pl-1">
       <div class="absolute left-4.25 top-2 bottom-2 w-px bg-slate-100"></div>
       <div class="flex flex-col gap-1">
         <a
@@ -36,6 +38,11 @@ const emit = defineEmits<{
           </span>
         </a>
       </div>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else class="text-center py-4 text-xs text-slate-400">
+      No posts yet
     </div>
   </div>
 </template>

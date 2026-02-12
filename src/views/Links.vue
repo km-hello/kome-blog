@@ -65,21 +65,8 @@ onMounted(async () => {
             count-label="Total Links"
         />
 
-        <!-- Skeleton Loading -->
-        <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <div v-for="i in 6" :key="i" class="bento-card p-5 flex flex-col items-center animate-pulse">
-            <div class="size-16 rounded-full bg-slate-200 mb-3"></div>
-            <div class="h-4 bg-slate-200 rounded w-2/3 mb-2"></div>
-            <div class="h-3 bg-slate-100 rounded w-full mb-1"></div>
-            <div class="h-3 bg-slate-100 rounded w-4/5"></div>
-            <div class="mt-3 pt-3 border-t border-slate-100 w-full flex justify-center">
-              <div class="h-3 bg-slate-100 rounded w-1/2"></div>
-            </div>
-          </div>
-        </div>
-
         <!-- Links Grid -->
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-if="links.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <a
               v-for="link in links"
               :key="link.id"
@@ -106,6 +93,11 @@ onMounted(async () => {
               <span class="truncate max-w-[80%]">{{ extractDomain(link.url) }}</span>
             </div>
           </a>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else-if="!loading" class="text-center py-16 text-sm text-slate-400">
+          {{ searchKeyword ? 'No matching links.' : 'No links yet.' }}
         </div>
       </main>
 
