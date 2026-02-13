@@ -1,12 +1,44 @@
 <!-- src/components/sidebar/ProfileCard.vue -->
 <script setup lang="ts">
-import { Github, Globe, Mail, Rss } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { Globe, Mail, Rss, Home, Link as LinkIcon } from 'lucide-vue-next'
+import { IconGithub, IconX } from '@/components/icons/BrandIcons'
 import type { OwnerInfo, SiteStats } from '@/api/site'
 
-defineProps<{
+const props = defineProps<{
   owner: OwnerInfo
   stats: SiteStats
 }>()
+
+// platform 到图标的映射
+const iconMap: Record<string, any> = {
+  github: IconGithub,
+  twitter: IconX,
+  email: Mail,
+  homepage: Home,
+  website: Globe,
+  rss: Rss,
+}
+
+// 获取平台图标
+const getIcon = (platform: string) => iconMap[platform] || LinkIcon
+
+// 过滤掉 url 为空的链接（保留 # 以显示图标）
+const validLinks = computed(() =>
+    props.owner.socialLinks?.filter(link => link.url) || []
+)
+
+// 判断链接是否可点击
+const isClickable = (url: string) => url && url !== '#'
+
+// 获取链接的 href（处理 email 类型）
+const getLinkHref = (link: { platform: string; url: string }) => {
+  if (!isClickable(link.url)) return undefined
+  if (link.platform === 'email') {
+    return link.url.startsWith('mailto:') ? link.url : `mailto:${link.url}`
+  }
+  return link.url
+}
 </script>
 
 <template>
@@ -56,12 +88,23 @@ defineProps<{
 
     <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
-    <!-- Social Links -->
-    <div class="grid grid-cols-4 gap-2">
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="GitHub"><Github :size="18" /></a>
-      <a href="https://km-o.com" target="_blank" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="Homepage"><Globe :size="18" /></a>
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="Email"><Mail :size="18" /></a>
-      <a href="#" class="flex items-center justify-center h-10 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition-colors" title="RSS"><Rss :size="18" /></a>
+    <!-- Social Links (仅在有链接配置时显示) -->
+    <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-2">
+      <component
+          v-for="link in validLinks"
+          :key="link.platform"
+          :is="isClickable(link.url) ? 'a' : 'span'"
+          :href="getLinkHref(link)"
+          :target="isClickable(link.url) && link.platform !== 'email' ? '_blank' : undefined"
+          :rel="isClickable(link.url) ? 'noopener noreferrer' : undefined"
+          class="flex items-center justify-center h-10 rounded-lg border transition-colors"
+          :class="isClickable(link.url)
+            ? 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 cursor-pointer'
+            : 'bg-slate-50 border-slate-100 text-slate-300 cursor-default'"
+          :title="link.platform"
+      >
+        <component :is="getIcon(link.platform)" :size="18" />
+      </component>
     </div>
   </div>
 </template>

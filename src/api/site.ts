@@ -2,10 +2,17 @@ import request from '@/request'
 
 // ==================== 类型定义 ====================
 
+export interface SocialLink {
+    platform: string
+    url: string
+}
+
 export interface OwnerInfo {
     nickname: string
     avatar?: string
     description?: string
+    createdAt: string  // 站点创建时间（ISO 格式）
+    socialLinks?: SocialLink[]
 }
 
 export interface SiteStats {

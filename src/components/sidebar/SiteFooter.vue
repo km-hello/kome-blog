@@ -1,14 +1,18 @@
 <!-- src/components/sidebar/SiteFooter.vue -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { Timer } from 'lucide-vue-next'
+import { useSiteStore } from '@/stores/useSiteStore'
 
-const runningDays = ref(0)
+const siteStore = useSiteStore()
 
-onMounted(() => {
-  const startDate = new Date('2025-01-01')
+const runningDays = computed(() => {
+  const createdAt = siteStore.siteInfo?.owner?.createdAt
+  if (!createdAt) return 0
+
+  const startDate = new Date(createdAt)
   const now = new Date()
-  runningDays.value = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+  return Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
 })
 </script>
 
