@@ -101,7 +101,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
           :class="isClickable(link.url)
             ? 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 cursor-pointer'
             : 'bg-slate-50 border-slate-100 text-slate-300 cursor-default'"
-          :title="link.platform"
+          :title="isClickable(link.url) ? link.url : undefined"
       >
         <component :is="getIcon(link.platform)" :size="18" />
       </component>
