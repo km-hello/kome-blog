@@ -26,6 +26,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '友链' },
     },
     {
+        path: '/about',
+        name: 'About',
+        component: () => import('@/views/About.vue'),
+        meta: { title: '关于' },
+    },
+    {
         path: '/post/:slug',
         name: 'PostDetail',
         component: () => import('@/views/PostDetail.vue'),

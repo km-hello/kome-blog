@@ -10,11 +10,10 @@ const navItems = [
   { label: 'Archive', path: '/archive' },
   { label: 'Memos', path: '/memos' },
   { label: 'Links', path: '/links' },
+  { label: 'About', path: '/about' },
 ]
 
-const externalLinks = [
-  { label: 'About', href: 'https://km-o.com' },
-]
+const externalLinks: { label: string; href: string }[] = []
 
 const isActive = (path: string) => {
   if (path === '/') return route.path === '/'
