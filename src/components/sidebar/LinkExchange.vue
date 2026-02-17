@@ -5,11 +5,13 @@ import { Copy, Check } from 'lucide-vue-next'
 
 const copied = ref(false)
 
+const origin = window.location.origin
+
 const fields = [
   { label: 'Name', value: 'Kome Blog' },
+  { label: 'Link', value: origin },
   { label: 'Desc', value: 'A collection of thoughts.' },
-  { label: 'Link', value: 'https://kome.blog' },
-  { label: 'Avatar', value: 'https://api.dicebear.com/7.x/shapes/svg?seed=Kome' },
+  { label: 'Avatar', value: `${origin}/favicon.svg` },
 ]
 
 const copyAll = async () => {

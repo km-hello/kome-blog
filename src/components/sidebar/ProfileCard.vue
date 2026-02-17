@@ -45,11 +45,11 @@ const getLinkHref = (link: { platform: string; url: string }) => {
   <div class="bento-card p-6">
     <!-- Header -->
     <div class="flex items-center gap-4 mb-6">
-      <div class="size-14 rounded-full p-1 bg-white border border-gray-100 shadow-sm overflow-hidden shrink-0">
+      <div class="size-14 rounded-full overflow-hidden shrink-0 ring-2 ring-slate-100">
         <img
             :src="owner.avatar"
             :alt="owner.nickname"
-            class="size-full bg-slate-50 rounded-full"
+            class="size-full bg-slate-50 object-cover"
         >
       </div>
       <div>
