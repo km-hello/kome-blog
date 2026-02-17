@@ -60,8 +60,6 @@ const formatDay = (dateStr: string) => {
 const fetchArchives = async () => {
   loading.value = true
   const res = await getArchivePostsApi({
-    pageNum: 1,
-    pageSize: 1000,
     keyword: searchKeyword.value || undefined,
     tagId: selectedTagId.value ?? undefined,
   })
