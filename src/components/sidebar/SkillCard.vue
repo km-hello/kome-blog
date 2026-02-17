@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<{
   skills: () => [],
 })
 
-const hasSkills = computed(() => props.skills.length > 0)
+const hasSkills = computed(() => (props.skills?.length ?? 0) > 0)
 
 const levelConfig = [
   {
@@ -36,7 +36,7 @@ const levels = computed(() =>
   levelConfig
     .map(config => ({
       ...config,
-      items: props.skills.filter(s => s.level === config.level).map(s => s.name),
+      items: (props.skills ?? []).filter(s => s.level === config.level).map(s => s.name),
     }))
     .filter(group => group.items.length > 0)
 )
