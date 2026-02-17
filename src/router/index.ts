@@ -5,43 +5,43 @@ const routes: RouteRecordRaw[] = [
         path: '/',
         name: 'Home',
         component: () => import('@/views/Home.vue'),
-        meta: { title: '首页' },
+        meta: { title: 'Home' },
     },
     {
         path: '/archive',
         name: 'Archive',
         component: () => import('@/views/Archive.vue'),
-        meta: { title: '归档' },
+        meta: { title: 'Archive' },
     },
     {
         path: '/memos',
         name: 'Memos',
         component: () => import('@/views/Memos.vue'),
-        meta: { title: '随记' },
+        meta: { title: 'Memos' },
     },
     {
         path: '/links',
         name: 'Links',
         component: () => import('@/views/Links.vue'),
-        meta: { title: '友链' },
+        meta: { title: 'Links' },
     },
     {
         path: '/about',
         name: 'About',
         component: () => import('@/views/About.vue'),
-        meta: { title: '关于' },
+        meta: { title: 'About' },
     },
     {
         path: '/post/:slug',
         name: 'PostDetail',
         component: () => import('@/views/PostDetail.vue'),
-        meta: { title: '文章' },
+        meta: { title: 'Post' },
     },
     {
         path: '/preview',
         name: 'Preview',
         component: () => import('@/views/Preview.vue'),
-        meta: { title: '预览' },
+        meta: { title: 'Preview' },
     },
 ]
 
@@ -55,7 +55,7 @@ const router = createRouter({
 
 router.afterEach((to) => {
     const title = to.meta.title as string
-    document.title = title ? `${title} | Kome Blog` : 'Kome Blog'
+    document.title = title ? `${title} - Kome Blog` : 'Kome Blog'
 })
 
 export default router
