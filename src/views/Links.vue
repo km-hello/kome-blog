@@ -23,8 +23,6 @@ const loading = ref(true)
 const fetchLinks = async () => {
   loading.value = true
   links.value = await getLinksApi({
-    pageNum: 1,
-    pageSize: 100,
     keyword: searchKeyword.value || undefined,
   })
   loading.value = false

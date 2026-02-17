@@ -49,6 +49,12 @@ export interface PostQueryRequest extends BaseQuery {
     ignorePinned?: boolean
 }
 
+/** 归档查询请求（非分页，返回全量数据） */
+export interface PostArchiveQueryRequest {
+    keyword?: string
+    tagId?: number
+}
+
 /** 归档 - 简略文章 */
 export interface ArchiveSimplePost {
     id: number
@@ -78,7 +84,7 @@ export const getPostsApi = (params: PostQueryRequest): Promise<PageResult<PostSi
     return request.get<PageResult<PostSimpleResponse>>('/api/posts', { params })
 }
 
-export const getArchivePostsApi = (params: PostQueryRequest): Promise<PostArchiveResponse[]> => {
+export const getArchivePostsApi = (params: PostArchiveQueryRequest): Promise<PostArchiveResponse[]> => {
     return request.get<PostArchiveResponse[]>('/api/posts/archive', { params })
 }
 

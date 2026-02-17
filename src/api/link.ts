@@ -1,5 +1,4 @@
 import request from '@/request'
-import type { BaseQuery } from '@/types/api'
 
 // ==================== 类型定义 ====================
 
@@ -13,13 +12,13 @@ export interface LinkResponse {
     createTime: string
 }
 
-export interface LinkQueryRequest extends BaseQuery {
+/** 公开友链查询请求（非分页，返回全量数据） */
+export interface LinkPublicQueryRequest {
     keyword?: string
-    status?: number
 }
 
 // ==================== API 接口 ====================
 
-export const getLinksApi = (params: LinkQueryRequest): Promise<LinkResponse[]> => {
+export const getLinksApi = (params: LinkPublicQueryRequest): Promise<LinkResponse[]> => {
     return request.get<LinkResponse[]>('/api/links', { params })
 }
