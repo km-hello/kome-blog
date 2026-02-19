@@ -3,6 +3,7 @@
 import {onMounted, ref} from 'vue'
 import {Globe} from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
+import LinkCardSkeleton from '@/components/skeleton/LinkCardSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
@@ -63,8 +64,13 @@ onMounted(async () => {
             count-label="Total Links"
         />
 
+        <!-- Loading State -->
+        <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <LinkCardSkeleton v-for="i in 6" :key="i" />
+        </div>
+
         <!-- Links Grid -->
-        <div v-if="links.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-else-if="links.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <a
               v-for="link in links"
               :key="link.id"
@@ -94,7 +100,7 @@ onMounted(async () => {
         </div>
 
         <!-- Empty State -->
-        <div v-else-if="!loading" class="text-center py-16 text-sm text-slate-400">
+        <div v-else class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword ? 'No matching links.' : 'No links yet.' }}
         </div>
       </main>

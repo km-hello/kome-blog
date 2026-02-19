@@ -1,10 +1,12 @@
 <!-- src/components/sidebar/TagList.vue -->
 <script setup lang="ts">
+import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import type { TagPostCountResponse } from '@/api/tag'
 
 defineProps<{
   tags: TagPostCountResponse[]
   activeTagId?: number | null
+  loading?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -29,7 +31,9 @@ const handleTagClick = (tagId: number) => {
       </button>
     </div>
 
-    <div class="flex flex-wrap gap-2 max-h-60 overflow-y-auto scrollbar-thin pr-1">
+    <SidebarSkeleton v-if="loading && tags.length === 0" variant="tags" />
+
+    <div v-else class="flex flex-wrap gap-2 max-h-60 overflow-y-auto scrollbar-thin pr-1">
       <button
           v-for="tag in tags"
           :key="tag.id"
@@ -51,7 +55,7 @@ const handleTagClick = (tagId: number) => {
       </button>
     </div>
 
-    <div v-if="tags.length === 0" class="text-center py-4 text-xs text-slate-400">
+    <div v-if="!loading && tags.length === 0" class="text-center py-4 text-xs text-slate-400">
       No tags yet
     </div>
   </div>

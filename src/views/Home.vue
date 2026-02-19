@@ -9,6 +9,7 @@ import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TagList from '@/components/sidebar/TagList.vue'
 import LatestMemo from '@/components/sidebar/LatestMemo.vue'
 import PostCard from '@/components/post/PostCard.vue'
+import PostCardSkeleton from '@/components/skeleton/PostCardSkeleton.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 import { getPostsApi, type PostSimpleResponse } from '@/api/post'
@@ -28,7 +29,7 @@ const total = ref(0)
 const searchKeyword = ref('')
 const selectedTagId = ref<number | null>(null)
 
-const loading = ref(false)
+const loading = ref(true)
 
 const fetchPosts = async () => {
   loading.value = true
@@ -81,8 +82,13 @@ onMounted(async () => {
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
       <!-- Main Content -->
       <main class="lg:col-span-8 flex flex-col gap-6">
+        <!-- Loading State -->
+        <template v-if="loading">
+          <PostCardSkeleton v-for="i in 3" :key="i" />
+        </template>
+
         <!-- Posts List -->
-        <template v-if="posts.length > 0">
+        <template v-else-if="posts.length > 0">
           <PostCard v-for="post in posts" :key="post.id" :post="post" />
 
           <Pagination
@@ -94,7 +100,7 @@ onMounted(async () => {
         </template>
 
         <!-- Empty State -->
-        <div v-else-if="!loading" class="text-center py-16 text-sm text-slate-400">
+        <div v-else class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
         </div>
       </main>
@@ -111,11 +117,12 @@ onMounted(async () => {
 
           <SearchBox placeholder="Search..." @search="handleSearch" />
 
-          <LatestMemo :memos="memos" />
+          <LatestMemo :memos="memos" :loading="loading" />
 
           <TagList
               :tags="tags"
               :active-tag-id="selectedTagId"
+              :loading="loading"
               @select="handleTagSelect"
           />
 

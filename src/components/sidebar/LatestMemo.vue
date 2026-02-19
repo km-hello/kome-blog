@@ -14,11 +14,13 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
 import { StickyNote } from 'lucide-vue-next'
+import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import type { MemoResponse } from '@/api/memo'
 import { useMarkdown } from '@/composables/useMarkdown'
 
 const props = defineProps<{
   memos: MemoResponse[]
+  loading?: boolean
 }>()
 
 const { render, renderMermaidCharts } = useMarkdown()
@@ -81,8 +83,11 @@ const formatDate = (dateStr: string): string => {
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Latest Memos</h4>
     </div>
 
+    <!-- Loading State -->
+    <SidebarSkeleton v-if="loading && memos.length === 0" variant="memos" />
+
     <!-- Memo 列表 -->
-    <div class="space-y-3">
+    <div v-else class="space-y-3">
       <router-link
           v-for="memo in memos"
           :key="memo.id"
@@ -129,7 +134,7 @@ const formatDate = (dateStr: string): string => {
     </div>
 
     <!-- 空状态 -->
-    <div v-if="memos.length === 0" class="text-center py-4 text-xs text-slate-400">
+    <div v-if="!loading && memos.length === 0" class="text-center py-4 text-xs text-slate-400">
       No memos yet
     </div>
   </div>
