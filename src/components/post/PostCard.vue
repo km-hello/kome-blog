@@ -1,12 +1,14 @@
 <!-- src/components/post/PostCard.vue -->
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Clock, Eye, Pin } from 'lucide-vue-next'
 import type { PostSimpleResponse } from '@/api/post'
 
 const props = defineProps<{
   post: PostSimpleResponse
 }>()
+
+const imageLoaded = ref(false)
 
 const formattedDate = computed(() => {
   const date = new Date(props.post.createTime)
@@ -52,12 +54,12 @@ const formattedDate = computed(() => {
           </p>
         </div>
 
-        <div v-if="post.coverImage" class="hidden md:block w-40 h-28 shrink-0 overflow-hidden rounded-lg bg-slate-50">
-          <img :src="post.coverImage" class="size-full object-cover" alt="Cover" loading="lazy">
+        <div v-if="post.coverImage" class="hidden md:block w-40 h-28 shrink-0 overflow-hidden rounded-lg bg-slate-100" :class="{ 'animate-pulse': !imageLoaded }">
+          <img :src="post.coverImage" class="size-full object-cover" alt="Cover" loading="lazy" @load="imageLoaded = true">
         </div>
 
-        <div v-if="post.coverImage" class="md:hidden w-full h-48 overflow-hidden rounded-lg bg-slate-50 mt-2">
-          <img :src="post.coverImage" class="size-full object-cover" alt="Cover" loading="lazy">
+        <div v-if="post.coverImage" class="md:hidden w-full h-48 overflow-hidden rounded-lg bg-slate-100 mt-2" :class="{ 'animate-pulse': !imageLoaded }">
+          <img :src="post.coverImage" class="size-full object-cover" alt="Cover" loading="lazy" @load="imageLoaded = true">
         </div>
       </div>
 
