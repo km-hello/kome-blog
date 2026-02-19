@@ -15,6 +15,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle } from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
+import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
@@ -200,15 +201,7 @@ watch(
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full">
 
       <!-- ==================== 加载骨架屏 ==================== -->
-      <div v-if="loading" class="bento-card p-8 md:p-10 text-center">
-        <div class="animate-pulse space-y-4">
-          <div class="h-8 bg-slate-200 rounded w-3/4 mx-auto"></div>
-          <div class="h-4 bg-slate-100 rounded w-1/2 mx-auto"></div>
-          <div class="h-4 bg-slate-100 rounded w-2/3 mx-auto mt-8"></div>
-          <div class="h-4 bg-slate-100 rounded w-full mx-auto"></div>
-          <div class="h-4 bg-slate-100 rounded w-5/6 mx-auto"></div>
-        </div>
-      </div>
+      <PostDetailSkeleton v-if="loading" />
 
       <template v-else-if="post">
 
