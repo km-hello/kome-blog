@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
+import ArchiveSkeleton from '@/components/skeleton/ArchiveSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
@@ -107,8 +108,11 @@ onUnmounted(() => {
             count-label="Total Posts"
         />
 
+        <!-- Loading State -->
+        <ArchiveSkeleton v-if="loading" />
+
         <!-- Year Blocks -->
-        <template v-if="archives.length > 0">
+        <template v-else-if="archives.length > 0">
           <div
               v-for="yearGroup in archives"
               :key="yearGroup.year"
@@ -175,7 +179,7 @@ onUnmounted(() => {
         </template>
 
         <!-- Empty State -->
-        <div v-else-if="!loading" class="text-center py-16 text-sm text-slate-400">
+        <div v-else class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
         </div>
       </main>
@@ -193,6 +197,7 @@ onUnmounted(() => {
           <TagList
               :tags="tags"
               :active-tag-id="selectedTagId"
+              :loading="loading"
               @select="handleTagSelect"
           />
 
