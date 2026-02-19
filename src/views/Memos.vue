@@ -11,9 +11,10 @@
 -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Pin } from 'lucide-vue-next'
+import { Pin, Loader2 } from 'lucide-vue-next'
 import { useInfiniteScroll } from '@vueuse/core'
 import AppHeader from '@/components/common/AppHeader.vue'
+import MemoSkeleton from '@/components/skeleton/MemoSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
@@ -165,8 +166,13 @@ onMounted(async () => {
             count-label="Total Memos"
         />
 
+        <!-- ==================== Initial Loading State ==================== -->
+        <template v-if="loading && memos.length === 0">
+          <MemoSkeleton v-for="i in 3" :key="i" />
+        </template>
+
         <!-- ==================== Memo 列表 ==================== -->
-        <div v-if="memos.length > 0" class="flex flex-col gap-4">
+        <div v-else-if="memos.length > 0" class="flex flex-col gap-4">
           <article
               v-for="memo in memos"
               :key="memo.id"
@@ -206,7 +212,7 @@ onMounted(async () => {
 
         <!-- ==================== 加载状态 / 底部提示 ==================== -->
         <div v-if="memos.length > 0 || loading" class="text-center py-8">
-          <span v-if="loading" class="text-xs font-mono text-slate-400 tracking-wide">Loading...</span>
+          <Loader2 v-if="loading" class="size-5 animate-spin text-slate-300 mx-auto" />
           <span v-else-if="noMore" class="text-xs font-mono text-slate-300 tracking-wide">&mdash; End of Stream &mdash;</span>
         </div>
       </main>
