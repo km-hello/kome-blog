@@ -668,3 +668,13 @@
   .markdown-body .mermaid-container { padding: 1rem 0.5rem; margin: 1.25rem 0; }
   .markdown-body .katex-display { font-size: 0.95em; }
 }
+
+/* ================================================================
+   8. 侧边栏抽屉样式覆盖
+   Teleport 传入的内容带有 sticky top-24，在抽屉内无效且产生空白
+   ================================================================ */
+
+.sidebar-drawer-content > div {
+  position: static !important;
+  top: auto !important;
+}
