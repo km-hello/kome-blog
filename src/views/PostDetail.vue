@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle, ChevronDown } from 'lucide-vue-next'
+import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle, List, X, ArrowUp } from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
 import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
@@ -38,6 +38,8 @@ const activeSection = ref('')
 const tocContainer = ref<HTMLElement | null>(null)
 /** 移动端 TOC 折叠状态 */
 const mobileTocOpen = ref(false)
+/** 浮动按钮可见状态（滚动超过一屏后显示） */
+const showFab = ref(false)
 
 /* ==================== 工具函数 ==================== */
 
@@ -104,12 +106,20 @@ const scrollTo = (id: string) => {
   }
 }
 
+/** 平滑滚动到页面顶部 */
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 /**
  * 滚动事件处理：根据当前可视区域更新 TOC 高亮项
  * 遍历所有 h2/h3 标题，找到最后一个已滚过视口顶部 120px 的标题作为当前高亮项；
  * 页面顶部（scrollY < 100）时默认高亮第一个标题
  */
 const handleScroll = () => {
+  // 浮动按钮：滚动超过一屏后显示
+  showFab.value = window.scrollY > window.innerHeight
+
   const headers = document.querySelectorAll('.markdown-body h2, .markdown-body h3')
   if (headers.length === 0) return
 
@@ -271,38 +281,6 @@ watch(
 
           <!-- 文章正文 -->
           <article class="lg:col-span-9">
-            <!-- 移动端 TOC：可折叠目录（仅 < lg 显示） -->
-            <div v-if="toc.length > 0" class="lg:hidden bento-card p-4 mb-6">
-              <button
-                  @click="mobileTocOpen = !mobileTocOpen"
-                  class="flex items-center justify-between w-full text-left"
-              >
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Table of Contents</span>
-                <ChevronDown
-                    :size="16"
-                    class="text-slate-400 transition-transform duration-200"
-                    :class="{ 'rotate-180': mobileTocOpen }"
-                />
-              </button>
-              <ul v-show="mobileTocOpen" class="mt-3 space-y-0 relative border-l border-slate-100">
-                <li v-for="item in toc" :key="item.id">
-                  <a
-                      :href="'#' + item.id"
-                      class="block py-1.5 text-sm text-slate-500 hover:text-slate-800 cursor-pointer truncate transition-all border-l-2 border-transparent"
-                      :class="[
-                        activeSection === item.id
-                          ? 'text-slate-900 font-semibold border-l-slate-900! bg-slate-50'
-                          : '',
-                        item.level === 3 ? 'pl-6' : 'pl-4',
-                      ]"
-                      @click.prevent="scrollTo(item.id); mobileTocOpen = false"
-                  >
-                    {{ item.text }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
             <div class="bento-card p-4 sm:p-6 md:p-8 lg:p-10 min-h-150">
               <!-- Markdown 渲染区域：使用 .markdown-body 基础密度样式 -->
               <div class="markdown-body" v-html="renderedContent"></div>
@@ -385,5 +363,103 @@ watch(
 
     <!-- Mermaid 图表放大模态框 -->
     <MermaidModal />
+
+    <!-- ==================== 移动端 TOC：浮动按钮 + 底部弹出面板 ==================== -->
+    <template v-if="toc.length > 0">
+      <!-- 浮动按钮组（仅移动端，滚动超过一屏后显示） -->
+      <Transition
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 scale-90 translate-y-4"
+          enter-to-class="opacity-100 scale-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100 scale-100 translate-y-0"
+          leave-to-class="opacity-0 scale-90 translate-y-4"
+      >
+        <div
+            v-show="showFab && !mobileTocOpen"
+            class="lg:hidden fixed right-4 bottom-6 z-40 flex flex-col rounded-xl overflow-hidden"
+            style="border: 1px solid rgba(0, 0, 0, 0.06); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08)"
+        >
+          <button
+              class="size-11 bg-white/95 backdrop-blur-sm flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-50 active:bg-slate-100 transition-colors"
+              style="border-bottom: 1px solid rgba(0, 0, 0, 0.06)"
+              @click="scrollToTop"
+          >
+            <ArrowUp :size="18" />
+          </button>
+          <button
+              class="size-11 bg-white/95 backdrop-blur-sm flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-50 active:bg-slate-100 transition-colors"
+              @click="mobileTocOpen = true"
+          >
+            <List :size="18" />
+          </button>
+        </div>
+      </Transition>
+
+      <!-- 底部弹出遮罩 -->
+      <Transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
+      >
+        <div
+            v-if="mobileTocOpen"
+            class="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            @click="mobileTocOpen = false"
+        />
+      </Transition>
+
+      <!-- 底部弹出面板 -->
+      <Transition
+          enter-active-class="transition duration-250 ease-out"
+          enter-from-class="translate-y-full"
+          enter-to-class="translate-y-0"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="translate-y-0"
+          leave-to-class="translate-y-full"
+      >
+        <div
+            v-if="mobileTocOpen"
+            class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl"
+            style="max-height: 65vh"
+        >
+          <!-- 拖动条 -->
+          <div class="flex justify-center pt-3 pb-1">
+            <div class="w-10 h-1 rounded-full bg-slate-200" />
+          </div>
+          <!-- 标题栏 -->
+          <div class="flex items-center justify-between px-5 pb-3 border-b border-slate-100">
+            <h3 class="text-sm font-semibold text-slate-700">Table of Contents</h3>
+            <button
+                class="p-1.5 rounded-md text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                @click="mobileTocOpen = false"
+            >
+              <X :size="18" />
+            </button>
+          </div>
+          <!-- 目录列表 -->
+          <ul class="overflow-y-auto overscroll-contain px-5 py-3 space-y-0 scrollbar-thin" style="max-height: calc(65vh - 80px)">
+            <li v-for="item in toc" :key="item.id">
+              <a
+                  :href="'#' + item.id"
+                  class="block py-2.5 text-sm text-slate-500 hover:text-slate-800 cursor-pointer truncate transition-all border-l-2 border-transparent"
+                  :class="[
+                    activeSection === item.id
+                      ? 'text-slate-900 font-semibold border-l-slate-900! bg-slate-50 rounded-r-md'
+                      : '',
+                    item.level === 3 ? 'pl-7' : 'pl-4',
+                  ]"
+                  @click.prevent="scrollTo(item.id); mobileTocOpen = false"
+              >
+                {{ item.text }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </Transition>
+    </template>
   </div>
 </template>
