@@ -4,10 +4,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ArchiveSkeleton from '@/components/skeleton/ArchiveSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import ProfileCardSkeleton from '@/components/skeleton/ProfileCardSkeleton.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TagList from '@/components/sidebar/TagList.vue'
 import TimelineNav from '@/components/sidebar/TimelineNav.vue'
+import TimelineNavSkeleton from '@/components/skeleton/TimelineNavSkeleton.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
@@ -192,10 +194,12 @@ onUnmounted(() => {
           <div class="sticky top-24 space-y-5">
             <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
             <SetupHint v-else-if="siteStore.initialized === false" />
+            <ProfileCardSkeleton v-else />
 
             <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 
-            <TimelineNav :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
+            <TimelineNav v-if="!loading" :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
+            <TimelineNavSkeleton v-else />
 
             <TagList
                 :tags="tags"
