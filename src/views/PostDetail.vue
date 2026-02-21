@@ -252,8 +252,8 @@ watch(
               <span>{{ post.views }} views</span>
             </div>
 
-            <!-- 标签列表（右对齐） -->
-            <div v-if="post.tags?.length" class="flex flex-wrap items-center gap-2 ml-auto">
+            <!-- 标签列表：大屏右对齐，小屏独占一行 -->
+            <div v-if="post.tags?.length" class="flex flex-wrap items-center gap-2 w-full md:w-auto md:ml-auto">
               <span
                   v-for="tag in post.tags"
                   :key="tag.id"
