@@ -13,7 +13,7 @@
     <!-- Body -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-9">
-        <div class="bento-card p-8 md:p-10 space-y-4">
+        <div class="bento-card p-4 sm:p-6 md:p-8 lg:p-10 space-y-4">
           <div class="h-5 bg-slate-100 rounded w-2/3" />
           <div class="h-4 bg-slate-50 rounded w-full" />
           <div class="h-4 bg-slate-50 rounded w-full" />

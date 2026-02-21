@@ -18,7 +18,7 @@ const runningDays = computed(() => {
 
 <template>
   <div class="bento-card px-5 py-4">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-wrap items-center justify-between gap-y-1">
       <a href="https://github.com/km-hello/kome-blog" target="_blank" class="text-[10px] font-semibold text-slate-400 tracking-widest hover:text-slate-700 transition-colors">
         © 2026 Kome Blog
       </a>

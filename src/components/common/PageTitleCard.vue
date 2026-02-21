@@ -15,7 +15,7 @@ defineProps<{
       <p class="text-sm text-slate-500 mt-2">{{ subtitle }}</p>
     </div>
     <div v-if="count != null" class="text-right shrink-0">
-      <div class="text-4xl font-bold text-slate-900">{{ count }}</div>
+      <div class="text-3xl sm:text-4xl font-bold text-slate-900">{{ count }}</div>
       <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">{{ countLabel }}</div>
     </div>
   </div>
