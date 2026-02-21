@@ -1,9 +1,11 @@
 <!-- src/components/layout/AppHeader.vue -->
 <script setup lang="ts">
-import { Menu } from 'lucide-vue-next'
+import { ref, watch } from 'vue'
+import { Menu, X } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const mobileMenuOpen = ref(false)
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -19,6 +21,11 @@ const isActive = (path: string) => {
   if (path === '/') return route.path === '/'
   return route.path.startsWith(path)
 }
+
+// Auto-close mobile menu on route change
+watch(() => route.path, () => {
+  mobileMenuOpen.value = false
+})
 </script>
 
 <template>
@@ -53,9 +60,47 @@ const isActive = (path: string) => {
         </a>
       </nav>
 
-      <button class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
-        <Menu :size="20" />
+      <button
+          class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+      >
+        <Menu v-if="!mobileMenuOpen" :size="20" />
+        <X v-else :size="20" />
       </button>
     </div>
+
+    <!-- Mobile dropdown menu -->
+    <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0 -translate-y-1"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 -translate-y-1"
+    >
+      <nav v-show="mobileMenuOpen" class="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-xl">
+        <div class="max-w-6xl mx-auto px-4 py-2 flex flex-col">
+          <router-link
+              v-for="item in navItems"
+              :key="item.path"
+              :to="item.path"
+              class="px-4 py-3 rounded-md text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-50"
+              :class="{ 'text-slate-900 bg-slate-50 font-semibold': isActive(item.path) }"
+          >
+            {{ item.label }}
+          </router-link>
+          <a
+              v-for="link in externalLinks"
+              :key="link.href"
+              :href="link.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-3 rounded-md text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-50"
+          >
+            {{ link.label }}
+          </a>
+        </div>
+      </nav>
+    </Transition>
   </header>
 </template>
