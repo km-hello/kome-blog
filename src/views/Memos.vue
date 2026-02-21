@@ -16,9 +16,11 @@ import { useInfiniteScroll } from '@vueuse/core'
 import AppHeader from '@/components/common/AppHeader.vue'
 import MemoSkeleton from '@/components/skeleton/MemoSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import ProfileCardSkeleton from '@/components/skeleton/ProfileCardSkeleton.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
+import MemoStatsSkeleton from '@/components/skeleton/MemoStatsSkeleton.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
@@ -225,10 +227,12 @@ onMounted(async () => {
           <div class="sticky top-24 space-y-5">
             <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
             <SetupHint v-else-if="siteStore.initialized === false" />
+            <ProfileCardSkeleton v-else />
             <SearchBox placeholder="Search memos..." @search="handleSearch" />
             <MemoStats v-if="memoStats" :stats="memoStats" />
+            <MemoStatsSkeleton v-else />
 
-            <SiteFooter v-if="isLg" />
+            <SiteFooter />
           </div>
         </Teleport>
       </aside>

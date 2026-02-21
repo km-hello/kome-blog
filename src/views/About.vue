@@ -3,9 +3,11 @@
 import { onMounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import ProfileCardSkeleton from '@/components/skeleton/ProfileCardSkeleton.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import SkillCard from '@/components/sidebar/SkillCard.vue'
+import SkillCardSkeleton from '@/components/skeleton/SkillCardSkeleton.vue'
 import RepoCard from '@/components/sidebar/RepoCard.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useSiteStore } from '@/stores/useSiteStore'
@@ -99,8 +101,10 @@ onMounted(() => {
           <div class="sticky top-24 space-y-5">
             <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
             <SetupHint v-else-if="siteStore.initialized === false" />
+            <ProfileCardSkeleton v-else />
 
-            <SkillCard :skills="siteStore.siteInfo?.owner?.skills" />
+            <SkillCard v-if="siteStore.siteInfo" :skills="siteStore.siteInfo?.owner?.skills" />
+            <SkillCardSkeleton v-else />
 
             <RepoCard />
 

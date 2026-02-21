@@ -5,6 +5,7 @@ import {Globe} from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
 import LinkCardSkeleton from '@/components/skeleton/LinkCardSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
+import ProfileCardSkeleton from '@/components/skeleton/ProfileCardSkeleton.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import LinkExchange from '@/components/sidebar/LinkExchange.vue'
@@ -113,6 +114,7 @@ onMounted(async () => {
           <div class="sticky top-24 space-y-5">
             <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
             <SetupHint v-else-if="siteStore.initialized === false" />
+            <ProfileCardSkeleton v-else />
 
             <SearchBox placeholder="Search links..." @search="handleSearch" />
 
