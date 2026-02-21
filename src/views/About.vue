@@ -104,7 +104,7 @@ onMounted(() => {
 
             <RepoCard />
 
-            <SiteFooter v-if="isLg" />
+            <SiteFooter />
           </div>
         </Teleport>
       </aside>

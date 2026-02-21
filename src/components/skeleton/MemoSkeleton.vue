@@ -8,7 +8,7 @@
         <div class="h-3 w-12 bg-slate-50 rounded" />
       </div>
     </div>
-    <div class="pl-11 space-y-2">
+    <div class="pl-0 sm:pl-11 space-y-2">
       <div class="h-4 bg-slate-50 rounded w-full" />
       <div class="h-4 bg-slate-50 rounded w-5/6" />
       <div class="h-4 bg-slate-50 rounded w-2/3" />

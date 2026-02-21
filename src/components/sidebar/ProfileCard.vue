@@ -59,27 +59,27 @@ const getLinkHref = (link: { platform: string; url: string }) => {
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
-        <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
+        <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedPostCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">POSTS</div>
       </div>
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
-        <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
+        <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.usedTagCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">TAGS</div>
       </div>
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
-        <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
+        <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedMemoCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">MEMOS</div>
       </div>
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
-        <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
+        <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedLinkCount }}
         </div>
         <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">LINKS</div>
@@ -89,7 +89,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
     <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
     <!-- Social Links (仅在有链接配置时显示) -->
-    <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-2">
+    <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <component
           v-for="link in validLinks"
           :key="link.platform"

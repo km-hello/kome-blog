@@ -120,7 +120,7 @@ onMounted(async () => {
 
             <RandomVisit :links="links" />
 
-            <SiteFooter v-if="isLg" />
+            <SiteFooter />
           </div>
         </Teleport>
       </aside>
