@@ -14,8 +14,10 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import {getLinksApi, type LinkResponse} from '@/api/link'
 import { useSiteStore } from '@/stores/useSiteStore'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
+const { isLg } = useSidebarDrawer()
 
 const links = ref<LinkResponse[]>([])
 const searchKeyword = ref('')
@@ -107,18 +109,20 @@ onMounted(async () => {
 
       <!-- Sidebar -->
       <aside class="lg:col-span-4 relative">
-        <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-          <SetupHint v-else-if="siteStore.initialized === false" />
+        <Teleport to="#sidebar-drawer-content" :disabled="isLg">
+          <div class="sticky top-24 space-y-5">
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+            <SetupHint v-else-if="siteStore.initialized === false" />
 
-          <SearchBox placeholder="Search links..." @search="handleSearch" />
+            <SearchBox placeholder="Search links..." @search="handleSearch" />
 
-          <LinkExchange />
+            <LinkExchange />
 
-          <RandomVisit :links="links" />
+            <RandomVisit :links="links" />
 
-          <SiteFooter />
-        </div>
+            <SiteFooter v-if="isLg" />
+          </div>
+        </Teleport>
       </aside>
     </div>
   </div>

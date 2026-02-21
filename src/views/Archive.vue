@@ -14,8 +14,10 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { getArchivePostsApi, type PostArchiveResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { useSiteStore } from '@/stores/useSiteStore'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
+const { isLg } = useSidebarDrawer()
 
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
@@ -186,23 +188,25 @@ onUnmounted(() => {
 
       <!-- Sidebar -->
       <aside class="lg:col-span-4 relative">
-        <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-          <SetupHint v-else-if="siteStore.initialized === false" />
+        <Teleport to="#sidebar-drawer-content" :disabled="isLg">
+          <div class="sticky top-24 space-y-5">
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+            <SetupHint v-else-if="siteStore.initialized === false" />
 
-          <SearchBox placeholder="Filter archives..." @search="handleSearch" />
+            <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 
-          <TimelineNav :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
+            <TimelineNav :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
 
-          <TagList
-              :tags="tags"
-              :active-tag-id="selectedTagId"
-              :loading="loading"
-              @select="handleTagSelect"
-          />
+            <TagList
+                :tags="tags"
+                :active-tag-id="selectedTagId"
+                :loading="loading"
+                @select="handleTagSelect"
+            />
 
-          <SiteFooter />
-        </div>
+            <SiteFooter v-if="isLg" />
+          </div>
+        </Teleport>
       </aside>
     </div>
   </div>

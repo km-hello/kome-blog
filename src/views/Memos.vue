@@ -24,11 +24,13 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
 import { useMarkdown } from '@/composables/useMarkdown'
 import { useCodeCopy } from '@/composables/useCodeCopy'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 import { getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse } from '@/api/memo'
 import { useSiteStore } from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
+const { isLg } = useSidebarDrawer()
 const { render, renderMermaidCharts } = useMarkdown()
 
 // 注册代码块复制功能（事件委托，自动管理生命周期）
@@ -219,17 +221,16 @@ onMounted(async () => {
 
       <!-- ==================== 右侧栏 ==================== -->
       <aside class="lg:col-span-4 relative">
-        <div class="sticky top-24 space-y-5">
-          <!-- 个人资料卡片 -->
-          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-          <SetupHint v-else-if="siteStore.initialized === false" />
-          <!-- 搜索框 -->
-          <SearchBox placeholder="Search memos..." @search="handleSearch" />
-          <!-- Memo 统计（热力图等） -->
-          <MemoStats v-if="memoStats" :stats="memoStats" />
+        <Teleport to="#sidebar-drawer-content" :disabled="isLg">
+          <div class="sticky top-24 space-y-5">
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+            <SetupHint v-else-if="siteStore.initialized === false" />
+            <SearchBox placeholder="Search memos..." @search="handleSearch" />
+            <MemoStats v-if="memoStats" :stats="memoStats" />
 
-          <SiteFooter />
-        </div>
+            <SiteFooter v-if="isLg" />
+          </div>
+        </Teleport>
       </aside>
     </div>
 
