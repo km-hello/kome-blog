@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle } from 'lucide-vue-next'
+import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle, ChevronDown } from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
 import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
@@ -36,6 +36,8 @@ const loading = ref(true)
 const activeSection = ref('')
 /** TOC 容器 DOM 引用，用于自动滚动 TOC 列表到当前活跃项 */
 const tocContainer = ref<HTMLElement | null>(null)
+/** 移动端 TOC 折叠状态 */
+const mobileTocOpen = ref(false)
 
 /* ==================== 工具函数 ==================== */
 
@@ -241,7 +243,7 @@ watch(
             </div>
 
             <!-- 标签列表（右对齐） -->
-            <div v-if="post.tags?.length" class="flex items-center gap-2 ml-auto">
+            <div v-if="post.tags?.length" class="flex flex-wrap items-center gap-2 ml-auto">
               <span
                   v-for="tag in post.tags"
                   :key="tag.id"
@@ -269,7 +271,39 @@ watch(
 
           <!-- 文章正文 -->
           <article class="lg:col-span-9">
-            <div class="bento-card p-8 md:p-10 min-h-150">
+            <!-- 移动端 TOC：可折叠目录（仅 < lg 显示） -->
+            <div v-if="toc.length > 0" class="lg:hidden bento-card p-4 mb-6">
+              <button
+                  @click="mobileTocOpen = !mobileTocOpen"
+                  class="flex items-center justify-between w-full text-left"
+              >
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Table of Contents</span>
+                <ChevronDown
+                    :size="16"
+                    class="text-slate-400 transition-transform duration-200"
+                    :class="{ 'rotate-180': mobileTocOpen }"
+                />
+              </button>
+              <ul v-show="mobileTocOpen" class="mt-3 space-y-0 relative border-l border-slate-100">
+                <li v-for="item in toc" :key="item.id">
+                  <a
+                      :href="'#' + item.id"
+                      class="block py-1.5 text-sm text-slate-500 hover:text-slate-800 cursor-pointer truncate transition-all border-l-2 border-transparent"
+                      :class="[
+                        activeSection === item.id
+                          ? 'text-slate-900 font-semibold border-l-slate-900! bg-slate-50'
+                          : '',
+                        item.level === 3 ? 'pl-6' : 'pl-4',
+                      ]"
+                      @click.prevent="scrollTo(item.id); mobileTocOpen = false"
+                  >
+                    {{ item.text }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bento-card p-4 sm:p-6 md:p-8 lg:p-10 min-h-150">
               <!-- Markdown 渲染区域：使用 .markdown-body 基础密度样式 -->
               <div class="markdown-body" v-html="renderedContent"></div>
             </div>
