@@ -14,8 +14,10 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { getArchivePostsApi, type PostArchiveResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { useSiteStore } from '@/stores/useSiteStore'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
+const { isLg } = useSidebarDrawer()
 
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
@@ -120,21 +122,21 @@ onUnmounted(() => {
               class="bento-card scroll-mt-32"
           >
             <!-- Year Header -->
-            <div class="px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
-              <h2 class="text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
+            <div class="px-4 sm:px-6 md:px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
+              <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
               <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
                 {{ yearGroup.total }} Posts
               </span>
             </div>
 
             <!-- Timeline Body -->
-            <div class="p-8 relative">
-              <div class="absolute left-8 top-6 bottom-2 w-px bg-slate-100"></div>
+            <div class="p-4 sm:p-6 md:p-8 relative">
+              <div class="absolute left-4 sm:left-6 md:left-8 top-6 bottom-2 w-px bg-slate-100"></div>
 
               <div class="flex flex-col gap-8">
-                <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-16">
+                <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-10 sm:pl-12 md:pl-16">
                   <!-- Month Node -->
-                  <div class="absolute left-8 top-[-0.2rem] -translate-x-1/2">
+                  <div class="absolute left-4 sm:left-6 md:left-8 top-[-0.2rem] -translate-x-1/2">
                     <span class="inline-flex items-center justify-center font-mono text-[0.65rem] font-semibold text-slate-400 bg-white border border-slate-100 rounded-full px-2.5 py-0.5 shadow-sm">
                       {{ MONTH_NAMES[monthGroup.month - 1] }}
                     </span>
@@ -185,24 +187,26 @@ onUnmounted(() => {
       </main>
 
       <!-- Sidebar -->
-      <aside class="lg:col-span-4 relative hidden lg:block">
-        <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-          <SetupHint v-else-if="siteStore.initialized === false" />
+      <aside class="lg:col-span-4 relative">
+        <Teleport to="#sidebar-drawer-content" :disabled="isLg">
+          <div class="sticky top-24 space-y-5">
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+            <SetupHint v-else-if="siteStore.initialized === false" />
 
-          <SearchBox placeholder="Filter archives..." @search="handleSearch" />
+            <SearchBox placeholder="Filter archives..." @search="handleSearch" />
 
-          <TimelineNav :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
+            <TimelineNav :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
 
-          <TagList
-              :tags="tags"
-              :active-tag-id="selectedTagId"
-              :loading="loading"
-              @select="handleTagSelect"
-          />
+            <TagList
+                :tags="tags"
+                :active-tag-id="selectedTagId"
+                :loading="loading"
+                @select="handleTagSelect"
+            />
 
-          <SiteFooter />
-        </div>
+            <SiteFooter v-if="isLg" />
+          </div>
+        </Teleport>
       </aside>
     </div>
   </div>

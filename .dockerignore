@@ -15,6 +15,7 @@ dist
 dist-ssr
 
 # Local config
+.env
 .env.development
 .env.local
 .env.*.local
@@ -24,3 +25,9 @@ dist-ssr
 
 # CI/CD
 .github/
+
+# Claude Code / oh-my-claudecode
+.omc/
+
+# Test articles
+test-articles/

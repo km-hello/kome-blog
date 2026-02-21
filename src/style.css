@@ -111,6 +111,8 @@
   color: #334155;        /* slate-700 */
   line-height: 1.85;
   font-size: 1.05rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .markdown-body strong {
@@ -244,6 +246,7 @@
 .markdown-body .code-block {
   position: relative;
   margin: 1.5rem 0;
+  overflow: hidden;
 }
 
 /* 复制按钮容器：默认隐藏，hover 代码块时显示 */
@@ -263,12 +266,12 @@
 .markdown-body .code-block .code-copy-btn {
   display: flex;
   align-items: center;
-  padding: 0.2rem 0.5rem;
+  padding: 0.35rem 0.6rem;
   border: none;
   border-radius: 0.25rem;
   background-color: #e2e8f0;
   color: #64748b;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -311,6 +314,7 @@
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
+  max-width: 100%;
   margin: 1.5rem 0;
 }
 
@@ -635,4 +639,42 @@
   margin: 0.25em 0;
   border-radius: 6px;
   overflow: hidden;
+}
+
+/* ================================================================
+   6. 触摸设备适配
+   在无 hover 的设备上，始终显示代码复制按钮
+   ================================================================ */
+
+@media (hover: none) {
+  .markdown-body .code-block .code-header {
+    opacity: 1;
+  }
+}
+
+/* ================================================================
+   7. 移动端响应式适配
+   针对小屏幕缩小标题字号、禁用两端对齐、缩减间距
+   ================================================================ */
+
+@media (max-width: 640px) {
+  .markdown-body h1 { font-size: 1.5rem; }
+  .markdown-body h2 { font-size: 1.3rem; }
+  .markdown-body h3 { font-size: 1.15rem; }
+  .markdown-body h4 { font-size: 1.05rem; }
+  .markdown-body p { text-align: left; }
+  .markdown-body pre code { font-size: 0.8rem; }
+  .markdown-body blockquote { padding: 0.75rem 1rem; margin: 1.25rem 0; }
+  .markdown-body .mermaid-container { padding: 1rem 0.5rem; margin: 1.25rem 0; }
+  .markdown-body .katex-display { font-size: 0.95em; }
+}
+
+/* ================================================================
+   8. 侧边栏抽屉样式覆盖
+   Teleport 传入的内容带有 sticky top-24，在抽屉内无效且产生空白
+   ================================================================ */
+
+.sidebar-drawer-content > div {
+  position: static !important;
+  top: auto !important;
 }

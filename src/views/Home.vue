@@ -11,6 +11,7 @@ import LatestMemo from '@/components/sidebar/LatestMemo.vue'
 import PostCard from '@/components/post/PostCard.vue'
 import PostCardSkeleton from '@/components/skeleton/PostCardSkeleton.vue'
 import Pagination from '@/components/common/Pagination.vue'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 import { getPostsApi, type PostSimpleResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
@@ -18,6 +19,7 @@ import { getLatestMemosApi, type MemoResponse } from '@/api/memo'
 import { useSiteStore } from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
+const { isLg } = useSidebarDrawer()
 
 const posts = ref<PostSimpleResponse[]>([])
 const tags = ref<TagPostCountResponse[]>([])
@@ -107,27 +109,29 @@ onMounted(async () => {
 
       <!-- Sidebar -->
       <aside class="lg:col-span-4 relative">
-        <div class="sticky top-24 space-y-5">
-          <ProfileCard
-              v-if="siteStore.siteInfo"
-              :owner="siteStore.siteInfo.owner"
-              :stats="siteStore.siteInfo.stats"
-          />
-          <SetupHint v-else-if="siteStore.initialized === false" />
+        <Teleport to="#sidebar-drawer-content" :disabled="isLg">
+          <div class="sticky top-24 space-y-5">
+            <ProfileCard
+                v-if="siteStore.siteInfo"
+                :owner="siteStore.siteInfo.owner"
+                :stats="siteStore.siteInfo.stats"
+            />
+            <SetupHint v-else-if="siteStore.initialized === false" />
 
-          <SearchBox placeholder="Search..." @search="handleSearch" />
+            <SearchBox placeholder="Search..." @search="handleSearch" />
 
-          <LatestMemo :memos="memos" :loading="loading" />
+            <LatestMemo :memos="memos" :loading="loading" />
 
-          <TagList
-              :tags="tags"
-              :active-tag-id="selectedTagId"
-              :loading="loading"
-              @select="handleTagSelect"
-          />
+            <TagList
+                :tags="tags"
+                :active-tag-id="selectedTagId"
+                :loading="loading"
+                @select="handleTagSelect"
+            />
 
-          <SiteFooter />
-        </div>
+            <SiteFooter v-if="isLg" />
+          </div>
+        </Teleport>
       </aside>
     </div>
   </div>

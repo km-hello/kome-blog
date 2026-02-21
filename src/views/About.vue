@@ -9,8 +9,10 @@ import SkillCard from '@/components/sidebar/SkillCard.vue'
 import RepoCard from '@/components/sidebar/RepoCard.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useSiteStore } from '@/stores/useSiteStore'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
+const { isLg } = useSidebarDrawer()
 
 const features = [
   { title: 'Articles', desc: 'Marked-based rendering with highlight.js, KaTeX math, Mermaid diagrams, pinned posts, reading time, and auto TOC.' },
@@ -92,17 +94,19 @@ onMounted(() => {
       </main>
 
       <!-- Sidebar -->
-      <aside class="lg:col-span-4 relative hidden lg:block">
-        <div class="sticky top-24 space-y-5">
-          <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-          <SetupHint v-else-if="siteStore.initialized === false" />
+      <aside class="lg:col-span-4 relative">
+        <Teleport to="#sidebar-drawer-content" :disabled="isLg">
+          <div class="sticky top-24 space-y-5">
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
+            <SetupHint v-else-if="siteStore.initialized === false" />
 
-          <SkillCard :skills="siteStore.siteInfo?.owner?.skills" />
+            <SkillCard :skills="siteStore.siteInfo?.owner?.skills" />
 
-          <RepoCard />
+            <RepoCard />
 
-          <SiteFooter />
-        </div>
+            <SiteFooter v-if="isLg" />
+          </div>
+        </Teleport>
       </aside>
     </div>
   </div>
