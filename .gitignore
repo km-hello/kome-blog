@@ -30,3 +30,9 @@ dist-ssr
 
 # Windows reserved device names
 nul
+
+# Claude Code / oh-my-claudecode
+.omc/
+
+# Test articles
+test-articles/
