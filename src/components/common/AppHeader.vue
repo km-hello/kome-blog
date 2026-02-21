@@ -1,11 +1,13 @@
 <!-- src/components/layout/AppHeader.vue -->
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Menu, X } from 'lucide-vue-next'
+import { Menu, X, PanelRight } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
+import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 const route = useRoute()
 const mobileMenuOpen = ref(false)
+const { toggle: toggleSidebar } = useSidebarDrawer()
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -60,13 +62,24 @@ watch(() => route.path, () => {
         </a>
       </nav>
 
-      <button
-          class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
-          @click="mobileMenuOpen = !mobileMenuOpen"
-      >
-        <Menu v-if="!mobileMenuOpen" :size="20" />
-        <X v-else :size="20" />
-      </button>
+      <div class="flex items-center gap-1">
+        <!-- 侧边栏抽屉触发按钮（仅移动端，< lg） -->
+        <button
+            class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+            @click="toggleSidebar"
+        >
+          <PanelRight :size="20" />
+        </button>
+
+        <!-- 导航菜单汉堡按钮（仅移动端，< md） -->
+        <button
+            class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+            @click="mobileMenuOpen = !mobileMenuOpen"
+        >
+          <Menu v-if="!mobileMenuOpen" :size="20" />
+          <X v-else :size="20" />
+        </button>
+      </div>
     </div>
 
     <!-- Mobile dropdown menu -->
