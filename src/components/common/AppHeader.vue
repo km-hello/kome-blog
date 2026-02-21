@@ -1,6 +1,6 @@
 <!-- src/components/layout/AppHeader.vue -->
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Menu, X, PanelRight } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
@@ -8,6 +8,9 @@ import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 const route = useRoute()
 const mobileMenuOpen = ref(false)
 const { toggle: toggleSidebar } = useSidebarDrawer()
+
+// 文章详情页有独立的 TOC，不需要侧边栏抽屉按钮
+const showSidebarButton = computed(() => route.name !== 'PostDetail')
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -40,7 +43,7 @@ watch(() => route.path, () => {
         <h1 class="font-bold text-slate-900 text-base">Kome Blog</h1>
       </router-link>
 
-      <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-500">
+      <nav class="hidden lg:flex gap-6 text-sm font-medium text-slate-500">
         <router-link
             v-for="item in navItems"
             :key="item.path"
@@ -62,18 +65,19 @@ watch(() => route.path, () => {
         </a>
       </nav>
 
-      <div class="flex items-center gap-1">
-        <!-- 侧边栏抽屉触发按钮（仅移动端，< lg） -->
+      <div class="flex items-center gap-1 lg:hidden">
+        <!-- 侧边栏抽屉触发按钮（< lg，文章详情页不显示） -->
         <button
-            class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+            v-if="showSidebarButton"
+            class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
             @click="toggleSidebar"
         >
           <PanelRight :size="20" />
         </button>
 
-        <!-- 导航菜单汉堡按钮（仅移动端，< md） -->
+        <!-- 导航菜单汉堡按钮（< lg） -->
         <button
-            class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+            class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
             @click="mobileMenuOpen = !mobileMenuOpen"
         >
           <Menu v-if="!mobileMenuOpen" :size="20" />
@@ -91,7 +95,7 @@ watch(() => route.path, () => {
         leave-from-class="opacity-100 translate-y-0"
         leave-to-class="opacity-0 -translate-y-1"
     >
-      <nav v-show="mobileMenuOpen" class="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-xl">
+      <nav v-show="mobileMenuOpen" class="lg:hidden border-t border-slate-100 bg-white/95 backdrop-blur-xl">
         <div class="max-w-6xl mx-auto px-4 py-2 flex flex-col">
           <router-link
               v-for="item in navItems"
