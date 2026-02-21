@@ -168,12 +168,12 @@ onUnmounted(() => {
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeModal"></div>
 
         <!-- 模态框主体 -->
-        <div class="relative w-[70vw] h-[70vh] bg-white rounded-xl shadow-2xl flex flex-col">
+        <div class="relative w-[95vw] h-[85vh] sm:w-[85vw] sm:h-[80vh] md:w-[70vw] md:h-[70vh] bg-white rounded-xl shadow-2xl flex flex-col">
           <!-- 顶部工具栏：缩放控制 + 关闭按钮 -->
           <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
               <button
-                  class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                  class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
                   title="Ctrl + Scroll Down"
                   @click="zoomOut"
               >
@@ -181,14 +181,14 @@ onUnmounted(() => {
               </button>
               <span class="text-sm text-slate-600 min-w-16 text-center">{{ Math.round(zoom * 100) }}%</span>
               <button
-                  class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                  class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
                   title="Ctrl + Scroll Up"
                   @click="zoomIn"
               >
                 <ZoomIn :size="18" />
               </button>
               <button
-                  class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                  class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
                   title="Reset"
                   @click="resetZoom"
               >
@@ -196,7 +196,7 @@ onUnmounted(() => {
               </button>
             </div>
             <button
-                class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
                 title="Close (Esc)"
                 @click="closeModal"
             >

@@ -54,11 +54,7 @@ const formattedDate = computed(() => {
           </p>
         </div>
 
-        <div v-if="post.coverImage" class="hidden md:block w-40 h-28 shrink-0 overflow-hidden rounded-lg bg-slate-100" :class="{ 'animate-pulse': !imageLoaded }">
-          <img :src="post.coverImage" class="size-full object-cover" alt="Cover" loading="lazy" @load="imageLoaded = true">
-        </div>
-
-        <div v-if="post.coverImage" class="md:hidden w-full h-48 overflow-hidden rounded-lg bg-slate-100 mt-2" :class="{ 'animate-pulse': !imageLoaded }">
+        <div v-if="post.coverImage" class="w-full h-48 md:w-40 md:h-28 shrink-0 overflow-hidden rounded-lg bg-slate-100 mt-2 md:mt-0" :class="{ 'animate-pulse': !imageLoaded }">
           <img :src="post.coverImage" class="size-full object-cover" alt="Cover" loading="lazy" @load="imageLoaded = true">
         </div>
       </div>

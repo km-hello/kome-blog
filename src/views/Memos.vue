@@ -201,7 +201,7 @@ onMounted(async () => {
             </div>
 
             <!-- Markdown 内容：使用 compact 密度样式 + 左侧缩进对齐头像 -->
-            <div class="markdown-body markdown-compact pl-11" v-html="render(memo.content)"></div>
+            <div class="markdown-body markdown-compact pl-0 sm:pl-11" v-html="render(memo.content)"></div>
           </article>
         </div>
 
@@ -218,7 +218,7 @@ onMounted(async () => {
       </main>
 
       <!-- ==================== 右侧栏 ==================== -->
-      <aside class="lg:col-span-4 relative hidden lg:block">
+      <aside class="lg:col-span-4 relative">
         <div class="sticky top-24 space-y-5">
           <!-- 个人资料卡片 -->
           <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />

@@ -63,8 +63,14 @@ onUnmounted(() => {
 <style scoped>
 .preview-page {
     min-height: 100vh;
-    padding: 2rem;
+    padding: 1rem;
     background: #fff;
+}
+
+@media (min-width: 640px) {
+  .preview-page {
+    padding: 2rem;
+  }
 }
 
 .empty-state {

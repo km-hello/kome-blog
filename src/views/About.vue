@@ -92,7 +92,7 @@ onMounted(() => {
       </main>
 
       <!-- Sidebar -->
-      <aside class="lg:col-span-4 relative hidden lg:block">
+      <aside class="lg:col-span-4 relative">
         <div class="sticky top-24 space-y-5">
           <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
           <SetupHint v-else-if="siteStore.initialized === false" />

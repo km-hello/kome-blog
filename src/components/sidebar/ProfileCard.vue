@@ -59,7 +59,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedPostCount }}
