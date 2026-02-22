@@ -19,7 +19,7 @@ const handleTagClick = (tagId: number) => {
 </script>
 
 <template>
-  <div class="bento-card px-5 py-5">
+  <div class="bento-card p-5">
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tags</h4>
       <button

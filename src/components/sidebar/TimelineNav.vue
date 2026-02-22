@@ -14,7 +14,7 @@ const emit = defineEmits<{
 
 <template>
   <!-- Timeline Nav -->
-  <div class="bento-card px-5 py-5">
+  <div class="bento-card p-5">
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Timeline</h4>
     </div>

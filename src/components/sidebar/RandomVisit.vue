@@ -18,7 +18,7 @@ const roll = () => {
 </script>
 
 <template>
-  <div class="bento-card px-5 py-5">
+  <div class="bento-card p-5">
     <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Random Visit</h4>
 
     <p class="text-[11px] text-slate-400 leading-relaxed mb-4">

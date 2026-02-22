@@ -77,7 +77,7 @@ const formatDate = (dateStr: string): string => {
 </script>
 
 <template>
-  <div class="bento-card px-5 py-5">
+  <div class="bento-card p-5">
     <!-- 标题栏 -->
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Latest Memos</h4>

@@ -31,7 +31,7 @@ const copyField = async (field: typeof fields[number]) => {
 </script>
 
 <template>
-  <div class="bento-card px-5 py-5">
+  <div class="bento-card p-5">
     <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Exchange</h4>
 
     <div class="space-y-2">
