@@ -17,6 +17,7 @@ import { Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle, Li
 import AppHeader from '@/components/common/AppHeader.vue'
 import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
+import axios from 'axios'
 import { getPostDetailApi, type PostDetailResponse } from '@/api/post'
 import { useMarkdown } from '@/composables/useMarkdown'
 import { useCodeCopy } from '@/composables/useCodeCopy'
@@ -178,7 +179,9 @@ const fetchData = async () => {
     handleScroll()
   } catch (error) {
     console.error('Failed to fetch post:', error)
-    await router.push('/')
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      await router.replace({ name: 'NotFound' })
+    }
   } finally {
     loading.value = false
   }
