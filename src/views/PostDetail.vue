@@ -260,7 +260,7 @@ watch(
               <span
                   v-for="tag in post.tags"
                   :key="tag.id"
-                  class="px-2.5 py-1 rounded-md bg-slate-100 text-[10px] font-bold uppercase tracking-wide text-slate-500"
+                  class="px-2.5 py-1 rounded-md bg-slate-100 text-[10px] font-bold tracking-wide text-slate-400"
               >
                 {{ tag.name }}
               </span>
