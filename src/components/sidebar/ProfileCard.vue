@@ -52,9 +52,9 @@ const getLinkHref = (link: { platform: string; url: string }) => {
             class="size-full bg-slate-50 object-cover"
         >
       </div>
-      <div>
-        <h3 class="font-bold text-slate-900 text-lg">{{ owner.nickname }}</h3>
-        <p v-if="owner.description" class="text-xs text-slate-500">{{ owner.description }}</p>
+      <div class="min-w-0">
+        <h3 class="font-bold text-slate-800 text-base">{{ owner.nickname }}</h3>
+        <p v-if="owner.description" class="text-xs text-slate-400 mt-0.5 leading-relaxed line-clamp-2">{{ owner.description }}</p>
       </div>
     </div>
 
