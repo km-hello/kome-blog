@@ -10,6 +10,7 @@ export interface SocialLink {
 export interface SkillItem {
     name: string
     level: number  // 1=Basic, 2=Familiar, 3=Proficient
+    order?: number
 }
 
 export interface OwnerInfo {

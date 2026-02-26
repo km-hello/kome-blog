@@ -36,7 +36,7 @@ const levels = computed(() =>
   levelConfig
     .map(config => ({
       ...config,
-      items: (props.skills ?? []).filter(s => s.level === config.level).map(s => s.name),
+      items: (props.skills ?? []).filter(s => s.level === config.level).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map(s => s.name),
     }))
     .filter(group => group.items.length > 0)
 )
