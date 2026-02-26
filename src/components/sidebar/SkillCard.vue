@@ -47,25 +47,19 @@ const levels = computed(() =>
     <h3 class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">Skills</h3>
 
     <template v-if="hasSkills">
-      <div class="space-y-3">
+      <div class="space-y-3.5">
         <div v-for="level in levels" :key="level.label">
-          <div class="flex flex-wrap gap-1.5">
+          <p class="text-[10px] font-medium text-slate-300 mb-1.5">{{ level.label }}</p>
+          <div class="flex flex-wrap gap-1.5 gap-y-2">
             <span
                 v-for="item in level.items"
                 :key="item"
-                class="px-2 py-0.5 text-[11px] font-medium rounded"
+                class="px-2 py-0.5 text-[11px] font-medium rounded leading-relaxed"
                 :class="level.tagClass"
             >
               {{ item }}
             </span>
           </div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-4 mt-4 pt-3 border-t border-slate-100">
-        <div v-for="config in levelConfig" :key="config.label" class="flex items-center gap-1.5">
-          <span class="size-2 rounded-full" :class="config.dotClass" />
-          <span class="text-[10px] text-slate-400">{{ config.label }}</span>
         </div>
       </div>
     </template>
