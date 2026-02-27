@@ -1,4 +1,17 @@
-<!-- src/views/Links.vue -->
+<!--
+  Links.vue - 友情链接页
+
+  功能：展示所有已审核的友情链接，支持关键词搜索。
+
+  布局：
+    - 主内容区（lg:col-span-8）：友链卡片网格
+    - 侧边栏（lg:col-span-4）：个人资料、搜索框、友链交换卡片、随机访问、页脚
+
+  响应式（友链网格）：
+    - < sm (640px): 单列
+    - >= sm: 2 列
+    - >= lg (1024px): 3 列
+-->
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {Globe} from 'lucide-vue-next'
@@ -17,13 +30,24 @@ import {getLinksApi, type LinkResponse} from '@/api/link'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
+// ========== 状态定义 ==========
+
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
+/** 友链列表 */
 const links = ref<LinkResponse[]>([])
+/** 搜索关键词 */
 const searchKeyword = ref('')
+/** 是否正在加载 */
 const loading = ref(true)
 
+// ========== 方法 ==========
+
+/**
+ * 获取友链列表。
+ * 根据搜索关键词请求所有已审核的友链数据。
+ */
 const fetchLinks = async () => {
   loading.value = true
   links.value = await getLinksApi({
@@ -32,11 +56,23 @@ const fetchLinks = async () => {
   loading.value = false
 }
 
+/**
+ * 处理搜索事件。
+ *
+ * @param keyword 搜索关键词。
+ */
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
   fetchLinks()
 }
 
+/**
+ * 从 URL 中提取域名。
+ * 用于友链卡片底部展示站点域名。
+ *
+ * @param url 完整 URL。
+ * @returns 域名字符串，解析失败时返回原始 URL。
+ */
 const extractDomain = (url: string) => {
   try {
     return new URL(url).hostname
@@ -44,6 +80,8 @@ const extractDomain = (url: string) => {
     return url
   }
 }
+
+// ========== 生命周期 ==========
 
 onMounted(async () => {
   await Promise.all([
@@ -58,7 +96,7 @@ onMounted(async () => {
     <AppHeader />
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- Main -->
+      <!-- 主内容区 -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         <PageTitleCard
             title="Links"
@@ -67,12 +105,12 @@ onMounted(async () => {
             count-label="Total Links"
         />
 
-        <!-- Loading State -->
+        <!-- 加载状态: 网格 sm 2列 / lg 3列 -->
         <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <LinkCardSkeleton v-for="i in 6" :key="i" />
         </div>
 
-        <!-- Links Grid -->
+        <!-- 友链网格: sm 2列 / lg 3列 -->
         <div v-else-if="links.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <a
               v-for="link in links"
@@ -95,6 +133,7 @@ onMounted(async () => {
             <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mt-1 min-h-10">
               {{ link.description }}
             </p>
+            <!-- 域名展示 -->
             <div class="mt-3 pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
               <Globe :size="12" />
               <span class="truncate max-w-[80%]">{{ extractDomain(link.url) }}</span>
@@ -102,13 +141,13 @@ onMounted(async () => {
           </a>
         </div>
 
-        <!-- Empty State -->
+        <!-- 空状态 -->
         <div v-else class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword ? 'No matching links.' : 'No links yet.' }}
         </div>
       </main>
 
-      <!-- Sidebar -->
+      <!-- 侧边栏 -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">

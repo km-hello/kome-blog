@@ -38,7 +38,7 @@ const { render, renderMermaidCharts } = useMarkdown()
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
 
-/* ==================== 响应式状态 ==================== */
+// ========== 响应式状态 ==========
 
 /** 已加载的 Memo 列表（追加模式，支持无限滚动） */
 const memos = ref<MemoResponse[]>([])
@@ -57,7 +57,7 @@ const loading = ref(false)
 /** 是否已加载完全部数据（无更多内容） */
 const noMore = ref(false)
 
-/* ==================== 工具函数 ==================== */
+// ========== 工具函数 ==========
 
 /**
  * 将日期字符串格式化为人性化的相对时间
@@ -87,7 +87,7 @@ const formatTime = (dateStr: string) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-/* ==================== 数据获取 ==================== */
+// ========== 数据获取 ==========
 
 /**
  * 获取当前页的 Memo 数据
@@ -136,12 +136,12 @@ const handleSearch = (keyword: string) => {
   fetchMemos()
 }
 
-/* ==================== 无限滚动 ==================== */
+// ========== 无限滚动 ==========
 
 // 监听 document 滚动，当距底部 200px 时自动触发 loadMore
 useInfiniteScroll(document, loadMore, { distance: 200 })
 
-/* ==================== 生命周期 ==================== */
+// ========== 生命周期 ==========
 
 // 并行加载：Memo 列表 + 站点信息 + Memo 统计
 onMounted(async () => {
@@ -159,7 +159,7 @@ onMounted(async () => {
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-      <!-- ==================== 主内容区 ==================== -->
+      <!-- 主内容区 -->
       <main class="lg:col-span-8 flex flex-col gap-6">
 
         <!-- 页面标题卡片 -->
@@ -170,12 +170,12 @@ onMounted(async () => {
             count-label="Total Memos"
         />
 
-        <!-- ==================== Initial Loading State ==================== -->
+        <!-- 初始加载状态 -->
         <template v-if="loading && memos.length === 0">
           <MemoSkeleton v-for="i in 3" :key="i" />
         </template>
 
-        <!-- ==================== Memo 列表 ==================== -->
+        <!-- Memo 列表 -->
         <div v-else-if="memos.length > 0" class="flex flex-col gap-4">
           <article
               v-for="memo in memos"
@@ -209,19 +209,19 @@ onMounted(async () => {
           </article>
         </div>
 
-        <!-- ==================== 空状态 ==================== -->
+        <!-- 空状态 -->
         <div v-else-if="!loading && noMore" class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword ? 'No matching memos.' : 'No memos yet.' }}
         </div>
 
-        <!-- ==================== 加载状态 / 底部提示 ==================== -->
+        <!-- 加载状态 / 底部提示 -->
         <div v-if="memos.length > 0 || loading" class="text-center py-8">
           <Loader2 v-if="loading" class="size-5 animate-spin text-slate-300 mx-auto" />
           <span v-else-if="noMore" class="text-xs font-mono text-slate-300 tracking-wide">&mdash; End of Stream &mdash;</span>
         </div>
       </main>
 
-      <!-- ==================== 右侧栏 ==================== -->
+      <!-- 右侧栏 -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">

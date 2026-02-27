@@ -1,4 +1,19 @@
-<!-- src/views/Archive.vue -->
+<!--
+  Archive.vue - 文章归档页
+
+  功能：按年月分组展示所有已发布文章，支持关键词搜索和标签筛选。
+
+  布局：
+    - 主内容区（lg:col-span-8）：时间线式年月分组文章列表
+    - 侧边栏（lg:col-span-4）：个人资料、搜索框、年份快捷导航、标签云、页脚
+
+  响应式：
+    - < sm (640px): 文章日期和标题纵向排列，时间线缩进较小
+    - >= sm: 日期与标题横向排列，时间线缩进适中
+    - >= md (768px): 时间线缩进加大
+    - < lg: 侧边栏移入抽屉
+    - >= lg: 侧边栏固定右侧
+-->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
@@ -18,36 +33,60 @@ import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
+// ========== 状态定义 ==========
+
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
+/** 月份缩写映射 */
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
+/** 归档数据（按年份分组） */
 const archives = ref<PostArchiveResponse[]>([])
+/** 标签列表 */
 const tags = ref<TagPostCountResponse[]>([])
+/** 当前高亮的年份（侧边栏导航联动） */
 const activeYear = ref<number | null>(null)
+/** 搜索关键词 */
 const searchKeyword = ref('')
+/** 选中的标签 ID */
 const selectedTagId = ref<number | null>(null)
+/** 是否正在加载 */
 const loading = ref(true)
 
+/** 文章总数（各年份 total 之和） */
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
 })
 
+// ========== 方法 ==========
+
+/**
+ * 滚动到指定年份区块。
+ * 设置活跃年份并平滑滚动到对应 DOM 元素位置。
+ *
+ * @param year 目标年份。
+ */
 const scrollToYear = (year: number) => {
   activeYear.value = year
   const el = document.getElementById(`year-${year}`)
   if (el) {
+    // 预留顶部导航栏的偏移量
     const offset = 100
     const top = el.getBoundingClientRect().top + window.pageYOffset - offset
     window.scrollTo({ top, behavior: 'smooth' })
   }
 }
 
+/**
+ * 滚动事件处理。
+ * 检测当前视口内的年份区块，自动更新侧边栏的活跃年份高亮。
+ */
 const handleScroll = () => {
   const blocks = document.querySelectorAll('[id^="year-"]')
   for (const block of blocks) {
     const rect = block.getBoundingClientRect()
+    // 当区块顶部进入视口上方 200px 内且底部仍在视口中时，视为当前活跃年份
     if (rect.top < 200 && rect.bottom > 100) {
       const year = parseInt(block.id.replace('year-', ''))
       if (activeYear.value !== year) {
@@ -58,10 +97,20 @@ const handleScroll = () => {
   }
 }
 
+/**
+ * 格式化日期为两位数日期。
+ *
+ * @param dateStr ISO 格式日期字符串。
+ * @returns 两位数的日（如 "01", "15"）。
+ */
 const formatDay = (dateStr: string) => {
   return new Date(dateStr).getDate().toString().padStart(2, '0')
 }
 
+/**
+ * 获取归档数据。
+ * 根据当前搜索和标签筛选条件请求后端归档接口。
+ */
 const fetchArchives = async () => {
   loading.value = true
   const res = await getArchivePostsApi({
@@ -69,27 +118,42 @@ const fetchArchives = async () => {
     tagId: selectedTagId.value ?? undefined,
   })
   archives.value = res
+  // 默认高亮第一个年份
   if (res.length > 0) activeYear.value = res[0]?.year ?? null
   loading.value = false
 }
 
+/**
+ * 处理搜索事件。
+ *
+ * @param keyword 搜索关键词。
+ */
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
   fetchArchives()
 }
 
+/**
+ * 处理标签选择事件。
+ *
+ * @param tagId 选中的标签 ID，null 表示取消筛选。
+ */
 const handleTagSelect = (tagId: number | null) => {
   selectedTagId.value = tagId
   fetchArchives()
 }
 
+// ========== 生命周期 ==========
+
 onMounted(async () => {
+  // 并行加载归档数据、标签列表和站点信息
   await Promise.all([
     fetchArchives(),
     getTagsApi().then(res => tags.value = res),
     siteStore.fetchSiteInfo(),
   ])
 
+  // 注册滚动监听，用于年份导航联动
   window.addEventListener('scroll', handleScroll)
 })
 
@@ -103,7 +167,7 @@ onUnmounted(() => {
     <AppHeader />
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- Main -->
+      <!-- 主内容区 -->
       <main class="lg:col-span-8 flex flex-col gap-8">
         <PageTitleCard
             title="Archive"
@@ -112,10 +176,10 @@ onUnmounted(() => {
             count-label="Total Posts"
         />
 
-        <!-- Loading State -->
+        <!-- 加载状态 -->
         <ArchiveSkeleton v-if="loading" />
 
-        <!-- Year Blocks -->
+        <!-- 年份分组列表 -->
         <template v-else-if="archives.length > 0">
           <div
               v-for="yearGroup in archives"
@@ -123,7 +187,7 @@ onUnmounted(() => {
               :id="`year-${yearGroup.year}`"
               class="bento-card scroll-mt-32"
           >
-            <!-- Year Header -->
+            <!-- 年份标题栏 -->
             <div class="px-4 sm:px-6 md:px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
               <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
               <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
@@ -131,20 +195,21 @@ onUnmounted(() => {
               </span>
             </div>
 
-            <!-- Timeline Body -->
+            <!-- 时间线主体 -->
             <div class="p-4 sm:p-6 md:p-8 relative">
+              <!-- 时间线竖线: 左侧缩进随断点递增 sm:left-6 md:left-8 -->
               <div class="absolute left-4 sm:left-6 md:left-8 top-6 bottom-2 w-px bg-slate-100"></div>
 
               <div class="flex flex-col gap-8">
                 <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-10 sm:pl-12 md:pl-16">
-                  <!-- Month Node -->
+                  <!-- 月份节点标签 -->
                   <div class="absolute left-4 sm:left-6 md:left-8 top-[-0.2rem] -translate-x-1/2">
                     <span class="inline-flex items-center justify-center font-mono text-[0.65rem] font-semibold text-slate-400 bg-white border border-slate-100 rounded-full px-2.5 py-0.5 shadow-sm">
                       {{ MONTH_NAMES[monthGroup.month - 1] }}
                     </span>
                   </div>
 
-                  <!-- Posts -->
+                  <!-- 文章列表: < sm 日期标题纵向排列; >= sm 横向排列 -->
                   <div class="flex flex-col gap-1 pt-1">
                     <router-link
                         v-for="post in monthGroup.posts"
@@ -174,7 +239,7 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- End Note -->
+          <!-- 底部结束标记 -->
           <div class="text-center text-xs text-slate-300 font-mono pb-8 flex items-center justify-center gap-2">
             <span class="size-1 rounded-full bg-slate-300"></span>
             <span>THE BEGINNING</span>
@@ -182,13 +247,13 @@ onUnmounted(() => {
           </div>
         </template>
 
-        <!-- Empty State -->
+        <!-- 空状态 -->
         <div v-else class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
         </div>
       </main>
 
-      <!-- Sidebar -->
+      <!-- 侧边栏 -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">

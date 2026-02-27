@@ -1,4 +1,4 @@
-<!-- src/views/NotFound.vue -->
+<!-- NotFound.vue - 404 页面，展示页面未找到的提示和返回首页链接 -->
 <script setup lang="ts">
 import AppHeader from '@/components/common/AppHeader.vue'
 import { FileQuestion } from 'lucide-vue-next'

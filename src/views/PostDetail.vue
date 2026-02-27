@@ -29,7 +29,7 @@ const { render, toc, renderMermaidCharts } = useMarkdown({ collectToc: true })
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
 
-/* ==================== 响应式状态 ==================== */
+// ========== 响应式状态 ==========
 
 const post = ref<PostDetailResponse | null>(null)
 const loading = ref(true)
@@ -42,7 +42,7 @@ const mobileTocOpen = ref(false)
 /** 浮动按钮可见状态（滚动超过一屏后显示） */
 const showFab = ref(false)
 
-/* ==================== 工具函数 ==================== */
+// ========== 工具函数 ==========
 
 /** 格式化日期为 YYYY-MM-DD 格式（中文 locale） */
 const formatDate = (dateStr: string) => {
@@ -53,7 +53,7 @@ const formatDate = (dateStr: string) => {
   }).replace(/\//g, '-')
 }
 
-/* ==================== 计算属性 ==================== */
+// ========== 计算属性 ==========
 
 /**
  * 是否显示"更新日期"
@@ -79,7 +79,7 @@ const renderedContent = computed(() => {
   return render(post.value.content)
 })
 
-/* ==================== 副作用 / 监听器 ==================== */
+// ========== 副作用 / 监听器 ==========
 
 /**
  * 监听渲染后的 HTML 变化，等待 DOM 更新后初始化 Mermaid 图表
@@ -163,7 +163,7 @@ watch(activeSection, async (newVal) => {
   }
 })
 
-/* ==================== 数据获取 ==================== */
+// ========== 数据获取 ==========
 
 /** 根据当前路由 slug 获取文章详情，失败时跳转首页 */
 const fetchData = async () => {
@@ -187,7 +187,7 @@ const fetchData = async () => {
   }
 }
 
-/* ==================== 生命周期 ==================== */
+// ========== 生命周期 ==========
 
 onMounted(() => {
   fetchData()
@@ -215,12 +215,12 @@ watch(
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full">
 
-      <!-- ==================== 加载骨架屏 ==================== -->
+      <!-- 加载骨架屏 -->
       <PostDetailSkeleton v-if="loading" />
 
       <template v-else-if="post">
 
-        <!-- ==================== 文章元信息头部 ==================== -->
+        <!-- 文章元信息头部 -->
         <div class="bento-card p-6 md:p-8 mb-6 flex flex-col gap-4">
           <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
             {{ post.title }}
@@ -268,7 +268,7 @@ watch(
           </div>
         </div>
 
-        <!-- ==================== 内容过期警告横幅 ==================== -->
+        <!-- 内容过期警告横幅 -->
         <div
             v-if="isOutdated"
             class="flex items-center gap-3 px-5 py-4 mb-6 rounded-xl bg-amber-50 border border-amber-200 text-amber-800"
@@ -279,7 +279,7 @@ watch(
           </p>
         </div>
 
-        <!-- ==================== 正文 + 侧边栏布局 ==================== -->
+        <!-- 正文 + 侧边栏布局 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
           <!-- 文章正文 -->
@@ -289,7 +289,7 @@ watch(
               <div class="markdown-body" v-html="renderedContent"></div>
             </div>
 
-            <!-- ==================== 上一篇 / 下一篇导航 ==================== -->
+            <!-- 上一篇 / 下一篇导航 -->
             <div
                 v-if="post.previous || post.next"
                 class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6"
@@ -328,7 +328,7 @@ watch(
             </div>
           </article>
 
-          <!-- ==================== 右侧栏：目录导航 ==================== -->
+          <!-- 右侧栏：目录导航 -->
           <aside class="lg:col-span-3 relative hidden lg:block">
             <div class="sticky top-24 space-y-6">
               <!-- TOC 目录（仅在有标题时显示） -->
@@ -367,7 +367,7 @@ watch(
     <!-- Mermaid 图表放大模态框 -->
     <MermaidModal />
 
-    <!-- ==================== 移动端 TOC：浮动按钮 + 底部弹出面板 ==================== -->
+    <!-- 移动端 TOC：浮动按钮 + 底部弹出面板 -->
     <template v-if="toc.length > 0">
       <!-- 浮动按钮组（仅移动端，滚动超过一屏后显示） -->
       <Transition

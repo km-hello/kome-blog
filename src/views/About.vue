@@ -1,4 +1,20 @@
-<!-- src/views/About.vue -->
+<!--
+  About.vue - 关于页
+
+  功能：展示博客项目介绍、功能特性和技术栈信息。
+
+  布局：
+    - 主内容区（lg:col-span-8）：项目介绍卡片、功能特性网格、技术栈卡片
+    - 侧边栏（lg:col-span-4）：个人资料、技能卡片、GitHub 仓库、页脚
+
+  响应式（特性网格）：
+    - < sm (640px): 单列
+    - >= sm: 2 列
+
+  响应式（技术栈网格）：
+    - < md (768px): 单列
+    - >= md: 3 列（Blog / Admin / API）
+-->
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
@@ -13,9 +29,12 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
+// ========== 状态定义 ==========
+
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
+/** 博客功能特性列表（静态数据） */
 const features = [
   { title: 'Articles', desc: 'Marked-based rendering with highlight.js, KaTeX math, Mermaid diagrams, pinned posts, reading time, and auto TOC.' },
   { title: 'Memos', desc: 'Microblog feed with intersection-observer infinite scroll, pinned entries, usage stats, and relative timestamps.' },
@@ -25,6 +44,7 @@ const features = [
   { title: 'Admin Dashboard', desc: 'Full CRUD for posts, memos, tags, links, and site settings behind JWT authentication.' },
 ]
 
+/** 技术栈分组（Blog / Admin / API） */
 const techStacks = [
   {
     label: 'Blog',
@@ -40,6 +60,8 @@ const techStacks = [
   },
 ]
 
+// ========== 生命周期 ==========
+
 onMounted(() => {
   siteStore.fetchSiteInfo()
 })
@@ -50,19 +72,20 @@ onMounted(() => {
     <AppHeader />
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- Main -->
+      <!-- 主内容区 -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         <PageTitleCard
             title="About"
             subtitle="About this blog and the person behind it."
         />
 
-        <!-- Project -->
+        <!-- 项目介绍 + 功能特性 -->
         <div class="bento-card p-6">
           <h2 class="text-sm font-bold text-slate-900 mb-2">Project</h2>
           <p class="text-sm text-slate-500 leading-relaxed mb-5">
             Kome Blog is a modern, full-stack personal blog system composed of three parts: a public-facing blog, an admin dashboard, and a RESTful API backend.
           </p>
+          <!-- 功能特性网格: < sm 单列; >= sm 2列 -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div
                 v-for="feature in features"
@@ -75,9 +98,10 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- Tech Stack -->
+        <!-- 技术栈 -->
         <div class="bento-card p-6">
           <h2 class="text-sm font-bold text-slate-900 mb-5">Tech Stack</h2>
+          <!-- 技术栈网格: < md 单列; >= md 3列 -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div v-for="stack in techStacks" :key="stack.label">
               <h3 class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-3">{{ stack.label }}</h3>
@@ -95,7 +119,7 @@ onMounted(() => {
         </div>
       </main>
 
-      <!-- Sidebar -->
+      <!-- 侧边栏 -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">
