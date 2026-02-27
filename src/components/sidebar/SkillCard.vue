@@ -1,8 +1,20 @@
-<!-- src/components/sidebar/SkillCard.vue -->
+<!--
+  SkillCard.vue - 技能卡片组件
+
+  功能：按熟练度分组展示站长技能标签（Proficient / Familiar / Basic），
+        每组内按 order 排序。
+
+  Props:
+    - skills: 技能列表数据（可选，默认空数组）
+-->
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SkillItem } from '@/api/site'
 
+/**
+ * Props 定义
+ * @property skills 技能项目数组
+ */
 const props = withDefaults(defineProps<{
   skills?: SkillItem[]
 }>(), {

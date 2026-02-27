@@ -1,9 +1,20 @@
-<!-- src/components/sidebar/RandomVisit.vue -->
+<!--
+  RandomVisit.vue - 随机访问友链组件
+
+  功能：点击按钮随机选取一个友链并展示预览卡片，支持外链跳转。
+
+  Props:
+    - links: 友链列表数据
+-->
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Dice5, ExternalLink } from 'lucide-vue-next'
 import type { LinkResponse } from '@/api/link'
 
+/**
+ * Props 定义
+ * @property links 友链列表数据
+ */
 const props = defineProps<{
   links: LinkResponse[]
 }>()
@@ -18,6 +29,7 @@ const roll = () => {
 </script>
 
 <template>
+  <!-- 随机友链卡片 -->
   <div class="bento-card p-5">
     <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Random Visit</h4>
 
@@ -25,7 +37,7 @@ const roll = () => {
       Roll the dice and visit a random friend.
     </p>
 
-    <!-- Picked preview -->
+    <!-- 选中的友链预览 -->
     <a v-if="picked" :href="picked.url" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-lg bg-slate-50/70 border border-slate-100/80 hover:bg-slate-100/80 px-3 py-2.5 mb-4 group transition-colors">
       <div class="size-8 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 overflow-hidden shrink-0">
         <img

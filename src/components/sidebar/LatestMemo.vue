@@ -83,7 +83,7 @@ const formatDate = (dateStr: string): string => {
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Latest Memos</h4>
     </div>
 
-    <!-- Loading State -->
+    <!-- 加载状态 -->
     <SidebarSkeleton v-if="loading && memos.length === 0" variant="memos" />
 
     <!-- Memo 列表 -->
@@ -117,7 +117,7 @@ const formatDate = (dateStr: string): string => {
               -->
               <div
                   v-if="overflowMap.get(memo.id)"
-                  class="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-slate-50 group-hover:from-slate-100 to-transparent pointer-events-none transition-colors"
+                  class="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-r from-slate-50 group-hover:from-slate-100 to-transparent pointer-events-none transition-colors"
               ></div>
             </div>
 

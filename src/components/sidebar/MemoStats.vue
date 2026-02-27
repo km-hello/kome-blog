@@ -1,7 +1,18 @@
-<!-- src/components/sidebar/MemoStats.vue -->
+<!--
+  MemoStats.vue - 动态统计卡片
+
+  功能：以 2x2 网格展示动态相关的统计数据（总数、总字数、本月发布数、最近发布日期）。
+
+  Props:
+    - stats: 动态统计数据对象（MemoStatsResponse）
+-->
 <script setup lang="ts">
 import type { MemoStatsResponse } from '@/api/memo'
 
+/**
+ * Props 定义
+ * @property stats Memo 统计数据对象
+ */
 defineProps<{
   stats: MemoStatsResponse
 }>()
@@ -20,6 +31,7 @@ const formatLatestDate = (dateStr: string | null) => {
 </script>
 
 <template>
+  <!-- 动态统计卡片 -->
   <div class="bento-card p-5">
     <h3 class="text-xs font-semibold text-slate-400 tracking-widest mb-4">MEMO STATS</h3>
     <div class="grid grid-cols-2 gap-2">

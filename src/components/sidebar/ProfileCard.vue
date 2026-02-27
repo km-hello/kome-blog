@@ -1,4 +1,16 @@
-<!-- src/components/sidebar/ProfileCard.vue -->
+<!--
+  ProfileCard.vue - 个人资料卡片
+
+  功能：
+    - 展示站长头像、昵称、个人描述
+    - 四宫格统计信息（文章数、标签数、动态数、友链数）
+    - 社交链接图标组：自动识别平台（GitHub、Twitter、Email 等）并匹配图标
+    - 邮箱链接自动补全 mailto: 前缀
+
+  Props:
+    - owner: 站长信息（OwnerInfo，含头像、昵称、描述、社交链接）
+    - stats: 站点统计数据（SiteStats，含各类内容发布数量）
+-->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Globe, Mail, Rss, Home, Link as LinkIcon } from 'lucide-vue-next'
@@ -10,7 +22,7 @@ const props = defineProps<{
   stats: SiteStats
 }>()
 
-// platform 到图标的映射
+/** 平台到图标的映射关系 */
 const iconMap: Record<string, any> = {
   github: IconGithub,
   twitter: IconX,
@@ -20,18 +32,29 @@ const iconMap: Record<string, any> = {
   rss: Rss,
 }
 
-// 获取平台图标
+/**
+ * 根据平台名称获取对应的图标组件
+ * @param platform 平台标识
+ */
 const getIcon = (platform: string) => iconMap[platform] || LinkIcon
 
-// 过滤掉 url 为空的链接（保留 # 以显示图标）
+/**
+ * 过滤有效的社交链接（url 不为空）
+ */
 const validLinks = computed(() =>
     props.owner.socialLinks?.filter(link => link.url) || []
 )
 
-// 判断链接是否可点击
+/**
+ * 判断链接是否可点击
+ * @param url 链接 URL
+ */
 const isClickable = (url: string) => url && url !== '#'
 
-// 获取链接的 href（处理 email 类型）
+/**
+ * 获取链接的 href（处理邮箱类型）
+ * @param link 社交链接对象
+ */
 const getLinkHref = (link: { platform: string; url: string }) => {
   if (!isClickable(link.url)) return undefined
   if (link.platform === 'email') {
@@ -42,9 +65,11 @@ const getLinkHref = (link: { platform: string; url: string }) => {
 </script>
 
 <template>
+  <!-- 个人资料卡片 -->
   <div class="bento-card p-6">
-    <!-- Header -->
+    <!-- 头部区域：头像 + 昵称/描述 -->
     <div class="flex items-center gap-4 mb-6">
+      <!-- 圆形头像（ring 装饰边框） -->
       <div class="size-14 rounded-full overflow-hidden shrink-0 ring-2 ring-slate-100">
         <img
             :src="owner.avatar"
@@ -58,7 +83,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       </div>
     </div>
 
-    <!-- Stats -->
+    <!-- 四宫格统计信息（文章/标签/动态/友链），hover 时背景高亮 -->
     <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
@@ -86,9 +111,16 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       </div>
     </div>
 
+    <!-- 分割线 -->
     <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
-    <!-- Social Links (仅在有链接配置时显示) -->
+    <!--
+      社交链接图标组（四列网格）
+      - 仅在有有效链接时渲染
+      - 动态组件：可点击的渲染为 <a>，不可点击的渲染为 <span>（灰色禁用态）
+      - 根据 platform 字段自动匹配图标（GitHub/Twitter/Email 等）
+      - Email 类型不设 target="_blank"，其余外链均新标签页打开
+    -->
     <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <component
           v-for="link in validLinks"
