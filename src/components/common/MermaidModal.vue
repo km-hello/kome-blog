@@ -26,7 +26,7 @@ const zoom = ref(1)
 const originalWidth = ref(0)
 const originalHeight = ref(0)
 
-// ========== 核心逻辑 ==========
+/* ========== 核心逻辑 ========== */
 
 /**
  * 打开 Mermaid 放大模态框
@@ -93,7 +93,7 @@ const resetZoom = () => {
   zoom.value = 1
 }
 
-// ========== 事件处理器（事件委托） ==========
+/* ========== 事件处理器（事件委托） ========== */
 
 /**
  * Mermaid 图表点击放大
@@ -131,7 +131,7 @@ const handleWheel = (e: WheelEvent) => {
   }
 }
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 onMounted(() => {
   document.addEventListener('click', handleClick)

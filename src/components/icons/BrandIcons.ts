@@ -1,6 +1,6 @@
 import { h } from 'vue'
 
-// GitHub 图标 (stroke style, matches Lucide aesthetic)
+/** GitHub 图标 (stroke style, matches Lucide aesthetic) */
 export const IconGithub = {
   name: 'IconGithub',
   render() {
@@ -25,7 +25,7 @@ export const IconGithub = {
   }
 }
 
-// X (Twitter) 图标 (stroke style, matches Lucide aesthetic)
+/** X (Twitter) 图标 (stroke style, matches Lucide aesthetic) */
 export const IconX = {
   name: 'IconX',
   render() {

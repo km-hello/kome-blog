@@ -2,7 +2,7 @@ import request from '@/request'
 import type { BaseQuery, PageResult } from '@/types/api'
 import type { TagResponse } from './tag'
 
-// ========== 类型定义 ==========
+/* ========== 类型定义 ========== */
 
 /**
  * 文章简略信息（用于列表展示）。
@@ -106,7 +106,7 @@ export interface PostArchiveResponse {
     months: MonthGroup[]       // 月份分组列表
 }
 
-// ========== API 接口 ==========
+/* ========== API 接口 ========== */
 
 /**
  * 获取文章分页列表。

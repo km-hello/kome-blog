@@ -29,7 +29,7 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
-// ========== 状态定义 ==========
+/* ========== 状态定义 ========== */
 
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
@@ -60,7 +60,7 @@ const techStacks = [
   },
 ]
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 onMounted(() => {
   siteStore.fetchSiteInfo()

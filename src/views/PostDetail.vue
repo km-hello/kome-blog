@@ -29,7 +29,7 @@ const { render, toc, renderMermaidCharts } = useMarkdown({ collectToc: true })
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
 
-// ========== 响应式状态 ==========
+/* ========== 响应式状态 ========== */
 
 const post = ref<PostDetailResponse | null>(null)
 const loading = ref(true)
@@ -42,7 +42,7 @@ const mobileTocOpen = ref(false)
 /** 浮动按钮可见状态（滚动超过一屏后显示） */
 const showFab = ref(false)
 
-// ========== 工具函数 ==========
+/* ========== 工具函数 ========== */
 
 /** 格式化日期为 YYYY-MM-DD 格式（中文 locale） */
 const formatDate = (dateStr: string) => {
@@ -53,7 +53,7 @@ const formatDate = (dateStr: string) => {
   }).replace(/\//g, '-')
 }
 
-// ========== 计算属性 ==========
+/* ========== 计算属性 ========== */
 
 /**
  * 是否显示"更新日期"
@@ -79,7 +79,7 @@ const renderedContent = computed(() => {
   return render(post.value.content)
 })
 
-// ========== 副作用 / 监听器 ==========
+/* ========== 副作用 / 监听器 ========== */
 
 /**
  * 监听渲染后的 HTML 变化，等待 DOM 更新后初始化 Mermaid 图表
@@ -163,7 +163,7 @@ watch(activeSection, async (newVal) => {
   }
 })
 
-// ========== 数据获取 ==========
+/* ========== 数据获取 ========== */
 
 /** 根据当前路由 slug 获取文章详情，失败时跳转首页 */
 const fetchData = async () => {
@@ -187,7 +187,7 @@ const fetchData = async () => {
   }
 }
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 onMounted(() => {
   fetchData()

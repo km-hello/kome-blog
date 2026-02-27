@@ -1,6 +1,6 @@
 import request from '@/request'
 
-// ========== 类型定义 ==========
+/* ========== 类型定义 ========== */
 
 /**
  * 社交链接信息。
@@ -58,7 +58,7 @@ export interface SiteInfoResponse {
     stats: SiteStats           // 站点统计数据
 }
 
-// ========== API 接口 ==========
+/* ========== API 接口 ========== */
 
 /**
  * 获取站点公开信息。

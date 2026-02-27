@@ -31,7 +31,7 @@ import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { getLatestMemosApi, type MemoResponse } from '@/api/memo'
 import { useSiteStore } from '@/stores/useSiteStore'
 
-// ========== 状态定义 ==========
+/* ========== 状态定义 ========== */
 
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
@@ -57,7 +57,7 @@ const selectedTagId = ref<number | null>(null)
 /** 是否正在加载 */
 const loading = ref(true)
 
-// ========== 方法 ==========
+/* ========== 方法 ========== */
 
 /**
  * 获取文章列表。
@@ -116,7 +116,7 @@ const handlePageChange = (page: number) => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 /** 页面挂载时并行加载文章、标签、最新动态和站点信息 */
 onMounted(async () => {

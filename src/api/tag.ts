@@ -1,6 +1,6 @@
 import request from '@/request'
 
-// ========== 类型定义 ==========
+/* ========== 类型定义 ========== */
 
 /**
  * 标签基础信息。
@@ -22,7 +22,7 @@ export interface TagPostCountResponse {
     createTime: string         // 创建时间（ISO 格式）
 }
 
-// ========== API 接口 ==========
+/* ========== API 接口 ========== */
 
 /**
  * 获取所有标签列表（含文章数量）。

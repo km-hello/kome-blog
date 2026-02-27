@@ -33,7 +33,7 @@ import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
-// ========== 状态定义 ==========
+/* ========== 状态定义 ========== */
 
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
@@ -59,7 +59,7 @@ const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
 })
 
-// ========== 方法 ==========
+/* ========== 方法 ========== */
 
 /**
  * 滚动到指定年份区块。
@@ -143,7 +143,7 @@ const handleTagSelect = (tagId: number | null) => {
   fetchArchives()
 }
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 onMounted(async () => {
   // 并行加载归档数据、标签列表和站点信息

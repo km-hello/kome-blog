@@ -1,7 +1,7 @@
 import request from '@/request'
 import type { BaseQuery, PageResult } from '@/types/api'
 
-// ========== 类型定义 ==========
+/* ========== 类型定义 ========== */
 
 /**
  * 动态信息。
@@ -36,7 +36,7 @@ export interface MemoStatsResponse {
     latestDate: string | null  // 最近一条动态的发布时间
 }
 
-// ========== API 接口 ==========
+/* ========== API 接口 ========== */
 
 /**
  * 获取动态分页列表。

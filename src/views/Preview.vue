@@ -10,7 +10,7 @@
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useMarkdown, renderMermaidCharts } from '@/composables/useMarkdown'
 
-// ========== 状态定义 ==========
+/* ========== 状态定义 ========== */
 
 /** 允许的消息来源（开发环境通过环境变量配置） */
 const allowedOrigins = (import.meta.env.VITE_ALLOWED_ORIGINS || '').split(',').filter(Boolean)
@@ -21,7 +21,7 @@ const content = ref('')
 const renderedHtml = ref('')
 const { render } = useMarkdown()
 
-// ========== 方法 ==========
+/* ========== 方法 ========== */
 
 /**
  * 处理 postMessage 消息事件。
@@ -45,7 +45,7 @@ const handleMessage = (event: MessageEvent) => {
     }
 }
 
-// ========== 侦听器 ==========
+/* ========== 侦听器 ========== */
 
 /** 监听内容变化，渲染 Markdown 并初始化 Mermaid 图表 */
 watch(content, async (newContent) => {
@@ -59,7 +59,7 @@ watch(content, async (newContent) => {
     }
 })
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 onMounted(() => {
     window.addEventListener('message', handleMessage)

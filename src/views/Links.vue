@@ -30,7 +30,7 @@ import {getLinksApi, type LinkResponse} from '@/api/link'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
-// ========== 状态定义 ==========
+/* ========== 状态定义 ========== */
 
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
@@ -42,7 +42,7 @@ const searchKeyword = ref('')
 /** 是否正在加载 */
 const loading = ref(true)
 
-// ========== 方法 ==========
+/* ========== 方法 ========== */
 
 /**
  * 获取友链列表。
@@ -81,7 +81,7 @@ const extractDomain = (url: string) => {
   }
 }
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 onMounted(async () => {
   await Promise.all([

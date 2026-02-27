@@ -38,7 +38,7 @@ const { render, renderMermaidCharts } = useMarkdown()
 // 注册代码块复制功能（事件委托，自动管理生命周期）
 useCodeCopy()
 
-// ========== 响应式状态 ==========
+/* ========== 响应式状态 ========== */
 
 /** 已加载的 Memo 列表（追加模式，支持无限滚动） */
 const memos = ref<MemoResponse[]>([])
@@ -57,7 +57,7 @@ const loading = ref(false)
 /** 是否已加载完全部数据（无更多内容） */
 const noMore = ref(false)
 
-// ========== 工具函数 ==========
+/* ========== 工具函数 ========== */
 
 /**
  * 将日期字符串格式化为人性化的相对时间
@@ -87,7 +87,7 @@ const formatTime = (dateStr: string) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-// ========== 数据获取 ==========
+/* ========== 数据获取 ========== */
 
 /**
  * 获取当前页的 Memo 数据
@@ -136,12 +136,12 @@ const handleSearch = (keyword: string) => {
   fetchMemos()
 }
 
-// ========== 无限滚动 ==========
+/* ========== 无限滚动 ========== */
 
 // 监听 document 滚动，当距底部 200px 时自动触发 loadMore
 useInfiniteScroll(document, loadMore, { distance: 200 })
 
-// ========== 生命周期 ==========
+/* ========== 生命周期 ========== */
 
 // 并行加载：Memo 列表 + 站点信息 + Memo 统计
 onMounted(async () => {

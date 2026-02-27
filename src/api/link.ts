@@ -1,6 +1,6 @@
 import request from '@/request'
 
-// ========== 类型定义 ==========
+/* ========== 类型定义 ========== */
 
 /**
  * 友链信息。
@@ -24,7 +24,7 @@ export interface LinkPublicQueryRequest {
     keyword?: string           // 搜索关键词
 }
 
-// ========== API 接口 ==========
+/* ========== API 接口 ========== */
 
 /**
  * 获取公开友链列表。
