@@ -1,6 +1,9 @@
+<!-- SidebarDrawer.vue - 移动端侧边栏抽屉（lg以下显示，从右侧滑入） -->
 <!--
-  src/components/common/SidebarDrawer.vue
-  移动端侧边栏抽屉 —— 从右侧滑入，仅在 < lg 屏幕下可见
+  功能：
+  - 从右侧滑入的侧边栏抽屉容器
+  - 仅在 < lg 屏幕下可见
+  - 支持遮罩层关闭和动画效果
 
   使用方式：
     在 App.vue 中全局挂载，各页面通过 <Teleport to="#sidebar-drawer-content">
@@ -20,7 +23,7 @@ watch(() => route.path, () => close())
 </script>
 
 <template>
-  <!-- 遮罩层 -->
+  <!-- 遮罩层（黑色半透明背景，点击关闭） -->
   <Transition
       enter-active-class="transition duration-200 ease-out"
       enter-from-class="opacity-0"
@@ -36,7 +39,7 @@ watch(() => route.path, () => close())
     />
   </Transition>
 
-  <!-- 抽屉面板（始终挂载以保证 Teleport 目标存在） -->
+  <!-- 侧边栏抽屉面板（从右侧滑入动画） -->
   <aside
       class="lg:hidden fixed top-0 right-0 bottom-0 z-50 w-[24rem] max-w-[92vw] bg-white shadow-2xl flex flex-col transition-transform duration-250 ease-out"
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"

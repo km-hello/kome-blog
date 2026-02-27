@@ -1,9 +1,7 @@
+<!-- MermaidModal.vue - Mermaid 图表放大模态框 -->
 <!--
-  src/components/common/MermaidModal.vue
-  Mermaid 图表放大模态框 —— 自包含的可复用组件
-
   功能概览:
-    - 通过事件委托自动监听 .mermaid-container.mermaid-rendered 的点击
+    - 自动监听 .mermaid-container.mermaid-rendered 的点击事件
     - 模态框内支持缩放：按钮控制 + Ctrl/Cmd+滚轮
     - ESC 键或点击遮罩关闭
     - 使用 Teleport 挂载到 body，避免被父容器 overflow 裁切
@@ -16,7 +14,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { X, ZoomIn, ZoomOut, RotateCcw } from 'lucide-vue-next'
 
-/* ==================== 响应式状态 ==================== */
+/* ========== 响应式状态 ========== */
 
 /** 模态框是否打开 */
 const modalOpen = ref(false)
@@ -28,7 +26,7 @@ const zoom = ref(1)
 const originalWidth = ref(0)
 const originalHeight = ref(0)
 
-/* ==================== 核心逻辑 ==================== */
+// ========== 核心逻辑 ==========
 
 /**
  * 打开 Mermaid 放大模态框
@@ -95,7 +93,7 @@ const resetZoom = () => {
   zoom.value = 1
 }
 
-/* ==================== 事件处理器（事件委托） ==================== */
+// ========== 事件处理器（事件委托） ==========
 
 /**
  * Mermaid 图表点击放大
@@ -133,7 +131,7 @@ const handleWheel = (e: WheelEvent) => {
   }
 }
 
-/* ==================== 生命周期 ==================== */
+// ========== 生命周期 ==========
 
 onMounted(() => {
   document.addEventListener('click', handleClick)

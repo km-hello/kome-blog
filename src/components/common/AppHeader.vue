@@ -1,4 +1,16 @@
-<!-- src/components/layout/AppHeader.vue -->
+<!--
+  AppHeader.vue - 顶部导航栏
+
+  功能：
+    - 固定顶部，高斯模糊半透明背景
+    - 导航菜单项高亮跟随当前路由
+    - 路由变化时自动关闭移动端菜单
+
+  响应式：
+    - >= lg: 水平导航链接，侧边栏/汉堡按钮隐藏
+    - < lg: 显示汉堡菜单按钮 + 侧边栏抽屉按钮（文章详情页隐藏侧边栏按钮）
+    - 移动端展开菜单使用 Transition 动画（向下展开/收起）
+-->
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { Menu, X, PanelRight } from 'lucide-vue-next'
@@ -12,6 +24,7 @@ const { toggle: toggleSidebar } = useSidebarDrawer()
 // 文章详情页有独立的 TOC，不需要侧边栏抽屉按钮
 const showSidebarButton = computed(() => route.name !== 'PostDetail')
 
+/** 导航菜单项 */
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Archive', path: '/archive' },
@@ -20,22 +33,29 @@ const navItems = [
   { label: 'About', path: '/about' },
 ]
 
+/** 外部链接列表 */
 const externalLinks: { label: string; href: string }[] = []
 
+/**
+ * 判断路由是否活跃
+ * @param path 路由路径
+ */
 const isActive = (path: string) => {
   if (path === '/') return route.path === '/'
   return route.path.startsWith(path)
 }
 
-// Auto-close mobile menu on route change
+// 路由变化时自动关闭移动端菜单
 watch(() => route.path, () => {
   mobileMenuOpen.value = false
 })
 </script>
 
 <template>
+  <!-- 顶部导航栏（固定顶部，高斯模糊效果） -->
   <header class="bg-white/90 backdrop-blur-2xl saturate-150 sticky top-0 z-50" style="border-bottom: 1px solid rgba(0, 0, 0, 0.06); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02)">
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+      <!-- Logo 和网站名称 -->
       <router-link to="/" class="flex items-center gap-3">
         <div class="size-9 bg-slate-900 rounded-md flex items-center justify-center text-white text-lg font-bold shadow-md">
           K
@@ -43,6 +63,7 @@ watch(() => route.path, () => {
         <h1 class="font-bold text-slate-900 text-base">Kome Blog</h1>
       </router-link>
 
+      <!-- 桌面端水平导航（lg+ 显示） -->
       <nav class="hidden lg:flex gap-6 text-sm font-medium text-slate-500">
         <router-link
             v-for="item in navItems"
@@ -86,7 +107,7 @@ watch(() => route.path, () => {
       </div>
     </div>
 
-    <!-- Mobile dropdown menu -->
+    <!-- 移动端下拉菜单 -->
     <Transition
         enter-active-class="transition duration-200 ease-out"
         enter-from-class="opacity-0 -translate-y-1"
