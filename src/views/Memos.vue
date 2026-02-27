@@ -40,21 +40,37 @@ useCodeCopy()
 
 /* ========== 响应式状态 ========== */
 
-/** 已加载的 Memo 列表（追加模式，支持无限滚动） */
+/**
+ * 已加载的 Memo 列表（追加模式，支持无限滚动）
+ */
 const memos = ref<MemoResponse[]>([])
-/** Memo 统计数据，独立接口获取 */
+/**
+ * Memo 统计数据，独立接口获取
+ */
 const memoStats = ref<MemoStatsResponse | null>(null)
-/** Memo 总数，用于页面标题卡片展示 */
+/**
+ * Memo 总数，用于页面标题卡片展示
+ */
 const total = ref(0)
-/** 当前搜索关键词，为空时加载全部 */
+/**
+ * 当前搜索关键词，为空时加载全部
+ */
 const searchKeyword = ref('')
-/** 当前页码（从 1 开始） */
+/**
+ * 当前页码（从 1 开始）
+ */
 const pageNum = ref(1)
-/** 每页条数 */
+/**
+ * 每页条数
+ */
 const pageSize = 10
-/** 是否正在加载中（防止重复请求） */
+/**
+ * 是否正在加载中（防止重复请求）
+ */
 const loading = ref(false)
-/** 是否已加载完全部数据（无更多内容） */
+/**
+ * 是否已加载完全部数据（无更多内容）
+ */
 const noMore = ref(false)
 
 /* ========== 工具函数 ========== */

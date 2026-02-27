@@ -73,7 +73,9 @@ const router = createRouter({
     },
 })
 
-/** 路由后置守卫：根据路由 meta.title 动态设置页面标题 */
+/**
+ * 路由后置守卫：根据路由 meta.title 动态设置页面标题
+ */
 router.afterEach((to) => {
     const title = to.meta.title as string
     document.title = title ? `${title} - Kome Blog` : 'Kome Blog'

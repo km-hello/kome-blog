@@ -18,7 +18,9 @@ import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 const route = useRoute()
 const { isOpen, close } = useSidebarDrawer()
 
-/** 路由变化时自动关闭抽屉 */
+/**
+ * 路由变化时自动关闭抽屉
+ */
 watch(() => route.path, () => close())
 </script>
 

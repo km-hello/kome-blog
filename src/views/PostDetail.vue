@@ -33,18 +33,28 @@ useCodeCopy()
 
 const post = ref<PostDetailResponse | null>(null)
 const loading = ref(true)
-/** 当前滚动高亮的 TOC 锚点 id */
+/**
+ * 当前滚动高亮的 TOC 锚点 id
+ */
 const activeSection = ref('')
-/** TOC 容器 DOM 引用，用于自动滚动 TOC 列表到当前活跃项 */
+/**
+ * TOC 容器 DOM 引用，用于自动滚动 TOC 列表到当前活跃项
+ */
 const tocContainer = ref<HTMLElement | null>(null)
-/** 移动端 TOC 折叠状态 */
+/**
+ * 移动端 TOC 折叠状态
+ */
 const mobileTocOpen = ref(false)
-/** 浮动按钮可见状态（滚动超过一屏后显示） */
+/**
+ * 浮动按钮可见状态（滚动超过一屏后显示）
+ */
 const showFab = ref(false)
 
 /* ========== 工具函数 ========== */
 
-/** 格式化日期为 YYYY-MM-DD 格式（中文 locale） */
+/**
+ *  格式化日期为 YYYY-MM-DD 格式（中文 locale）
+ */
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString('zh-CN', {
     year: 'numeric',
@@ -64,7 +74,9 @@ const showUpdateDate = computed(() => {
   return post.value.updateTime.slice(0, 10) !== post.value.createTime.slice(0, 10)
 })
 
-/** 内容过期提醒：距上次更新（或创建）超过 180 天 */
+/**
+ * 内容过期提醒：距上次更新（或创建）超过 180 天
+ */
 const isOutdated = computed(() => {
   if (!post.value) return false
   const ref = post.value.updateTime || post.value.createTime
@@ -73,7 +85,9 @@ const isOutdated = computed(() => {
   return diffMs > 180 * 24 * 60 * 60 * 1000
 })
 
-/** 渲染 Markdown 正文为 HTML（惰性计算，post 数据变化时自动更新） */
+/**
+ * 渲染 Markdown 正文为 HTML（惰性计算，post 数据变化时自动更新）
+ */
 const renderedContent = computed(() => {
   if (!post.value?.content) return ''
   return render(post.value.content)
@@ -107,7 +121,9 @@ const scrollTo = (id: string) => {
   }
 }
 
-/** 平滑滚动到页面顶部 */
+/**
+ * 平滑滚动到页面顶部
+ */
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -165,7 +181,9 @@ watch(activeSection, async (newVal) => {
 
 /* ========== 数据获取 ========== */
 
-/** 根据当前路由 slug 获取文章详情，失败时跳转首页 */
+/**
+ * 根据当前路由 slug 获取文章详情，失败时跳转首页
+ */
 const fetchData = async () => {
   const slug = route.params.slug as string
   if (!slug) return
@@ -198,7 +216,9 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-/** 监听路由参数变化，支持文章间直接跳转（如上一篇/下一篇）而不重建组件 */
+/**
+ * 监听路由参数变化，支持文章间直接跳转（如上一篇/下一篇）而不重建组件
+ */
 watch(
     () => route.params.slug,
     () => {

@@ -21,10 +21,14 @@ const route = useRoute()
 const mobileMenuOpen = ref(false)
 const { toggle: toggleSidebar } = useSidebarDrawer()
 
-/** 文章详情页有独立的 TOC，不需要侧边栏抽屉按钮 */
+/**
+ * 文章详情页有独立的 TOC，不需要侧边栏抽屉按钮
+ */
 const showSidebarButton = computed(() => route.name !== 'PostDetail')
 
-/** 导航菜单项 */
+/**
+ * 导航菜单项
+ */
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Archive', path: '/archive' },
@@ -33,7 +37,9 @@ const navItems = [
   { label: 'About', path: '/about' },
 ]
 
-/** 外部链接列表 */
+/**
+ * 外部链接列表
+ */
 const externalLinks: { label: string; href: string }[] = []
 
 /**
@@ -45,7 +51,9 @@ const isActive = (path: string) => {
   return route.path.startsWith(path)
 }
 
-/** 路由变化时自动关闭移动端菜单 */
+/**
+ * 路由变化时自动关闭移动端菜单
+ */
 watch(() => route.path, () => {
   mobileMenuOpen.value = false
 })

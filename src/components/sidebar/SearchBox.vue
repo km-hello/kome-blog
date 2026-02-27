@@ -33,12 +33,16 @@ const emit = defineEmits<{
 
 const keyword = ref('')
 
-/** 提交搜索（去除首尾空格后触发 search 事件） */
+/**
+ * 提交搜索（去除首尾空格后触发 search 事件）
+ */
 const handleSearch = () => {
   emit('search', keyword.value.trim())
 }
 
-/** 输入框清空时自动重置搜索 */
+/**
+ * 输入框清空时自动重置搜索
+ */
 watch(keyword, (val) => {
   if (val.trim() === '') {
     emit('search', '')

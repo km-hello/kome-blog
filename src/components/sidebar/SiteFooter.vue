@@ -12,7 +12,9 @@ import { useSiteStore } from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
 
-/** 站点运行天数（基于站长注册时间到当前日期的差值） */
+/**
+ * 站点运行天数（基于站长注册时间到当前日期的差值）
+ */
 const runningDays = computed(() => {
   const createdAt = siteStore.siteInfo?.owner?.createdAt
   if (!createdAt) return 0

@@ -35,11 +35,17 @@ import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
-/** 友链列表 */
+/**
+ * 友链列表
+ */
 const links = ref<LinkResponse[]>([])
-/** 搜索关键词 */
+/**
+ * 搜索关键词
+ */
 const searchKeyword = ref('')
-/** 是否正在加载 */
+/**
+ * 是否正在加载
+ */
 const loading = ref(true)
 
 /* ========== 方法 ========== */

@@ -70,7 +70,9 @@ watch(() => props.memos, async () => {
   setTimeout(() => renderMermaidCharts(), 0)
 }, { flush: 'post' })
 
-/** 从 ISO 日期字符串中提取 YYYY-MM-DD 部分 */
+/**
+ * 从 ISO 日期字符串中提取 YYYY-MM-DD 部分
+ */
 const formatDate = (dateStr: string): string => {
   return dateStr.split('T')[0] ?? dateStr
 }

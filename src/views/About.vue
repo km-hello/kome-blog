@@ -34,7 +34,9 @@ import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
-/** 博客功能特性列表（静态数据） */
+/**
+ * 博客功能特性列表（静态数据）
+ */
 const features = [
   { title: 'Articles', desc: 'Marked-based rendering with highlight.js, KaTeX math, Mermaid diagrams, pinned posts, reading time, and auto TOC.' },
   { title: 'Memos', desc: 'Microblog feed with intersection-observer infinite scroll, pinned entries, usage stats, and relative timestamps.' },
@@ -44,7 +46,9 @@ const features = [
   { title: 'Admin Dashboard', desc: 'Full CRUD for posts, memos, tags, links, and site settings behind JWT authentication.' },
 ]
 
-/** 技术栈分组（Blog / Admin / API） */
+/**
+ * 技术栈分组（Blog / Admin / API）
+ */
 const techStacks = [
   {
     label: 'Blog',

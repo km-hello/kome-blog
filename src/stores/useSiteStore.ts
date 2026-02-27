@@ -11,16 +11,24 @@ import { getSiteInfoApi, checkInitializedApi, type SiteInfoResponse } from '@/ap
 export const useSiteStore = defineStore('site', () => {
     // ========== State ==========
 
-    /** 系统是否已初始化（null=未检查，true=已初始化，false=未初始化） */
+    /**
+     * 系统是否已初始化（null=未检查，true=已初始化，false=未初始化）
+     */
     const initialized = ref<boolean | null>(null);
 
-    /** 站点信息（包含站长资料与统计数据） */
+    /**
+     * 站点信息（包含站长资料与统计数据）
+     */
     const siteInfo = ref<SiteInfoResponse | null>(null);
 
-    /** 是否正在加载中 */
+    /**
+     * 是否正在加载中
+     */
     const loading = ref(false);
 
-    /** 当前正在进行的请求 Promise，用于并发去重 */
+    /**
+     * 当前正在进行的请求 Promise，用于并发去重
+     */
     let pendingPromise: Promise<void> | null = null;
 
 

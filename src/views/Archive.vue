@@ -38,23 +38,39 @@ import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
-/** 月份缩写映射 */
+/**
+ * 月份缩写映射
+ */
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
-/** 归档数据（按年份分组） */
+/**
+ * 归档数据（按年份分组）
+ */
 const archives = ref<PostArchiveResponse[]>([])
-/** 标签列表 */
+/**
+ * 标签列表
+ */
 const tags = ref<TagPostCountResponse[]>([])
-/** 当前高亮的年份（侧边栏导航联动） */
+/**
+ * 当前高亮的年份（侧边栏导航联动）
+ */
 const activeYear = ref<number | null>(null)
-/** 搜索关键词 */
+/**
+ * 搜索关键词
+ */
 const searchKeyword = ref('')
-/** 选中的标签 ID */
+/**
+ * 选中的标签 ID
+ */
 const selectedTagId = ref<number | null>(null)
-/** 是否正在加载 */
+/**
+ * 是否正在加载
+ */
 const loading = ref(true)
 
-/** 文章总数（各年份 total 之和） */
+/**
+ * 文章总数（各年份 total 之和）
+ */
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
 })

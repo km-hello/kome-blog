@@ -16,13 +16,21 @@ import { X, ZoomIn, ZoomOut, RotateCcw } from 'lucide-vue-next'
 
 /* ========== 响应式状态 ========== */
 
-/** 模态框是否打开 */
+/**
+ * 模态框是否打开
+ */
 const modalOpen = ref(false)
-/** 模态框中渲染的 SVG 字符串（已移除固定尺寸，改由 CSS 控制） */
+/**
+ * 模态框中渲染的 SVG 字符串（已移除固定尺寸，改由 CSS 控制）
+ */
 const svgContent = ref('')
-/** 当前缩放倍率，默认 1 = 100% */
+/**
+ * 当前缩放倍率，默认 1 = 100%
+ */
 const zoom = ref(1)
-/** SVG 原始宽高，作为缩放计算的基准 */
+/**
+ * SVG 原始宽高，作为缩放计算的基准
+ */
 const originalWidth = ref(0)
 const originalHeight = ref(0)
 
@@ -66,7 +74,9 @@ const openModal = (content: string) => {
   document.body.style.overflow = 'hidden'
 }
 
-/** 关闭模态框并恢复页面滚动 */
+/**
+ * 关闭模态框并恢复页面滚动
+ */
 const closeModal = () => {
   modalOpen.value = false
   svgContent.value = ''
@@ -74,21 +84,29 @@ const closeModal = () => {
   document.body.style.overflow = ''
 }
 
-/** 根据缩放倍率计算实际显示尺寸 */
+/**
+ * 根据缩放倍率计算实际显示尺寸
+ */
 const displayWidth = computed(() => originalWidth.value * zoom.value)
 const displayHeight = computed(() => originalHeight.value * zoom.value)
 
-/** 放大：每次 +25%，上限 500% */
+/**
+ * 放大：每次 +25%，上限 500%
+ */
 const zoomIn = () => {
   zoom.value = Math.min(zoom.value + 0.25, 5)
 }
 
-/** 缩小：每次 -25%，下限 25% */
+/**
+ * 缩小：每次 -25%，下限 25%
+ */
 const zoomOut = () => {
   zoom.value = Math.max(zoom.value - 0.25, 0.25)
 }
 
-/** 重置缩放为 100% */
+/**
+ * 重置缩放为 100%
+ */
 const resetZoom = () => {
   zoom.value = 1
 }
@@ -109,7 +127,9 @@ const handleClick = (e: MouseEvent) => {
   }
 }
 
-/** ESC 键关闭模态框 */
+/**
+ * ESC 键关闭模态框
+ */
 const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && modalOpen.value) {
     closeModal()

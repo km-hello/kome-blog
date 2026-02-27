@@ -12,12 +12,18 @@ import { useMarkdown, renderMermaidCharts } from '@/composables/useMarkdown'
 
 /* ========== 状态定义 ========== */
 
-/** 允许的消息来源（开发环境通过环境变量配置） */
+/**
+ * 允许的消息来源（开发环境通过环境变量配置）
+ */
 const allowedOrigins = (import.meta.env.VITE_ALLOWED_ORIGINS || '').split(',').filter(Boolean)
 
-/** 原始 Markdown 内容 */
+/**
+ * 原始 Markdown 内容
+ */
 const content = ref('')
-/** 渲染后的 HTML */
+/**
+ * 渲染后的 HTML
+ */
 const renderedHtml = ref('')
 const { render } = useMarkdown()
 
@@ -47,7 +53,9 @@ const handleMessage = (event: MessageEvent) => {
 
 /* ========== 侦听器 ========== */
 
-/** 监听内容变化，渲染 Markdown 并初始化 Mermaid 图表 */
+/**
+ * 监听内容变化，渲染 Markdown 并初始化 Mermaid 图表
+ */
 watch(content, async (newContent) => {
     if (newContent) {
         renderedHtml.value = render(newContent)

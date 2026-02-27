@@ -33,7 +33,9 @@ const copyAll = async () => {
   setTimeout(() => (copied.value = false), 2000)
 }
 
-/** 当前已复制的字段标签（用于逐项复制的视觉反馈） */
+/**
+ * 当前已复制的字段标签（用于逐项复制的视觉反馈）
+ */
 const copiedField = ref('')
 
 /**

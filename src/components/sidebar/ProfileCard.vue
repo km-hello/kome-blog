@@ -22,7 +22,9 @@ const props = defineProps<{
   stats: SiteStats
 }>()
 
-/** 平台到图标的映射关系 */
+/**
+ * 平台到图标的映射关系
+ */
 const iconMap: Record<string, any> = {
   github: IconGithub,
   twitter: IconX,

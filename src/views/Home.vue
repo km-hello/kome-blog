@@ -36,25 +36,43 @@ import { useSiteStore } from '@/stores/useSiteStore'
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
 
-/** 文章列表 */
+/**
+ * 文章列表
+ */
 const posts = ref<PostSimpleResponse[]>([])
-/** 标签列表（含文章数量） */
+/**
+ * 标签列表（含文章数量）
+ */
 const tags = ref<TagPostCountResponse[]>([])
-/** 最新动态列表 */
+/**
+ * 最新动态列表
+ */
 const memos = ref<MemoResponse[]>([])
 
-/** 当前页码 */
+/**
+ * 当前页码
+ */
 const currentPage = ref(1)
-/** 每页条数 */
+/**
+ * 每页条数
+ */
 const pageSize = 8
-/** 文章总数 */
+/**
+ * 文章总数
+ */
 const total = ref(0)
-/** 搜索关键词 */
+/**
+ * 搜索关键词
+ */
 const searchKeyword = ref('')
-/** 选中的标签 ID */
+/**
+ * 选中的标签 ID
+ */
 const selectedTagId = ref<number | null>(null)
 
-/** 是否正在加载 */
+/**
+ * 是否正在加载
+ */
 const loading = ref(true)
 
 /* ========== 方法 ========== */
@@ -118,7 +136,9 @@ const handlePageChange = (page: number) => {
 
 /* ========== 生命周期 ========== */
 
-/** 页面挂载时并行加载文章、标签、最新动态和站点信息 */
+/**
+ * 页面挂载时并行加载文章、标签、最新动态和站点信息
+ */
 onMounted(async () => {
   await Promise.all([
     fetchPosts(),
