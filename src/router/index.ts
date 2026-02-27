@@ -1,5 +1,18 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+/**
+ * 路由配置表。
+ *
+ * 路由结构：
+ *   /              → Home      首页（文章列表）
+ *   /archive       → Archive   归档（按年月分组）
+ *   /memos         → Memos     动态列表
+ *   /links         → Links     友情链接
+ *   /about         → About     关于页
+ *   /post/:slug    → PostDetail 文章详情
+ *   /preview       → Preview   管理端文章预览（iframe 接收端）
+ *   /*             → NotFound  404 页面
+ */
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
@@ -54,11 +67,13 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+    /** 滚动行为：若有历史位置则恢复，否则回到顶部 */
     scrollBehavior(_to, _from, savedPosition) {
         return savedPosition ?? { top: 0 }
     },
 })
 
+/** 路由后置守卫：根据路由 meta.title 动态设置页面标题 */
 router.afterEach((to) => {
     const title = to.meta.title as string
     document.title = title ? `${title} - Kome Blog` : 'Kome Blog'
