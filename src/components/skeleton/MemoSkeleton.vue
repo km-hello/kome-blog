@@ -1,4 +1,4 @@
-<!-- src/components/skeleton/MemoSkeleton.vue -->
+<!-- 动态卡片加载骨架屏 -->
 <template>
   <div class="bento-card p-5 animate-pulse">
     <div class="flex items-center gap-3 mb-3">

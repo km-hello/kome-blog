@@ -1,4 +1,4 @@
-<!-- src/components/skeleton/ArchiveSkeleton.vue -->
+<!-- 归档页加载骨架屏 -->
 <template>
   <div class="bento-card animate-pulse">
     <div class="px-4 sm:px-6 md:px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
