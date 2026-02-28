@@ -1,22 +1,15 @@
-<!--
-  ProfileCard.vue - 个人资料卡片
-
-  功能：
-    - 展示站长头像、昵称、个人描述
-    - 四宫格统计信息（文章数、标签数、动态数、友链数）
-    - 社交链接图标组：自动识别平台（GitHub、Twitter、Email 等）并匹配图标
-    - 邮箱链接自动补全 mailto: 前缀
-
-  Props:
-    - owner: 站长信息（OwnerInfo，含头像、昵称、描述、社交链接）
-    - stats: 站点统计数据（SiteStats，含各类内容发布数量）
--->
+<!-- ProfileCard.vue - 个人资料卡片 -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Globe, Mail, Rss, Home, Link as LinkIcon } from 'lucide-vue-next'
 import { IconGithub, IconX } from '@/components/icons/BrandIcons'
 import type { OwnerInfo, SiteStats } from '@/api/site'
 
+/**
+ * Props 定义
+ * @property owner 站长信息（OwnerInfo，含头像、昵称、描述、社交链接）
+ * @property stats 站点统计数据（SiteStats，含各类内容发布数量）
+ */
 const props = defineProps<{
   owner: OwnerInfo
   stats: SiteStats
@@ -67,11 +60,9 @@ const getLinkHref = (link: { platform: string; url: string }) => {
 </script>
 
 <template>
-  <!-- 个人资料卡片 -->
   <div class="bento-card p-6">
-    <!-- 头部区域：头像 + 昵称/描述 -->
+    <!-- 头像 + 昵称/描述 -->
     <div class="flex items-center gap-4 mb-6">
-      <!-- 圆形头像（ring 装饰边框） -->
       <div class="size-14 rounded-full overflow-hidden shrink-0 ring-2 ring-slate-100">
         <img
             :src="owner.avatar"
@@ -85,7 +76,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       </div>
     </div>
 
-    <!-- 四宫格统计信息（文章/标签/动态/友链），hover 时背景高亮 -->
+    <!-- 四宫格统计（sm+ gap 加大，数字 text-base → sm:text-lg） -->
     <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
@@ -113,16 +104,9 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       </div>
     </div>
 
-    <!-- 分割线 -->
     <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
-    <!--
-      社交链接图标组（四列网格）
-      - 仅在有有效链接时渲染
-      - 动态组件：可点击的渲染为 <a>，不可点击的渲染为 <span>（灰色禁用态）
-      - 根据 platform 字段自动匹配图标（GitHub/Twitter/Email 等）
-      - Email 类型不设 target="_blank"，其余外链均新标签页打开
-    -->
+    <!-- 社交链接图标组（四列网格，sm+ gap 加大；动态组件区分可点击 <a> / 禁用 <span>） -->
     <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <component
           v-for="link in validLinks"

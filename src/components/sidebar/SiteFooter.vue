@@ -1,10 +1,4 @@
-<!--
-  SiteFooter.vue - 站点页脚组件
-
-  功能：
-    - 左侧显示版权信息（链接至 GitHub 仓库）
-    - 右侧显示站点运行天数，基于 siteStore 中的站长注册时间动态计算
--->
+<!-- SiteFooter.vue - 站点页脚 -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Timer } from 'lucide-vue-next'
@@ -26,14 +20,12 @@ const runningDays = computed(() => {
 </script>
 
 <template>
-  <!-- 页脚信息栏（两端对齐：左版权 / 右运行天数） -->
+  <!-- 页脚（flex-wrap 窄屏自动换行） -->
   <div class="bento-card px-5 py-4">
     <div class="flex flex-wrap items-center justify-between gap-y-1">
-      <!-- 版权信息（链接至 GitHub 仓库） -->
       <a href="https://github.com/km-hello/kome-blog" target="_blank" class="text-[10px] font-semibold text-slate-400 tracking-widest hover:text-slate-700 transition-colors">
         © 2026 Kome Blog
       </a>
-      <!-- 运行天数（Timer 图标 + 动态计算天数） -->
       <span class="text-[10px] font-semibold text-slate-400 tracking-widest flex items-center gap-1">
         <Timer :size="10" />
         Running {{ runningDays }} days

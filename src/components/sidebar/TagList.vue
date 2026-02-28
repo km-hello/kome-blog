@@ -1,28 +1,13 @@
-<!--
-  TagList.vue - 标签列表组件
-
-  功能：
-    - 标签云展示，选中标签高亮（深色背景），支持取消选择
-    - 每个标签显示名称和关联文章数量
-    - 加载中显示骨架屏，无标签时显示空状态文案
-
-  Props:
-    - tags: 标签数组（TagPostCountResponse[]，含名称和文章计数）
-    - activeTagId: 当前选中的标签 ID（可选，null 表示无选中）
-    - loading: 加载状态（可选，控制骨架屏显示）
-
-  Events:
-    - select(tagId): 标签选择事件，tagId 为 null 表示取消筛选
--->
+<!-- TagList.vue - 标签列表组件 -->
 <script setup lang="ts">
 import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
-import type { TagPostCountResponse } from '@/api/tag'
+import type {TagPostCountResponse} from '@/api/tag'
 
 /**
  * Props 定义
- * @property tags 标签数组
- * @property activeTagId 当前选中的标签ID
- * @property loading 加载状态
+ * @property tags 标签数组（TagPostCountResponse[]，含名称和文章计数）
+ * @property activeTagId 当前选中的标签 ID（null 表示无选中）
+ * @property loading 加载状态（控制骨架屏显示）
  */
 defineProps<{
   tags: TagPostCountResponse[]
@@ -32,7 +17,7 @@ defineProps<{
 
 /**
  * 事件定义
- * @event select 标签选择事件
+ * @event select 标签选择事件，tagId 为 null 表示取消筛选
  */
 const emit = defineEmits<{
   select: [tagId: number | null]
@@ -49,9 +34,8 @@ const handleTagClick = (tagId: number) => {
 </script>
 
 <template>
-  <!-- 标签云卡片 -->
   <div class="bento-card p-5">
-    <!-- 标题栏：左侧标题 + 右侧清除按钮（仅有选中标签时显示） -->
+    <!-- 标题栏 + 清除按钮（有选中标签时显示） -->
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tags</h4>
       <button
@@ -63,15 +47,10 @@ const handleTagClick = (tagId: number) => {
       </button>
     </div>
 
-    <!-- 加载骨架屏（首次加载且无缓存数据时显示） -->
-    <SidebarSkeleton v-if="loading && tags.length === 0" variant="tags" />
+    <!-- 加载骨架屏 -->
+    <SidebarSkeleton v-if="loading && tags.length === 0" variant="tags"/>
 
-    <!--
-      标签按钮组（flex 自动换行，最大高度 60 / 15rem，超出可滚动）
-      - 选中标签：深色背景 + 白色文字
-      - 未选中标签：浅灰背景，hover 时边框加深
-      - 每个标签右侧显示关联文章计数徽标
-    -->
+    <!-- 标签按钮组（flex 换行，max-h-60 超出滚动，选中深色/未选中浅灰） -->
     <div v-else class="flex flex-wrap gap-2 max-h-60 overflow-y-auto scrollbar-thin pr-1">
       <button
           v-for="tag in tags"
@@ -82,9 +61,8 @@ const handleTagClick = (tagId: number) => {
             ? 'bg-slate-800 border-slate-700 text-white'
             : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900'"
       >
-        <!-- 标签名称 -->
         <span class="text-xs font-bold">{{ tag.name }}</span>
-        <!-- 文章计数徽标（选中/未选中配色不同） -->
+        <!-- 文章计数徽标 -->
         <span
             class="text-[10px] font-mono px-1.5 rounded"
             :class="activeTagId === tag.id
