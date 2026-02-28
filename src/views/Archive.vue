@@ -1,19 +1,4 @@
-<!--
-  Archive.vue - 文章归档页
-
-  功能：按年月分组展示所有已发布文章，支持关键词搜索和标签筛选。
-
-  布局：
-    - 主内容区（lg:col-span-8）：时间线式年月分组文章列表
-    - 侧边栏（lg:col-span-4）：个人资料、搜索框、年份快捷导航、标签云、页脚
-
-  响应式：
-    - < sm (640px): 文章日期和标题纵向排列，时间线缩进较小
-    - >= sm: 日期与标题横向排列，时间线缩进适中
-    - >= md (768px): 时间线缩进加大
-    - < lg: 侧边栏移入抽屉
-    - >= lg: 侧边栏固定右侧
--->
+<!-- Archive.vue - 文章归档页 -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/components/common/AppHeader.vue'
@@ -32,8 +17,6 @@ import { getArchivePostsApi, type PostArchiveResponse } from '@/api/post'
 import { getTagsApi, type TagPostCountResponse } from '@/api/tag'
 import { useSiteStore } from '@/stores/useSiteStore'
 import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
-
-/* ========== 状态定义 ========== */
 
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
@@ -74,8 +57,6 @@ const loading = ref(true)
 const totalPosts = computed(() => {
   return archives.value.reduce((sum, year) => sum + year.total, 0)
 })
-
-/* ========== 方法 ========== */
 
 /**
  * 滚动到指定年份区块。
@@ -159,7 +140,6 @@ const handleTagSelect = (tagId: number | null) => {
   fetchArchives()
 }
 
-/* ========== 生命周期 ========== */
 
 onMounted(async () => {
   // 并行加载归档数据、标签列表和站点信息
@@ -183,7 +163,7 @@ onUnmounted(() => {
     <AppHeader />
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- 主内容区 -->
+      <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-8">
         <PageTitleCard
             title="Archive"
@@ -203,7 +183,7 @@ onUnmounted(() => {
               :id="`year-${yearGroup.year}`"
               class="bento-card scroll-mt-32"
           >
-            <!-- 年份标题栏 -->
+            <!-- 年份标题栏（padding 响应式 px-4 → sm:px-6 → md:px-8） -->
             <div class="px-4 sm:px-6 md:px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
               <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
               <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
@@ -211,21 +191,21 @@ onUnmounted(() => {
               </span>
             </div>
 
-            <!-- 时间线主体 -->
+            <!-- 时间线主体（padding 响应式 p-4 → sm:p-6 → md:p-8） -->
             <div class="p-4 sm:p-6 md:p-8 relative">
-              <!-- 时间线竖线: 左侧缩进随断点递增 sm:left-6 md:left-8 -->
+              <!-- 竖线（left 响应式 left-4 → sm:left-6 → md:left-8） -->
               <div class="absolute left-4 sm:left-6 md:left-8 top-6 bottom-2 w-px bg-slate-100"></div>
 
               <div class="flex flex-col gap-8">
                 <div v-for="monthGroup in yearGroup.months" :key="monthGroup.month" class="relative pl-10 sm:pl-12 md:pl-16">
-                  <!-- 月份节点标签 -->
+                  <!-- 月份节点（缩进 pl-10 → sm:pl-12 → md:pl-16） -->
                   <div class="absolute left-4 sm:left-6 md:left-8 top-[-0.2rem] -translate-x-1/2">
                     <span class="inline-flex items-center justify-center font-mono text-[0.65rem] font-semibold text-slate-400 bg-white border border-slate-100 rounded-full px-2.5 py-0.5 shadow-sm">
                       {{ MONTH_NAMES[monthGroup.month - 1] }}
                     </span>
                   </div>
 
-                  <!-- 文章列表: < sm 日期标题纵向排列; >= sm 横向排列 -->
+                  <!-- 文章列表（< sm 纵向排列 / >= sm 日期+标题横排） -->
                   <div class="flex flex-col gap-1 pt-1">
                     <router-link
                         v-for="post in monthGroup.posts"
@@ -269,7 +249,7 @@ onUnmounted(() => {
         </div>
       </main>
 
-      <!-- 侧边栏 -->
+      <!-- 侧边栏（< lg Teleport 至抽屉 / >= lg sticky 右侧） -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">

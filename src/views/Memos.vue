@@ -1,18 +1,8 @@
-<!--
-  src/views/Memos.vue
-  碎碎念 / 微博客页面 —— 路由: /memos
-
-  功能概览:
-    - 分页加载 Memo 列表，配合 useInfiniteScroll 实现无限滚动
-    - 关键词搜索（重置分页后重新加载）
-    - Markdown 渲染（compact 密度），支持代码块一键复制
-    - Mermaid 图表点击放大（由 MermaidModal 组件提供）
-    - 右侧栏：个人资料卡片、搜索框、Memo 统计
--->
+<!-- Memos.vue - 碎碎念 / 微博客页面 -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { Pin, Loader2 } from 'lucide-vue-next'
-import { useInfiniteScroll } from '@vueuse/core'
+import {ref, onMounted} from 'vue'
+import {Pin, Loader2} from 'lucide-vue-next'
+import {useInfiniteScroll} from '@vueuse/core'
 import AppHeader from '@/components/common/AppHeader.vue'
 import MemoSkeleton from '@/components/skeleton/MemoSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
@@ -24,21 +14,21 @@ import MemoStatsSkeleton from '@/components/skeleton/MemoStatsSkeleton.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
-import { useMarkdown } from '@/composables/useMarkdown'
-import { useCodeCopy } from '@/composables/useCodeCopy'
-import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
+import {useMarkdown} from '@/composables/useMarkdown'
+import {useCodeCopy} from '@/composables/useCodeCopy'
+import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
-import { getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse } from '@/api/memo'
-import { useSiteStore } from '@/stores/useSiteStore'
+import {getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse} from '@/api/memo'
+import {useSiteStore} from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
-const { isLg } = useSidebarDrawer()
-const { render, renderMermaidCharts } = useMarkdown()
+const {isLg} = useSidebarDrawer()
+const {render, renderMermaidCharts} = useMarkdown()
 
-// 注册代码块复制功能（事件委托，自动管理生命周期）
+/**
+ * 注册代码块复制功能（事件委托，自动管理生命周期）
+ */
 useCodeCopy()
-
-/* ========== 响应式状态 ========== */
 
 /**
  * 已加载的 Memo 列表（追加模式，支持无限滚动）
@@ -73,8 +63,6 @@ const loading = ref(false)
  */
 const noMore = ref(false)
 
-/* ========== 工具函数 ========== */
-
 /**
  * 将日期字符串格式化为人性化的相对时间
  * - 1 分钟内 → "Just now"
@@ -100,10 +88,8 @@ const formatTime = (dateStr: string) => {
   if (days === 1) return 'Yesterday'
   if (days < 7) return `${days}d ago`
 
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})
 }
-
-/* ========== 数据获取 ========== */
 
 /**
  * 获取当前页的 Memo 数据
@@ -152,14 +138,11 @@ const handleSearch = (keyword: string) => {
   fetchMemos()
 }
 
-/* ========== 无限滚动 ========== */
+/**
+ * 监听 document 滚动，当距底部 200px 时自动触发 loadMore
+ */
+useInfiniteScroll(document, loadMore, {distance: 200})
 
-// 监听 document 滚动，当距底部 200px 时自动触发 loadMore
-useInfiniteScroll(document, loadMore, { distance: 200 })
-
-/* ========== 生命周期 ========== */
-
-// 并行加载：Memo 列表 + 站点信息 + Memo 统计
 onMounted(async () => {
   await Promise.all([
     fetchMemos(),
@@ -171,14 +154,13 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <AppHeader />
+    <AppHeader/>
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-      <!-- 主内容区 -->
+      <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-6">
 
-        <!-- 页面标题卡片 -->
         <PageTitleCard
             title="Memos"
             subtitle="Fragments of thoughts, unfiltered."
@@ -186,9 +168,9 @@ onMounted(async () => {
             count-label="Total Memos"
         />
 
-        <!-- 初始加载状态 -->
+        <!-- 初始加载骨架屏 -->
         <template v-if="loading && memos.length === 0">
-          <MemoSkeleton v-for="i in 3" :key="i" />
+          <MemoSkeleton v-for="i in 3" :key="i"/>
         </template>
 
         <!-- Memo 列表 -->
@@ -220,7 +202,7 @@ onMounted(async () => {
               />
             </div>
 
-            <!-- Markdown 内容：使用 compact 密度样式 + 左侧缩进对齐头像 -->
+            <!-- Markdown 内容（sm+ 左侧缩进 pl-11 对齐头像） -->
             <div class="markdown-body markdown-compact pl-0 sm:pl-11" v-html="render(memo.content)"></div>
           </article>
         </div>
@@ -230,31 +212,32 @@ onMounted(async () => {
           {{ searchKeyword ? 'No matching memos.' : 'No memos yet.' }}
         </div>
 
-        <!-- 加载状态 / 底部提示 -->
+        <!-- 加载指示器 / 底部结束标记 -->
         <div v-if="memos.length > 0 || loading" class="text-center py-8">
-          <Loader2 v-if="loading" class="size-5 animate-spin text-slate-300 mx-auto" />
-          <span v-else-if="noMore" class="text-xs font-mono text-slate-300 tracking-wide">&mdash; End of Stream &mdash;</span>
+          <Loader2 v-if="loading" class="size-5 animate-spin text-slate-300 mx-auto"/>
+          <span v-else-if="noMore"
+                class="text-xs font-mono text-slate-300 tracking-wide">&mdash; End of Stream &mdash;</span>
         </div>
       </main>
 
-      <!-- 右侧栏 -->
+      <!-- 侧边栏（< lg Teleport 至抽屉 / >= lg sticky 右侧） -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">
-            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-            <SetupHint v-else-if="siteStore.initialized === false" />
-            <ProfileCardSkeleton v-else />
-            <SearchBox placeholder="Search memos..." @search="handleSearch" />
-            <MemoStats v-if="memoStats" :stats="memoStats" />
-            <MemoStatsSkeleton v-else />
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats"/>
+            <SetupHint v-else-if="siteStore.initialized === false"/>
+            <ProfileCardSkeleton v-else/>
+            <SearchBox placeholder="Search memos..." @search="handleSearch"/>
+            <MemoStats v-if="memoStats" :stats="memoStats"/>
+            <MemoStatsSkeleton v-else/>
 
-            <SiteFooter />
+            <SiteFooter/>
           </div>
         </Teleport>
       </aside>
     </div>
 
     <!-- Mermaid 图表放大模态框 -->
-    <MermaidModal />
+    <MermaidModal/>
   </div>
 </template>

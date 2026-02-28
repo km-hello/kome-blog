@@ -1,17 +1,4 @@
-<!--
-  Links.vue - 友情链接页
-
-  功能：展示所有已审核的友情链接，支持关键词搜索。
-
-  布局：
-    - 主内容区（lg:col-span-8）：友链卡片网格
-    - 侧边栏（lg:col-span-4）：个人资料、搜索框、友链交换卡片、随机访问、页脚
-
-  响应式（友链网格）：
-    - < sm (640px): 单列
-    - >= sm: 2 列
-    - >= lg (1024px): 3 列
--->
+<!-- Links.vue - 友情链接页 -->
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {Globe} from 'lucide-vue-next'
@@ -27,13 +14,11 @@ import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import {getLinksApi, type LinkResponse} from '@/api/link'
-import { useSiteStore } from '@/stores/useSiteStore'
-import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
-
-/* ========== 状态定义 ========== */
+import {useSiteStore} from '@/stores/useSiteStore'
+import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
-const { isLg } = useSidebarDrawer()
+const {isLg} = useSidebarDrawer()
 
 /**
  * 友链列表
@@ -47,8 +32,6 @@ const searchKeyword = ref('')
  * 是否正在加载
  */
 const loading = ref(true)
-
-/* ========== 方法 ========== */
 
 /**
  * 获取友链列表。
@@ -87,8 +70,6 @@ const extractDomain = (url: string) => {
   }
 }
 
-/* ========== 生命周期 ========== */
-
 onMounted(async () => {
   await Promise.all([
     fetchLinks(),
@@ -99,10 +80,10 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <AppHeader />
+    <AppHeader/>
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- 主内容区 -->
+      <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         <PageTitleCard
             title="Links"
@@ -111,12 +92,12 @@ onMounted(async () => {
             count-label="Total Links"
         />
 
-        <!-- 加载状态: 网格 sm 2列 / lg 3列 -->
+        <!-- 加载骨架屏（1列 → sm 2列 → lg 3列） -->
         <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <LinkCardSkeleton v-for="i in 6" :key="i" />
+          <LinkCardSkeleton v-for="i in 6" :key="i"/>
         </div>
 
-        <!-- 友链网格: sm 2列 / lg 3列 -->
+        <!-- 友链网格（1列 → sm 2列 → lg 3列） -->
         <div v-else-if="links.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <a
               v-for="link in links"
@@ -126,7 +107,8 @@ onMounted(async () => {
               rel="noopener noreferrer"
               class="bento-card p-5 h-full flex flex-col items-center text-center group cursor-pointer"
           >
-            <div class="size-16 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 shrink-0 overflow-hidden mb-3 group-hover:scale-105 transition-transform">
+            <div
+                class="size-16 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 shrink-0 overflow-hidden mb-3 group-hover:scale-105 transition-transform">
               <img
                   :src="link.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${link.name}`"
                   :alt="link.name"
@@ -140,8 +122,9 @@ onMounted(async () => {
               {{ link.description }}
             </p>
             <!-- 域名展示 -->
-            <div class="mt-3 pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-              <Globe :size="12" />
+            <div
+                class="mt-3 pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+              <Globe :size="12"/>
               <span class="truncate max-w-[80%]">{{ extractDomain(link.url) }}</span>
             </div>
           </a>
@@ -153,21 +136,21 @@ onMounted(async () => {
         </div>
       </main>
 
-      <!-- 侧边栏 -->
+      <!-- 侧边栏（< lg Teleport 至抽屉 / >= lg sticky 右侧） -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">
-            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-            <SetupHint v-else-if="siteStore.initialized === false" />
-            <ProfileCardSkeleton v-else />
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats"/>
+            <SetupHint v-else-if="siteStore.initialized === false"/>
+            <ProfileCardSkeleton v-else/>
 
-            <SearchBox placeholder="Search links..." @search="handleSearch" />
+            <SearchBox placeholder="Search links..." @search="handleSearch"/>
 
-            <LinkExchange />
+            <LinkExchange/>
 
-            <RandomVisit :links="links" />
+            <RandomVisit :links="links"/>
 
-            <SiteFooter />
+            <SiteFooter/>
           </div>
         </Teleport>
       </aside>
