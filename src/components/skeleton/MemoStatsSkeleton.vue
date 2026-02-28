@@ -1,4 +1,4 @@
-<!-- src/components/skeleton/MemoStatsSkeleton.vue -->
+<!-- MemoStatsSkeleton.vue - 动态统计加载骨架屏 -->
 <template>
   <div class="bento-card p-5 animate-pulse">
     <div class="h-3 w-20 bg-slate-100 rounded mb-4" />

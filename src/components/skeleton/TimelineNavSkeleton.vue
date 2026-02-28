@@ -1,4 +1,4 @@
-<!-- src/components/skeleton/TimelineNavSkeleton.vue -->
+<!-- TimelineNavSkeleton.vue - 时间线导航加载骨架屏 -->
 <template>
   <div class="bento-card px-5 py-5 animate-pulse">
     <div class="flex justify-between items-center mb-4">

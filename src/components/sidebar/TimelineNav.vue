@@ -1,25 +1,33 @@
-<!-- src/components/sidebar/TimelineNav.vue -->
+<!-- TimelineNav.vue - 归档时间线导航组件 -->
 <script setup lang="ts">
-import type { PostArchiveResponse } from '@/api/post'
+import type {PostArchiveResponse} from '@/api/post'
 
+/**
+ * Props 定义
+ * @property archives 归档数据（按年份分组）
+ * @property activeYear 当前高亮的年份
+ */
 defineProps<{
   archives: PostArchiveResponse[]
   activeYear: number | null
 }>()
 
+/**
+ * 事件定义
+ * @event scrollToYear 点击年份时触发，滚动到对应年份区块
+ */
 const emit = defineEmits<{
   scrollToYear: [year: number]
 }>()
 </script>
 
 <template>
-  <!-- Timeline Nav -->
   <div class="bento-card p-5">
     <div class="flex justify-between items-center mb-4">
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Timeline</h4>
     </div>
 
-    <!-- Timeline List -->
+    <!-- 时间线列表（左侧竖线 + 年份行，选中态加粗左缩进） -->
     <div v-if="archives.length > 0" class="relative pl-1">
       <div class="absolute left-4.25 top-2 bottom-2 w-px bg-slate-100"></div>
       <div class="flex flex-col gap-1">
@@ -40,7 +48,7 @@ const emit = defineEmits<{
       </div>
     </div>
 
-    <!-- Empty State -->
+    <!-- 空状态 -->
     <div v-else class="text-center py-4 text-xs text-slate-400">
       No posts yet
     </div>

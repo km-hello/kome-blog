@@ -1,29 +1,22 @@
-<!--
-  LatestMemo — 首页侧边栏"最新 Memo"预览卡片
-
-  功能：
-  - 展示最近发布的 Memo 列表，点击后跳转至 /memos 页面
-  - Memo 内容以 Markdown 渲染，最多显示 4 行
-  - 内容超出 4 行时，底部显示渐变遮罩暗示"还有更多"；未超出则不显示遮罩
-
-  溢出检测原理：
-  - 内容容器通过 max-h 限制高度（4 行 × 1.5em 行高 = 6em）
-  - DOM 渲染后比较 scrollHeight（完整内容高度）与 clientHeight（可见高度）
-  - scrollHeight > clientHeight 说明内容被截断，标记为溢出并显示遮罩
--->
+<!-- LatestMemo.vue - 最新 Memo 预览卡片 -->
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
-import { StickyNote } from 'lucide-vue-next'
+import {ref, watch, nextTick} from 'vue'
+import {StickyNote} from 'lucide-vue-next'
 import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
-import type { MemoResponse } from '@/api/memo'
-import { useMarkdown } from '@/composables/useMarkdown'
+import type {MemoResponse} from '@/api/memo'
+import {useMarkdown} from '@/composables/useMarkdown'
 
+/**
+ * Props 定义
+ * @property memos Memo 列表数据
+ * @property loading 加载状态
+ */
 const props = defineProps<{
   memos: MemoResponse[]
   loading?: boolean
 }>()
 
-const { render, renderMermaidCharts } = useMarkdown()
+const {render, renderMermaidCharts} = useMarkdown()
 
 /**
  * 缓存每个 Memo 内容容器的 DOM 引用
@@ -60,6 +53,13 @@ const checkOverflow = () => {
 }
 
 /**
+ * 从 ISO 日期字符串中提取 YYYY-MM-DD 部分
+ */
+const formatDate = (dateStr: string): string => {
+  return dateStr.split('T')[0] ?? dateStr
+}
+
+/**
  * 监听 memos 数据变化（异步加载完成时触发）
  * 等待 DOM 更新后重新检测溢出状态
  * flush: 'post' 确保在 DOM 更新之后执行回调
@@ -68,12 +68,8 @@ watch(() => props.memos, async () => {
   await nextTick()
   checkOverflow()
   setTimeout(() => renderMermaidCharts(), 0)
-}, { flush: 'post' })
+}, {flush: 'post'})
 
-/** 从 ISO 日期字符串中提取 YYYY-MM-DD 部分 */
-const formatDate = (dateStr: string): string => {
-  return dateStr.split('T')[0] ?? dateStr
-}
 </script>
 
 <template>
@@ -83,8 +79,8 @@ const formatDate = (dateStr: string): string => {
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Latest Memos</h4>
     </div>
 
-    <!-- Loading State -->
-    <SidebarSkeleton v-if="loading && memos.length === 0" variant="memos" />
+    <!-- 加载骨架屏 -->
+    <SidebarSkeleton v-if="loading && memos.length === 0" variant="memos"/>
 
     <!-- Memo 列表 -->
     <div v-else class="space-y-3">
@@ -95,32 +91,21 @@ const formatDate = (dateStr: string): string => {
           class="p-3 rounded-lg block bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors group"
       >
         <div class="flex gap-3 items-start">
-          <StickyNote :size="12" class="text-slate-300 mt-1 shrink-0" />
+          <StickyNote :size="12" class="text-slate-300 mt-1 shrink-0"/>
           <div class="flex-1 min-w-0">
-            <!-- Memo 内容区域（带溢出截断 + 条件遮罩） -->
+            <!-- 内容区域（max-h 4行截断，溢出时底部渐变遮罩） -->
             <div class="relative">
-              <!--
-                内容容器：
-                - max-h-[calc(4*1.5em)]：限制最大高度为 4 行（markdown-mini 的 line-height 为 1.5）
-                - overflow-hidden：超出部分隐藏
-                - :ref 回调收集 DOM 元素用于溢出检测
-              -->
               <div
                   :ref="(el: any) => setContentRef(memo.id, el)"
                   class="max-h-[calc(4*1.5em)] overflow-hidden markdown-body markdown-mini"
                   v-html="render(memo.content)"
               ></div>
-              <!--
-                底部渐变遮罩：仅在内容溢出时显示
-                - from-slate-50 / group-hover:from-slate-100：渐变起始色跟随卡片背景色变化，
-                  避免 hover 时遮罩颜色与背景不一致
-              -->
+              <!-- 溢出渐变遮罩（跟随卡片 hover 背景色变化） -->
               <div
                   v-if="overflowMap.get(memo.id)"
-                  class="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-slate-50 group-hover:from-slate-100 to-transparent pointer-events-none transition-colors"
+                  class="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-r from-slate-50 group-hover:from-slate-100 to-transparent pointer-events-none transition-colors"
               ></div>
             </div>
-
             <!-- 发布日期 -->
             <div class="flex items-center gap-2 mt-2">
               <span class="size-1 bg-slate-300 rounded-full"></span>

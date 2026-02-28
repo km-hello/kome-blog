@@ -9,22 +9,30 @@ import { getSiteInfoApi, checkInitializedApi, type SiteInfoResponse } from '@/ap
  * 同一次导航中多个组件同时调用时，通过 Promise 去重确保只发起一次请求。
  */
 export const useSiteStore = defineStore('site', () => {
-    // ========== State ==========
+    /* ========== State ========== */
 
-    /** 系统是否已初始化（null=未检查，true=已初始化，false=未初始化） */
+    /**
+     * 系统是否已初始化（null=未检查，true=已初始化，false=未初始化）
+     */
     const initialized = ref<boolean | null>(null);
 
-    /** 站点信息（包含站长资料与统计数据） */
+    /**
+     * 站点信息（包含站长资料与统计数据）
+     */
     const siteInfo = ref<SiteInfoResponse | null>(null);
 
-    /** 是否正在加载中 */
+    /**
+     * 是否正在加载中
+     */
     const loading = ref(false);
 
-    /** 当前正在进行的请求 Promise，用于并发去重 */
+    /**
+     * 当前正在进行的请求 Promise，用于并发去重
+     */
     let pendingPromise: Promise<void> | null = null;
 
 
-    // ========== Actions ==========
+    /* ========== Actions ========== */
 
     /**
      * 检查系统是否已初始化
@@ -75,7 +83,7 @@ export const useSiteStore = defineStore('site', () => {
     };
 
 
-    // ========== Return ==========
+    /* ========== Return ========== */
 
     return {
         // State

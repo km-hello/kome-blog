@@ -3,7 +3,9 @@ import { toast } from 'vue-sonner';
 import type { Result } from '@/types/api';
 
 /**
- * Axios 实例配置
+ * Axios 实例配置。
+ * - baseURL: 从环境变量 VITE_API_BASE_URL 读取，默认为空（同源）
+ * - timeout: 15 秒超时
  */
 const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '',
@@ -14,27 +16,29 @@ const service: AxiosInstance = axios.create({
 });
 
 /**
- * 响应拦截器
- * 统一处理响应数据和错误
+ * 响应拦截器。
+ * 统一处理响应数据解包和错误提示。
  */
 service.interceptors.response.use(
     (response: AxiosResponse) => {
         const res = response.data as Result;
 
-        // 业务成功
+        // 1. 业务成功：解包 data 字段直接返回
         if (res.code === 200) {
             return res.data;
         }
 
-        // 业务失败
+        // 2. 业务失败：提取错误消息并 toast 提示
         const errorMessage = res.message || '请求失败';
         toast.error(errorMessage);
         return Promise.reject(new Error(errorMessage));
     },
     (error: AxiosError) => {
+        // 3. 网络/HTTP 错误：根据错误类型生成友好提示
         let message = '请求失败';
 
         if (error.response?.data) {
+            // 服务端返回了错误响应体
             const res = error.response.data as Result;
             message = res.message || message;
         } else if (error.message === 'Network Error') {
@@ -49,9 +53,17 @@ service.interceptors.response.use(
 );
 
 /**
- * Request 类封装 HTTP 请求方法
+ * HTTP 请求封装类。
+ * 对 Axios 实例进行二次封装，提供类型安全的请求方法。
  */
 class Request {
+    /**
+     * 发送 GET 请求。
+     *
+     * @param url 请求路径。
+     * @param config Axios 请求配置（如 params、headers 等）。
+     * @returns 响应数据（已由拦截器解包）。
+     */
     get<T = any>(url: string, config?: any): Promise<T> {
         return service.get(url, config);
     }

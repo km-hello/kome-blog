@@ -1,4 +1,4 @@
-<!-- src/views/Links.vue -->
+<!-- Links.vue - 友情链接页 -->
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {Globe} from 'lucide-vue-next'
@@ -14,16 +14,29 @@ import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 
 import {getLinksApi, type LinkResponse} from '@/api/link'
-import { useSiteStore } from '@/stores/useSiteStore'
-import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
+import {useSiteStore} from '@/stores/useSiteStore'
+import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
-const { isLg } = useSidebarDrawer()
+const {isLg} = useSidebarDrawer()
 
+/**
+ * 友链列表
+ */
 const links = ref<LinkResponse[]>([])
+/**
+ * 搜索关键词
+ */
 const searchKeyword = ref('')
+/**
+ * 是否正在加载
+ */
 const loading = ref(true)
 
+/**
+ * 获取友链列表。
+ * 根据搜索关键词请求所有已审核的友链数据。
+ */
 const fetchLinks = async () => {
   loading.value = true
   links.value = await getLinksApi({
@@ -32,11 +45,23 @@ const fetchLinks = async () => {
   loading.value = false
 }
 
+/**
+ * 处理搜索事件。
+ *
+ * @param keyword 搜索关键词。
+ */
 const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
   fetchLinks()
 }
 
+/**
+ * 从 URL 中提取域名。
+ * 用于友链卡片底部展示站点域名。
+ *
+ * @param url 完整 URL。
+ * @returns 域名字符串，解析失败时返回原始 URL。
+ */
 const extractDomain = (url: string) => {
   try {
     return new URL(url).hostname
@@ -55,10 +80,10 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <AppHeader />
+    <AppHeader/>
 
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- Main -->
+      <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         <PageTitleCard
             title="Links"
@@ -67,12 +92,12 @@ onMounted(async () => {
             count-label="Total Links"
         />
 
-        <!-- Loading State -->
+        <!-- 加载骨架屏（1列 → sm 2列 → lg 3列） -->
         <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <LinkCardSkeleton v-for="i in 6" :key="i" />
+          <LinkCardSkeleton v-for="i in 6" :key="i"/>
         </div>
 
-        <!-- Links Grid -->
+        <!-- 友链网格（1列 → sm 2列 → lg 3列） -->
         <div v-else-if="links.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <a
               v-for="link in links"
@@ -82,7 +107,8 @@ onMounted(async () => {
               rel="noopener noreferrer"
               class="bento-card p-5 h-full flex flex-col items-center text-center group cursor-pointer"
           >
-            <div class="size-16 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 shrink-0 overflow-hidden mb-3 group-hover:scale-105 transition-transform">
+            <div
+                class="size-16 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 shrink-0 overflow-hidden mb-3 group-hover:scale-105 transition-transform">
               <img
                   :src="link.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${link.name}`"
                   :alt="link.name"
@@ -95,34 +121,36 @@ onMounted(async () => {
             <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mt-1 min-h-10">
               {{ link.description }}
             </p>
-            <div class="mt-3 pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-              <Globe :size="12" />
+            <!-- 域名展示 -->
+            <div
+                class="mt-3 pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+              <Globe :size="12"/>
               <span class="truncate max-w-[80%]">{{ extractDomain(link.url) }}</span>
             </div>
           </a>
         </div>
 
-        <!-- Empty State -->
+        <!-- 空状态 -->
         <div v-else class="text-center py-16 text-sm text-slate-400">
           {{ searchKeyword ? 'No matching links.' : 'No links yet.' }}
         </div>
       </main>
 
-      <!-- Sidebar -->
+      <!-- 侧边栏（< lg Teleport 至抽屉 / >= lg sticky 右侧） -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
           <div class="sticky top-24 space-y-5">
-            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats" />
-            <SetupHint v-else-if="siteStore.initialized === false" />
-            <ProfileCardSkeleton v-else />
+            <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats"/>
+            <SetupHint v-else-if="siteStore.initialized === false"/>
+            <ProfileCardSkeleton v-else/>
 
-            <SearchBox placeholder="Search links..." @search="handleSearch" />
+            <SearchBox placeholder="Search links..." @search="handleSearch"/>
 
-            <LinkExchange />
+            <LinkExchange/>
 
-            <RandomVisit :links="links" />
+            <RandomVisit :links="links"/>
 
-            <SiteFooter />
+            <SiteFooter/>
           </div>
         </Teleport>
       </aside>
