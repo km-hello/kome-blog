@@ -1,4 +1,4 @@
-<!-- 技能卡片加载骨架屏 -->
+<!-- SkillCardSkeleton.vue - 技能卡片加载骨架屏 -->
 <template>
   <div class="bento-card p-5 animate-pulse">
     <div class="h-3 w-12 bg-slate-100 rounded mb-4" />

@@ -1,5 +1,6 @@
-<!-- 归档页加载骨架屏 -->
+<!-- ArchiveSkeleton.vue - 归档页加载骨架屏 -->
 <template>
+  <!-- 归档骨架（padding 响应式 p-4 → sm:p-6 → md:p-8，缩进 pl-10 → sm:pl-12 → md:pl-16） -->
   <div class="bento-card animate-pulse">
     <div class="px-4 sm:px-6 md:px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
       <div class="h-8 w-16 bg-slate-100 rounded" />

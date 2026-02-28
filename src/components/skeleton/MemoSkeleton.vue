@@ -1,5 +1,6 @@
-<!-- 动态卡片加载骨架屏 -->
+<!-- MemoSkeleton.vue - 动态卡片加载骨架屏 -->
 <template>
+  <!-- 动态卡片骨架（内容区 sm+ 左侧缩进 pl-11） -->
   <div class="bento-card p-5 animate-pulse">
     <div class="flex items-center gap-3 mb-3">
       <div class="size-8 rounded-full bg-slate-100" />

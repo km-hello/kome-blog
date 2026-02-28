@@ -1,4 +1,4 @@
-<!-- 友链卡片加载骨架屏 -->
+<!-- LinkCardSkeleton.vue - 友链卡片加载骨架屏 -->
 <template>
   <div class="bento-card p-5 flex flex-col items-center text-center animate-pulse">
     <div class="size-16 rounded-full bg-slate-100 mb-3" />

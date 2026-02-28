@@ -1,7 +1,7 @@
-<!-- 文章详情加载骨架屏 -->
+<!-- PostDetailSkeleton.vue - 文章详情加载骨架屏 -->
 <template>
   <div class="animate-pulse space-y-6">
-    <!-- 文章元信息头部 -->
+    <!-- 文章头部（padding 响应式 p-6 → md:p-8） -->
     <div class="bento-card p-6 md:p-8 space-y-4">
       <div class="h-8 bg-slate-100 rounded w-3/4" />
       <div class="border-t border-slate-100 pt-4 mt-1 flex gap-5">
@@ -10,7 +10,7 @@
         <div class="h-3 w-14 bg-slate-50 rounded" />
       </div>
     </div>
-    <!-- 正文区域 -->
+    <!-- 正文 + TOC（>= lg 双栏，TOC 仅桌面端显示） -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-9">
         <div class="bento-card p-4 sm:p-6 md:p-8 lg:p-10 space-y-4">
