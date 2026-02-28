@@ -9,7 +9,7 @@ import { getSiteInfoApi, checkInitializedApi, type SiteInfoResponse } from '@/ap
  * 同一次导航中多个组件同时调用时，通过 Promise 去重确保只发起一次请求。
  */
 export const useSiteStore = defineStore('site', () => {
-    // ========== State ==========
+    /* ========== State ========== */
 
     /**
      * 系统是否已初始化（null=未检查，true=已初始化，false=未初始化）
@@ -32,7 +32,7 @@ export const useSiteStore = defineStore('site', () => {
     let pendingPromise: Promise<void> | null = null;
 
 
-    // ========== Actions ==========
+    /* ========== Actions ========== */
 
     /**
      * 检查系统是否已初始化
@@ -83,7 +83,7 @@ export const useSiteStore = defineStore('site', () => {
     };
 
 
-    // ========== Return ==========
+    /* ========== Return ========== */
 
     return {
         // State
