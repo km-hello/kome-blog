@@ -1,3 +1,8 @@
+/**
+ * api/post.ts - 文章接口
+ *
+ * 提供文章分页查询、归档列表及文章详情获取，供前台首页、归档页与文章详情页使用。
+ */
 import request from '@/request'
 import type { BaseQuery, PageResult } from '@/types/api'
 import type { TagResponse } from './tag'

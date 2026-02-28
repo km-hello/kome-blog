@@ -1,3 +1,8 @@
+/**
+ * api/memo.ts - 动态接口
+ *
+ * 提供动态的分页查询、最新动态获取及动态统计数据，供前台动态页面与侧边栏使用。
+ */
 import request from '@/request'
 import type { BaseQuery, PageResult } from '@/types/api'
 
