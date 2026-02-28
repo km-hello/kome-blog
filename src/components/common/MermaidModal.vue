@@ -1,20 +1,7 @@
 <!-- MermaidModal.vue - Mermaid 图表放大模态框 -->
-<!--
-  功能概览:
-    - 自动监听 .mermaid-container.mermaid-rendered 的点击事件
-    - 模态框内支持缩放：按钮控制 + Ctrl/Cmd+滚轮
-    - ESC 键或点击遮罩关闭
-    - 使用 Teleport 挂载到 body，避免被父容器 overflow 裁切
-
-  使用方式:
-    在需要 Mermaid 点击放大功能的页面组件模板末尾添加 <MermaidModal />
-    无需传入任何 props，组件通过事件委托自动处理页面内所有 Mermaid 图表
--->
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { X, ZoomIn, ZoomOut, RotateCcw } from 'lucide-vue-next'
-
-/* ========== 响应式状态 ========== */
+import {ref, computed, onMounted, onUnmounted} from 'vue'
+import {X, ZoomIn, ZoomOut, RotateCcw} from 'lucide-vue-next'
 
 /**
  * 模态框是否打开
@@ -33,8 +20,6 @@ const zoom = ref(1)
  */
 const originalWidth = ref(0)
 const originalHeight = ref(0)
-
-/* ========== 核心逻辑 ========== */
 
 /**
  * 打开 Mermaid 放大模态框
@@ -111,8 +96,6 @@ const resetZoom = () => {
   zoom.value = 1
 }
 
-/* ========== 事件处理器（事件委托） ========== */
-
 /**
  * Mermaid 图表点击放大
  * 通过事件委托监听 document 的 click 事件，匹配已渲染的 .mermaid-container
@@ -151,14 +134,18 @@ const handleWheel = (e: WheelEvent) => {
   }
 }
 
-/* ========== 生命周期 ========== */
-
+/**
+ * 注册事件委托：Mermaid 点击放大、ESC 关闭、Ctrl+滚轮缩放
+ */
 onMounted(() => {
   document.addEventListener('click', handleClick)
   document.addEventListener('keydown', handleKeydown)
-  document.addEventListener('wheel', handleWheel, { passive: false })
+  document.addEventListener('wheel', handleWheel, {passive: false})
 })
 
+/**
+ * 移除事件监听并恢复页面滚动
+ */
 onUnmounted(() => {
   document.removeEventListener('click', handleClick)
   document.removeEventListener('keydown', handleKeydown)
@@ -169,7 +156,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- 使用 Teleport 挂载到 body，避免被父容器 overflow 裁切 -->
+  <!-- Teleport 到 body，避免父容器 overflow 裁切 -->
   <Teleport to="body">
     <Transition
         enter-active-class="transition-opacity duration-200 ease-in-out"
@@ -182,12 +169,13 @@ onUnmounted(() => {
           class="fixed inset-0 z-50 flex items-center justify-center"
           @click.self="closeModal"
       >
-        <!-- 半透明遮罩 -->
+        <!-- 遮罩 -->
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeModal"></div>
 
-        <!-- 模态框主体 -->
-        <div class="relative w-[95vw] h-[85vh] sm:w-[85vw] sm:h-[80vh] md:w-[70vw] md:h-[70vh] bg-white rounded-xl shadow-2xl flex flex-col">
-          <!-- 顶部工具栏：缩放控制 + 关闭按钮 -->
+        <!-- 模态框（移动端 95vw/85vh → sm 85vw/80vh → md 70vw/70vh） -->
+        <div
+            class="relative w-[95vw] h-[85vh] sm:w-[85vw] sm:h-[80vh] md:w-[70vw] md:h-[70vh] bg-white rounded-xl shadow-2xl flex flex-col">
+          <!-- 工具栏：缩放按钮（移动端 p-2.5 / sm+ p-2）+ 关闭 -->
           <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
               <button
@@ -195,7 +183,7 @@ onUnmounted(() => {
                   title="Ctrl + Scroll Down"
                   @click="zoomOut"
               >
-                <ZoomOut :size="18" />
+                <ZoomOut :size="18"/>
               </button>
               <span class="text-sm text-slate-600 min-w-16 text-center">{{ Math.round(zoom * 100) }}%</span>
               <button
@@ -203,14 +191,14 @@ onUnmounted(() => {
                   title="Ctrl + Scroll Up"
                   @click="zoomIn"
               >
-                <ZoomIn :size="18" />
+                <ZoomIn :size="18"/>
               </button>
               <button
                   class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
                   title="Reset"
                   @click="resetZoom"
               >
-                <RotateCcw :size="18" />
+                <RotateCcw :size="18"/>
               </button>
             </div>
             <button
@@ -218,11 +206,11 @@ onUnmounted(() => {
                 title="Close (Esc)"
                 @click="closeModal"
             >
-              <X :size="18" />
+              <X :size="18"/>
             </button>
           </div>
 
-          <!-- SVG 内容区域：支持滚动和缩放 -->
+          <!-- SVG 内容（可滚动 + 缩放） -->
           <div class="flex-1 overflow-auto scrollbar-thin p-6 bg-slate-50 rounded-b-xl">
             <div class="inline-flex min-h-full min-w-full items-center justify-center">
               <div
