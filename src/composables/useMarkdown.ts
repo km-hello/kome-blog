@@ -1,13 +1,7 @@
 /**
  * useMarkdown.ts - Markdown 渲染核心组合式函数
  *
- * 功能：
- *   - 将 Markdown 文本渲染为安全的 HTML（XSS 防护：原生 HTML 标签全转义）
- *   - 代码高亮（highlight.js）+ 语言别名映射 + 语言自动检测兜底
- *   - LaTeX 数学公式（KaTeX，支持行内 $...$ 和块级 $$...$$）
- *   - Mermaid 图表（延迟加载，渲染为可点击放大的 SVG）
- *   - 可选的 TOC 目录提取（收集 h2/h3 标题，生成 id 锚点）
- *   - Markdown 源码预处理：修复后端常见的格式问题
+ * 功能：Markdown → HTML（XSS 防护）、代码高亮、LaTeX 数学公式、Mermaid 图表、可选 TOC 提取
  *
  * 使用方式：
  *   const { render, toc, renderMermaidCharts } = useMarkdown({ collectToc: true })
@@ -19,18 +13,14 @@ import { Marked } from 'marked'
 import hljs from 'highlight.js'
 import katex from 'katex'
 
-/**
- * TOC 目录项（标题锚点 id、文本、层级）
- */
+/** TOC 目录项 */
 export interface TocItem {
     id: string
     text: string
     level: number
 }
 
-/**
- * 基础 HTML 转义：防止 <script> / <style> / <div> 等直接插入破坏 DOM 或产生安全问题
- */
+/** HTML 转义：防止标签注入 */
 function escapeHtml(s: string): string {
     return s
         .replace(/&/g, '&amp;')
@@ -60,15 +50,10 @@ function preprocessMarkdown(content: string): string {
     return content
 }
 
-/**
- * Mermaid 是否已完成初始化（全局单例，首次调用后不再重复初始化）
- */
+/** Mermaid 是否已初始化（全局单例） */
 let mermaidInitialized = false
 
-/**
- * 延迟初始化 Mermaid 库。
- * 使用 dynamic import 按需加载，配置 base 主题和 slate 配色变量。
- */
+/** 延迟初始化 Mermaid（dynamic import 按需加载） */
 const initMermaid = async () => {
     if (mermaidInitialized) return
     const mermaid = (await import('mermaid')).default
@@ -87,9 +72,8 @@ const initMermaid = async () => {
 
 /**
  * 渲染页面中所有未处理的 Mermaid 图表。
- * 在 v-html 插入 DOM 之后调用，查找 .mermaid-container:not(.mermaid-rendered)
- * 元素，解码 data-code 属性中的 Mermaid 源码并渲染为 SVG。
- * 渲染成功后添加 .mermaid-rendered 标记，防止重复渲染。
+ * 查找 .mermaid-container:not(.mermaid-rendered)，解码 data-code 中的源码并渲染为 SVG。
+ * 成功后添加 .mermaid-rendered 防止重复渲染。
  */
 export const renderMermaidCharts = async () => {
     await initMermaid()
@@ -121,29 +105,20 @@ export const renderMermaidCharts = async () => {
 }
 
 /**
- * Markdown 渲染组合式函数。
+ * Markdown 渲染组合式函数
  *
- * @param options.collectToc 是否收集 h2/h3 标题生成 TOC 目录（默认 false）
- * @returns render — 同步渲染函数；toc — 响应式目录数组；renderMermaidCharts — Mermaid 异步渲染
+ * @param options.collectToc 是否收集 h2/h3 生成 TOC（默认 false）
  */
 export function useMarkdown(options: { collectToc?: boolean } = {}) {
     const { collectToc = false } = options
-    /**
-     * 响应式 TOC 目录列表（仅 collectToc 为 true 时填充）
-     */
+    /** 响应式 TOC 目录列表 */
     const toc: Ref<TocItem[]> = ref([])
 
     /**
-     * 将 Markdown 文本同步渲染为 HTML 字符串。
-     * 内部会进行预处理、marked 解析（含自定义渲染器和 LaTeX 扩展）。
-     *
-     * @param content 原始 Markdown 文本
-     * @returns 渲染后的 HTML 字符串
+     * 将 Markdown 文本同步渲染为 HTML 字符串
      */
     const render = (content: string): string => {
-        /**
-         * 仅在需要收集目录时重置 toc，避免在渲染循环中触发响应式更新
-         */
+        /* 收集目录时重置 toc，避免渲染循环中触发响应式更新 */
         if (collectToc) {
             toc.value = []
         }
@@ -154,14 +129,12 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
             breaks: false,
         })
 
-        /* ========== 自定义渲染器 ========== */
+        /* 自定义渲染器 */
         marked.use({
             renderer: {
                 /**
-                 * 标题渲染：生成带 id 锚点的 <h1>~<h6>。
-                 * - 从原始文本中去除 HTML 标签和 Markdown 格式符号，生成纯文本
-                 * - 纯文本转为 kebab-case id（保留中文字符，用于 TOC 锚点跳转）
-                 * - 当 collectToc 开启时，收集 h2/h3 到 toc 数组
+                 * 标题渲染：生成带 id 锚点的标题。
+                 * 纯文本转 kebab-case id（保留中文），collectToc 时收集 h2/h3 到 toc
                  */
                 heading(token) {
                     const depth = token.depth
@@ -180,37 +153,27 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                     return `<h${depth} id="${id}">${inner}</h${depth}>\n`
                 },
 
-                /**
-                 * 段落：递归解析行内 token 后包裹 <p>
-                 */
+                /** 段落 */
                 paragraph(token) {
                     return `<p>${this.parser.parseInline(token.tokens)}</p>\n`
                 },
 
-                /**
-                 * 加粗
-                 */
+                /** 加粗 */
                 strong(token) {
                     return `<strong>${this.parser.parseInline(token.tokens)}</strong>`
                 },
 
-                /**
-                 * 斜体
-                 */
+                /** 斜体 */
                 em(token) {
                     return `<em>${this.parser.parseInline(token.tokens)}</em>`
                 },
 
-                /**
-                 * 删除线
-                 */
+                /** 删除线 */
                 del(token) {
                     return `<del>${this.parser.parseInline(token.tokens)}</del>`
                 },
 
-                /**
-                 * 链接：外部链接（http 开头）自动添加 target=”_blank” 和 noopener
-                 */
+                /** 链接：外部链接自动 target=”_blank” */
                 link(token) {
                     const href = token.href
                     const text = this.parser.parseInline(token.tokens)
@@ -219,17 +182,13 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                     return `<a href="${href}"${target}>${text}</a>`
                 },
 
-                /**
-                 * 引用块
-                 */
+                /** 引用块 */
                 blockquote(token) {
                     const body = this.parser.parse(token.tokens)
                     return `<blockquote>${body}</blockquote>\n`
                 },
 
-                /**
-                 * 列表：支持有序/无序，有序列表非 1 起始时设置 start 属性
-                 */
+                /** 列表：有序列表非 1 起始时设 start 属性 */
                 list(token) {
                     const type = token.ordered ? 'ol' : 'ul'
                     const start = token.ordered && token.start !== 1 ? ` start="${token.start}"` : ''
@@ -238,8 +197,8 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                 },
 
                 /**
-                 * 列表项：支持 GFM 任务列表（task checkbox）。
-                 * 注意：marked v17 的 parse() 只接收 1 个参数，传多参会导致运行时异常。
+                 * 列表项：支持 GFM task checkbox。
+                 * 注意：marked v17 的 parse() 只接收 1 个参数
                  */
                 listitem(token) {
                     let prefix = ''
@@ -252,17 +211,12 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                     return `<li>${prefix}${body}</li>\n`
                 },
 
-                /**
-                 * checkbox 已在 listitem 中处理，返回空字符串避免重复渲染
-                 */
+                /** checkbox 已在 listitem 中处理 */
                 checkbox() {
                     return ''
                 },
 
-                /**
-                 * 表格：外层包裹 .table-wrapper 实现横向滚动。
-                 * 支持列对齐（left/center/right），通过 inline style 设置 text-align。
-                 */
+                /** 表格：外层 .table-wrapper 实现横向滚动，支持列对齐 */
                 table(token) {
                     const header = token.header
                         .map((cell, i) => {
@@ -290,40 +244,33 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                     return `<div class="table-wrapper"><table><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table></div>\n`
                 },
 
-                /**
-                 * 水平分割线
-                 */
+                /** 水平分割线 */
                 hr() {
                     return '<hr>\n'
                 },
 
-                /**
-                 * 换行
-                 */
+                /** 换行 */
                 br() {
                     return '<br>'
                 },
 
-                /**
-                 * 行内代码：必须 HTML 转义，否则 `<script setup>` 等内容
-                 * 会被浏览器当作真实标签解析，导致后续 DOM 内容被”吞掉”。
-                 */
+                /** 行内代码：必须转义，否则 `<script setup>` 等会被浏览器解析为真实标签 */
                 codespan(token) {
                     return `<code>${escapeHtml(token.text)}</code>`
                 },
 
                 /**
-                 * 代码块渲染（核心逻辑最复杂的渲染器）：
-                 * 1. 语言检测：优先使用 token.lang，缺失时尝试将第一行识别为语言名
-                 * 2. Mermaid 特殊处理：输出占位 div（data-code 存储转义后的源码），后续由 renderMermaidCharts 异步渲染
-                 * 3. 语言别名映射：vue→xml, jsx→javascript, sh→bash 等（highlight.js 不直接支持的语言）
-                 * 4. highlight.js 高亮 + 复制按钮（data-code 供前端 JS 复制）+ 语言标签显示
+                 * 代码块渲染（最复杂的渲染器）：
+                 * 1. 语言检测：优先 token.lang，缺失时尝试首行识别
+                 * 2. Mermaid：输出占位 div（data-code），由 renderMermaidCharts 异步渲染
+                 * 3. 语言别名映射：vue→xml, jsx→javascript, sh→bash 等
+                 * 4. highlight.js 高亮 + 复制按钮 + 语言标签
                  */
                 code(token) {
                     let code = token.text
                     let lang = (token.lang || '').trim().toLowerCase()
 
-                    /* 兜底：后端错误格式导致 token.lang 丢失时，尝试把第一行识别为语言 */
+                    /* 兜底：token.lang 丢失时，尝试把第一行识别为语言 */
                     if (!lang && code) {
                         const firstLine = (code.split('\n')[0] ?? '').trim().toLowerCase()
                         const possibleLangs = new Set([
@@ -336,12 +283,12 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                         }
                     }
 
-                    /* Mermaid 图表：输出占位容器，由 renderMermaidCharts() 异步渲染 SVG */
+                    /* Mermaid：输出占位容器，由 renderMermaidCharts() 异步渲染 */
                     if (lang === 'mermaid') {
                         return `<div class="mermaid-container" data-code="${escapeHtml(code)}"></div>\n`
                     }
 
-                    /* 语言别名映射（highlight.js 不直接支持的语言） */
+                    /* 语言别名映射 */
                     const langAliases: Record<string, string> = {
                         vue: 'xml',
                         jsx: 'javascript',
@@ -358,33 +305,26 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                     return `<div class="code-block"><div class="code-header">${copyBtn}</div><pre><code class="hljs language-${language}">${highlighted}</code></pre></div>\n`
                 },
 
-                /**
-                 * 图片：懒加载 + alt 转义防 XSS，有 alt 文本时额外输出 <em> 图片说明
-                 */
+                /** 图片：懒加载，有 alt 时输出图片说明 */
                 image(token) {
                     const href = token.href
                     const text = token.text || ''
                     const caption = text ? `<em class="img-caption">${escapeHtml(text)}</em>` : ''
-                    // alt 也要 escape，防止异常字符破坏属性
+                    // alt 也要 escape，防止属性注入
                     return `<img src="${href}" alt="${escapeHtml(text)}" loading="lazy">${caption}`
                 },
 
-                /**
-                 * 原生 HTML 标签：全部转义输出，禁止注入，防止 XSS 和布局破坏
-                 */
+                /** 原生 HTML 标签：全部转义，防止 XSS */
                 html(token) {
                     return escapeHtml(token.text)
                 },
             },
         })
 
-        /* ========== LaTeX 数学公式扩展 ========== */
+        /* LaTeX 数学公式扩展 */
         marked.use({
             extensions: [
-                /**
-                 * 块级 LaTeX：匹配 $$...$$ 语法。
-                 * 使用 KaTeX displayMode 渲染为居中公式块，失败时降级显示原始文本。
-                 */
+                /** 块级 LaTeX：匹配 $$...$$ 语法，KaTeX displayMode 渲染 */
                 {
                     name: 'latexBlock',
                     level: 'block',
@@ -407,10 +347,7 @@ export function useMarkdown(options: { collectToc?: boolean } = {}) {
                         }
                     },
                 },
-                /**
-                 * 行内 LaTeX：匹配 $...$ 语法（不跨行）。
-                 * 使用 KaTeX inline 模式渲染，失败时降级显示原始文本。
-                 */
+                /** 行内 LaTeX：匹配 $...$ 语法（不跨行），KaTeX inline 渲染 */
                 {
                     name: 'latexInline',
                     level: 'inline',
