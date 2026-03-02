@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "blogName": "Kome Blog"
+  },
+  "nav": {
+    "home": "首页",
+    "archive": "归档",
+    "memos": "动态",
+    "links": "友链",
+    "about": "关于",
+    "toggleLanguage": "切换语言"
+  },
+  "home": {
+    "noMatchingPosts": "没有匹配的文章。",
+    "noPosts": "暂无文章。",
+    "searchPlaceholder": "搜索..."
+  },
+  "archive": {
+    "title": "归档",
+    "subtitle": "关于代码、设计与生活的思考。",
+    "countLabel": "文章总数",
+    "theBeginning": "最初的起点",
+    "posts": "篇",
+    "noMatchingPosts": "没有匹配的文章。",
+    "noPosts": "暂无文章。",
+    "searchPlaceholder": "筛选归档..."
+  },
+  "memos": {
+    "title": "动态",
+    "subtitle": "随手记录的想法与片段。",
+    "countLabel": "动态总数",
+    "noMatchingMemos": "没有匹配的动态。",
+    "noMemos": "暂无动态。",
+    "endOfStream": "— 已加载全部 —",
+    "searchPlaceholder": "搜索动态..."
+  },
+  "links": {
+    "title": "友情链接",
+    "subtitle": "与数字世界的朋友们相连。",
+    "countLabel": "友链总数",
+    "noMatchingLinks": "没有匹配的友链。",
+    "noLinks": "暂无友链。",
+    "searchPlaceholder": "搜索友链..."
+  },
+  "about": {
+    "title": "关于",
+    "subtitle": "关于这个博客以及背后的人。"
+  },
+  "post": {
+    "published": "发布于",
+    "lastUpdated": "更新于",
+    "minRead": "{n} 分钟阅读",
+    "minReadShort": "{n}分钟",
+    "views": "{n} 次浏览",
+    "outdatedWarning": "该文章最后更新于 6 个月前，部分内容可能已过时。",
+    "previous": "上一篇",
+    "next": "下一篇",
+    "tableOfContents": "目录"
+  },
+  "time": {
+    "justNow": "刚刚",
+    "minutesAgo": "{n} 分钟前",
+    "hoursAgo": "{n} 小时前",
+    "daysAgo": "{n} 天前",
+    "yesterday": "昨天",
+    "months": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "页面未找到",
+    "description": "您查找的页面不存在或已被移除。",
+    "backToHome": "返回首页"
+  },
+  "preview": {
+    "waitingForContent": "等待内容..."
+  },
+  "sidebar": {
+    "posts": "文章",
+    "tags": "标签",
+    "memos": "动态",
+    "links": "友链",
+    "tagsTitle": "标签",
+    "clearTags": "清除",
+    "noTags": "暂无标签",
+    "skillsTitle": "技能",
+    "proficient": "精通",
+    "familiar": "熟悉",
+    "basic": "了解",
+    "noSkills": "暂无技能配置",
+    "latestMemos": "最新动态",
+    "noMemos": "暂无动态",
+    "timeline": "时间线",
+    "noPosts": "暂无文章",
+    "randomVisit": "随机访问",
+    "randomVisitDesc": "投个骰子，随机拜访一位友链。",
+    "feelingLucky": "手气不错",
+    "exchange": "友链申请",
+    "exchangeName": "名称",
+    "exchangeLink": "链接",
+    "exchangeDesc": "描述",
+    "exchangeAvatar": "头像",
+    "copied": "已复制！",
+    "copyAll": "复制全部",
+    "sourceCode": "源代码",
+    "memoStats": "动态统计",
+    "total": "总数",
+    "words": "字数",
+    "thisMonth": "本月",
+    "latest": "最新",
+    "runningDays": "已运行 {days} 天",
+    "setupNotInitialized": "系统未初始化",
+    "setupDescription": "请前往管理后台完成初始设置。",
+    "menu": "菜单"
+  },
+  "mermaid": {
+    "zoomIn": "Ctrl + 向上滚动",
+    "zoomOut": "Ctrl + 向下滚动",
+    "reset": "重置",
+    "close": "关闭 (Esc)"
+  },
+  "error": {
+    "requestFailed": "请求失败",
+    "networkError": "网络连接失败",
+    "timeout": "请求超时"
+  },
+  "common": {
+    "admin": "管理员"
+  }
+}

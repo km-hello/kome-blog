@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "blogName": "Kome Blog"
+  },
+  "nav": {
+    "home": "Home",
+    "archive": "Archive",
+    "memos": "Memos",
+    "links": "Links",
+    "about": "About",
+    "toggleLanguage": "Switch Language"
+  },
+  "home": {
+    "noMatchingPosts": "No matching posts.",
+    "noPosts": "No posts yet.",
+    "searchPlaceholder": "Search..."
+  },
+  "archive": {
+    "title": "Archive",
+    "subtitle": "Thinking about code, design, and life.",
+    "countLabel": "Total Posts",
+    "theBeginning": "THE BEGINNING",
+    "posts": "Posts",
+    "noMatchingPosts": "No matching posts.",
+    "noPosts": "No posts yet.",
+    "searchPlaceholder": "Filter archives..."
+  },
+  "memos": {
+    "title": "Memos",
+    "subtitle": "Fragments of thoughts, unfiltered.",
+    "countLabel": "Total Memos",
+    "noMatchingMemos": "No matching memos.",
+    "noMemos": "No memos yet.",
+    "endOfStream": "— End of Stream —",
+    "searchPlaceholder": "Search memos..."
+  },
+  "links": {
+    "title": "Links",
+    "subtitle": "Connecting with the digital neighborhood.",
+    "countLabel": "Total Links",
+    "noMatchingLinks": "No matching links.",
+    "noLinks": "No links yet.",
+    "searchPlaceholder": "Search links..."
+  },
+  "about": {
+    "title": "About",
+    "subtitle": "About this blog and the person behind it."
+  },
+  "post": {
+    "published": "Published",
+    "lastUpdated": "Last Updated",
+    "minRead": "{n} min read",
+    "minReadShort": "{n}min",
+    "views": "{n} views",
+    "outdatedWarning": "This article was last updated over 6 months ago. Some content may be outdated.",
+    "previous": "Previous",
+    "next": "Next",
+    "tableOfContents": "Table of Contents"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{n}m ago",
+    "hoursAgo": "{n}h ago",
+    "daysAgo": "{n}d ago",
+    "yesterday": "Yesterday",
+    "months": ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "backToHome": "Back to Home"
+  },
+  "preview": {
+    "waitingForContent": "Waiting for content..."
+  },
+  "sidebar": {
+    "posts": "POSTS",
+    "tags": "TAGS",
+    "memos": "MEMOS",
+    "links": "LINKS",
+    "tagsTitle": "Tags",
+    "clearTags": "Clear",
+    "noTags": "No tags yet",
+    "skillsTitle": "Skills",
+    "proficient": "Proficient",
+    "familiar": "Familiar",
+    "basic": "Basic",
+    "noSkills": "No skills configured",
+    "latestMemos": "Latest Memos",
+    "noMemos": "No memos yet",
+    "timeline": "Timeline",
+    "noPosts": "No posts yet",
+    "randomVisit": "Random Visit",
+    "randomVisitDesc": "Roll the dice and visit a random friend.",
+    "feelingLucky": "I'm Feeling Lucky",
+    "exchange": "Exchange",
+    "exchangeName": "Name",
+    "exchangeLink": "Link",
+    "exchangeDesc": "Desc",
+    "exchangeAvatar": "Avatar",
+    "copied": "Copied!",
+    "copyAll": "Copy All",
+    "sourceCode": "Source Code",
+    "memoStats": "MEMO STATS",
+    "total": "TOTAL",
+    "words": "WORDS",
+    "thisMonth": "THIS MONTH",
+    "latest": "LATEST",
+    "runningDays": "Running {days} days",
+    "setupNotInitialized": "System Not Initialized",
+    "setupDescription": "Please visit the admin panel to complete the initial setup.",
+    "menu": "Menu"
+  },
+  "mermaid": {
+    "zoomIn": "Ctrl + Scroll Up",
+    "zoomOut": "Ctrl + Scroll Down",
+    "reset": "Reset",
+    "close": "Close (Esc)"
+  },
+  "error": {
+    "requestFailed": "Request failed",
+    "networkError": "Network connection failed",
+    "timeout": "Request timed out"
+  },
+  "common": {
+    "admin": "Admin"
+  }
+}
