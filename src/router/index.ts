@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import i18n from '@/i18n'
 
 /**
  * 路由配置表。
@@ -78,7 +79,7 @@ const router = createRouter({
  */
 router.afterEach((to) => {
     const title = to.meta.title as string
-    document.title = title ? `${title} - Kome Blog` : 'Kome Blog'
+    document.title = title ? `${title} - ${i18n.global.t('brand.blogName')}` : i18n.global.t('brand.blogName')
 })
 
 export default router
