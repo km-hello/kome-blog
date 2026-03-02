@@ -2,7 +2,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Clock, Eye, Pin } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 import type { PostSimpleResponse } from '@/api/post'
+
+const {t, tm} = useI18n()
 
 /**
  * Props 定义
@@ -18,11 +21,11 @@ const props = defineProps<{
 const imageLoaded = ref(false)
 
 /**
- * 格式化文章发布日期（显示为 DD MMM YYYY 格式）
+ * 格式化文章发布日期（显示为 DD MMM YYYY 格式，月份跟随语言切换）
  */
 const formattedDate = computed(() => {
   const date = new Date(props.post.createTime)
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+  const months = tm('time.months') as string[]
   return {
     day: date.getDate().toString().padStart(2, '0'),
     month: months[date.getMonth()],
@@ -76,7 +79,7 @@ const formattedDate = computed(() => {
       <div class="mt-auto pt-4 md:pt-5 border-t border-gray-50 flex flex-wrap justify-between items-center gap-2.5 md:gap-3">
         <div class="flex items-center gap-4 text-xs text-gray-400 font-mono">
           <span v-if="post.readTime" class="flex items-center gap-1.5">
-            <Clock :size="12" />{{ post.readTime }}min
+            <Clock :size="12" />{{ t('post.minReadShort', { n: post.readTime }) }}
           </span>
           <span class="flex items-center gap-1.5">
             <Eye :size="12" />{{ post.views }}
