@@ -2,6 +2,9 @@
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted, nextTick, watch} from 'vue'
 import {useMarkdown, renderMermaidCharts} from '@/composables/useMarkdown'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 /**
  * 允许的消息来源（开发环境通过环境变量配置）
@@ -76,7 +79,7 @@ onUnmounted(() => {
     ></div>
     <!-- 等待内容提示 -->
     <div v-else class="flex items-center justify-center min-h-[50vh] text-slate-400 text-sm">
-      <p>等待内容...</p>
+      <p>{{ t('preview.waitingForContent') }}</p>
     </div>
   </div>
 </template>

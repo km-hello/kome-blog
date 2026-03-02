@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import {ref, computed, onMounted, onUnmounted, nextTick, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
+import {useI18n} from 'vue-i18n'
 import {Calendar, PenLine, Clock, ArrowLeft, ArrowRight, Eye, AlertTriangle, List, X, ArrowUp} from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
 import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton.vue'
@@ -13,6 +14,7 @@ import {useCodeCopy} from '@/composables/useCodeCopy'
 
 const route = useRoute()
 const router = useRouter()
+const {t} = useI18n()
 const {render, toc, renderMermaidCharts} = useMarkdown({collectToc: true})
 
 /**
@@ -235,7 +237,7 @@ onUnmounted(() => {
           <div
               class="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-500 border-t border-slate-100 pt-4 mt-1">
             <!-- 发布日期 -->
-            <div class="flex items-center gap-2 text-xs" title="Published">
+            <div class="flex items-center gap-2 text-xs" :title="t('post.published')">
               <Calendar :size="12" class="text-slate-400"/>
               <span>{{ formatDate(post.createTime) }}</span>
             </div>
@@ -244,7 +246,7 @@ onUnmounted(() => {
             <div
                 v-if="showUpdateDate"
                 class="flex items-center gap-2 text-xs"
-                title="Last Updated"
+                :title="t('post.lastUpdated')"
             >
               <PenLine :size="12" class="text-slate-400"/>
               <span>{{ formatDate(post.updateTime) }}</span>
@@ -253,13 +255,13 @@ onUnmounted(() => {
             <!-- 预计阅读时长 -->
             <div v-if="post.readTime" class="flex items-center gap-2 text-xs">
               <Clock :size="12" class="text-slate-400"/>
-              <span>{{ post.readTime }} min read</span>
+              <span>{{ t('post.minRead', { n: post.readTime }) }}</span>
             </div>
 
             <!-- 浏览量 -->
             <div class="flex items-center gap-2 text-xs">
               <Eye :size="12" class="text-slate-400"/>
-              <span>{{ post.views }} views</span>
+              <span>{{ t('post.views', { n: post.views }) }}</span>
             </div>
 
             <!-- 标签列表（< md 独占一行 / >= md 右对齐） -->
@@ -282,7 +284,7 @@ onUnmounted(() => {
         >
           <AlertTriangle :size="18" class="shrink-0 text-amber-500"/>
           <p class="text-sm">
-            This article was last updated over 6 months ago. Some content may be outdated.
+            {{ t('post.outdatedWarning') }}
           </p>
         </div>
 
@@ -308,7 +310,7 @@ onUnmounted(() => {
               >
                 <div class="flex items-center gap-2 text-xs text-slate-400 mb-2">
                   <ArrowLeft :size="12" class="transition-transform group-hover:-translate-x-1"/>
-                  <span>Previous</span>
+                  <span>{{ t('post.previous') }}</span>
                 </div>
                 <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900 line-clamp-2 transition-colors">
                   {{ post.previous.title }}
@@ -324,7 +326,7 @@ onUnmounted(() => {
                   class="bento-card p-5 group hover:shadow-md transition-all text-right"
               >
                 <div class="flex items-center justify-end gap-2 text-xs text-slate-400 mb-2">
-                  <span>Next</span>
+                  <span>{{ t('post.next') }}</span>
                   <ArrowRight :size="12" class="transition-transform group-hover:translate-x-1"/>
                 </div>
                 <p class="text-sm font-medium text-slate-700 group-hover:text-slate-900 line-clamp-2 transition-colors">
@@ -340,7 +342,7 @@ onUnmounted(() => {
               <!-- TOC 目录 -->
               <div v-if="toc.length > 0" class="bento-card p-6">
                 <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">
-                  Table of Contents
+                  {{ t('post.tableOfContents') }}
                 </h3>
                 <ul
                     ref="tocContainer"
@@ -441,7 +443,7 @@ onUnmounted(() => {
           </div>
           <!-- 标题栏 -->
           <div class="flex items-center justify-between px-5 pb-3 border-b border-slate-100">
-            <h3 class="text-sm font-semibold text-slate-700">Table of Contents</h3>
+            <h3 class="text-sm font-semibold text-slate-700">{{ t('post.tableOfContents') }}</h3>
             <button
                 class="p-1.5 rounded-md text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
                 @click="mobileTocOpen = false"

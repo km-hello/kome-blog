@@ -1,6 +1,7 @@
 <!-- Links.vue - 友情链接页 -->
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
+import {useI18n} from 'vue-i18n'
 import {Globe} from 'lucide-vue-next'
 import AppHeader from '@/components/common/AppHeader.vue'
 import LinkCardSkeleton from '@/components/skeleton/LinkCardSkeleton.vue'
@@ -19,6 +20,7 @@ import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
+const {t} = useI18n()
 
 /**
  * 友链列表
@@ -86,10 +88,10 @@ onMounted(async () => {
       <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         <PageTitleCard
-            title="Links"
-            subtitle="Connecting with the digital neighborhood."
+            :title="t('links.title')"
+            :subtitle="t('links.subtitle')"
             :count="links.length"
-            count-label="Total Links"
+            :count-label="t('links.countLabel')"
         />
 
         <!-- 加载骨架屏（1列 → sm 2列 → lg 3列） -->
@@ -132,7 +134,7 @@ onMounted(async () => {
 
         <!-- 空状态 -->
         <div v-else class="text-center py-16 text-sm text-slate-400">
-          {{ searchKeyword ? 'No matching links.' : 'No links yet.' }}
+          {{ searchKeyword ? t('links.noMatchingLinks') : t('links.noLinks') }}
         </div>
       </main>
 
@@ -144,7 +146,7 @@ onMounted(async () => {
             <SetupHint v-else-if="siteStore.initialized === false"/>
             <ProfileCardSkeleton v-else/>
 
-            <SearchBox placeholder="Search links..." @search="handleSearch"/>
+            <SearchBox :placeholder="t('links.searchPlaceholder')" @search="handleSearch"/>
 
             <LinkExchange/>
 
