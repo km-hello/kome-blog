@@ -1,12 +1,15 @@
 <!-- AppHeader.vue - 顶部导航栏 -->
 <script setup lang="ts">
 import {ref, computed, watch} from 'vue'
-import {Menu, X, PanelRight} from 'lucide-vue-next'
+import {Menu, X, PanelRight, Languages} from 'lucide-vue-next'
 import {useRoute} from 'vue-router'
+import {useI18n} from 'vue-i18n'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
+import {setLocale} from '@/i18n'
 
 const route = useRoute()
 const {toggle: toggleSidebar} = useSidebarDrawer()
+const {t, locale} = useI18n()
 
 /**
  * 移动端菜单展开状态
@@ -19,15 +22,15 @@ const mobileMenuOpen = ref(false)
 const showSidebarButton = computed(() => route.name !== 'PostDetail')
 
 /**
- * 导航菜单项
+ * 导航菜单项（响应式，支持语言切换）
  */
-const navItems = [
-  {label: 'Home', path: '/'},
-  {label: 'Archive', path: '/archive'},
-  {label: 'Memos', path: '/memos'},
-  {label: 'Links', path: '/links'},
-  {label: 'About', path: '/about'},
-]
+const navItems = computed(() => [
+  {label: t('nav.home'), path: '/'},
+  {label: t('nav.archive'), path: '/archive'},
+  {label: t('nav.memos'), path: '/memos'},
+  {label: t('nav.links'), path: '/links'},
+  {label: t('nav.about'), path: '/about'},
+])
 
 /**
  * 外部链接列表
@@ -41,6 +44,14 @@ const externalLinks: { label: string; href: string }[] = []
 const isActive = (path: string) => {
   if (path === '/') return route.path === '/'
   return route.path.startsWith(path)
+}
+
+/**
+ * 切换中英文语言
+ */
+const toggleLanguage = () => {
+  const next = locale.value === 'en' ? 'zh-CN' : 'en'
+  setLocale(next as 'en' | 'zh-CN')
 }
 
 /**
@@ -62,11 +73,11 @@ watch(() => route.path, () => {
             class="size-9 bg-slate-900 rounded-md flex items-center justify-center text-white text-lg font-bold shadow-md">
           K
         </div>
-        <h1 class="font-bold text-slate-900 text-base">Kome Blog</h1>
+        <h1 class="font-bold text-slate-900 text-base">{{ t('brand.blogName') }}</h1>
       </router-link>
 
       <!-- 桌面导航（>= lg） -->
-      <nav class="hidden lg:flex gap-6 text-sm font-medium text-slate-500">
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-500">
         <router-link
             v-for="item in navItems"
             :key="item.path"
@@ -86,9 +97,17 @@ watch(() => route.path, () => {
         >
           {{ link.label }}
         </a>
+        <!-- 语言切换按钮 -->
+        <button
+            class="p-2 rounded-md transition-colors hover:text-slate-900 hover:bg-slate-100"
+            :title="t('nav.toggleLanguage')"
+            @click="toggleLanguage"
+        >
+          <Languages :size="16"/>
+        </button>
       </nav>
 
-      <!-- 移动端按钮组（< lg）：侧边栏抽屉 + 汉堡菜单 -->
+      <!-- 移动端按钮组（< lg）：侧边栏抽屉 + 语言切换 + 汉堡菜单 -->
       <div class="flex items-center gap-1 lg:hidden">
         <!-- 侧边栏抽屉按钮（文章详情页隐藏） -->
         <button
@@ -97,6 +116,15 @@ watch(() => route.path, () => {
             @click="toggleSidebar"
         >
           <PanelRight :size="20"/>
+        </button>
+
+        <!-- 语言切换按钮 -->
+        <button
+            class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+            :title="t('nav.toggleLanguage')"
+            @click="toggleLanguage"
+        >
+          <Languages :size="20"/>
         </button>
 
         <!-- 汉堡菜单按钮 -->

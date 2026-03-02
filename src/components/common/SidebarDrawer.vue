@@ -3,10 +3,12 @@
 import {watch} from 'vue'
 import {X} from 'lucide-vue-next'
 import {useRoute} from 'vue-router'
+import {useI18n} from 'vue-i18n'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 const route = useRoute()
 const {isOpen, close} = useSidebarDrawer()
+const {t} = useI18n()
 
 /**
  * 路由变化时自动关闭抽屉
@@ -38,7 +40,7 @@ watch(() => route.path, () => close())
   >
     <!-- 标题栏 -->
     <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-      <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Menu</span>
+      <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest">{{ t('sidebar.menu') }}</span>
       <button
           class="p-1.5 rounded-md text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
           @click="close"
