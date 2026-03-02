@@ -3,7 +3,10 @@
 import { computed } from 'vue'
 import { Globe, Mail, Rss, Home, Link as LinkIcon } from 'lucide-vue-next'
 import { IconGithub, IconX } from '@/components/icons/BrandIcons'
+import { useI18n } from 'vue-i18n'
 import type { OwnerInfo, SiteStats } from '@/api/site'
+
+const {t} = useI18n()
 
 /**
  * Props 定义
@@ -82,25 +85,25 @@ const getLinkHref = (link: { platform: string; url: string }) => {
         <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedPostCount }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">POSTS</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.posts') }}</div>
       </div>
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.usedTagCount }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">TAGS</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.tags') }}</div>
       </div>
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedMemoCount }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">MEMOS</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.memos') }}</div>
       </div>
       <div class="text-center py-2 rounded-lg cursor-default group border border-transparent hover:bg-slate-50 hover:border-slate-200 transition-colors">
         <div class="text-base sm:text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.publishedLinkCount }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">LINKS</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.links') }}</div>
       </div>
     </div>
 

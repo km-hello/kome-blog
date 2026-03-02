@@ -1,7 +1,10 @@
 <!-- TagList.vue - 标签列表组件 -->
 <script setup lang="ts">
 import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
+import { useI18n } from 'vue-i18n'
 import type {TagPostCountResponse} from '@/api/tag'
+
+const {t} = useI18n()
 
 /**
  * Props 定义
@@ -37,13 +40,13 @@ const handleTagClick = (tagId: number) => {
   <div class="bento-card p-5">
     <!-- 标题栏 + 清除按钮（有选中标签时显示） -->
     <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tags</h4>
+      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">{{ t('sidebar.tagsTitle') }}</h4>
       <button
           v-if="activeTagId"
           @click="emit('select', null)"
           class="text-[10px] text-slate-400 hover:text-slate-600 transition-colors"
       >
-        Clear
+        {{ t('sidebar.clearTags') }}
       </button>
     </div>
 
@@ -76,7 +79,7 @@ const handleTagClick = (tagId: number) => {
 
     <!-- 空状态提示 -->
     <div v-if="!loading && tags.length === 0" class="text-center py-4 text-xs text-slate-400">
-      No tags yet
+      {{ t('sidebar.noTags') }}
     </div>
   </div>
 </template>

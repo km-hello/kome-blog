@@ -1,7 +1,10 @@
 <!-- RepoCard.vue - GitHub 仓库链接卡片 -->
 <script setup lang="ts">
 import {ExternalLink} from 'lucide-vue-next'
+import {useI18n} from 'vue-i18n'
 import {IconGithub} from '@/components/icons/BrandIcons'
+
+const {t} = useI18n()
 
 const repos = [
   {label: 'Blog', name: 'kome-blog', url: 'https://github.com/km-hello/kome-blog'},
@@ -12,7 +15,7 @@ const repos = [
 
 <template>
   <div class="bento-card p-5">
-    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Source Code</h4>
+    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">{{ t('sidebar.sourceCode') }}</h4>
 
     <!-- 仓库列表（GitHub 图标 | 标签+仓库名 | 外链箭头） -->
     <div class="space-y-2">

@@ -2,7 +2,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Timer } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 import { useSiteStore } from '@/stores/useSiteStore'
+
+const {t} = useI18n()
 
 const siteStore = useSiteStore()
 
@@ -24,11 +27,11 @@ const runningDays = computed(() => {
   <div class="bento-card px-5 py-4">
     <div class="flex flex-wrap items-center justify-between gap-y-1">
       <a href="https://github.com/km-hello/kome-blog" target="_blank" class="text-[10px] font-semibold text-slate-400 tracking-widest hover:text-slate-700 transition-colors">
-        © 2026 Kome Blog
+        © {{ new Date().getFullYear() }} {{ t('brand.blogName') }}
       </a>
       <span class="text-[10px] font-semibold text-slate-400 tracking-widest flex items-center gap-1">
         <Timer :size="10" />
-        Running {{ runningDays }} days
+        {{ t('sidebar.runningDays', { days: runningDays }) }}
       </span>
     </div>
   </div>

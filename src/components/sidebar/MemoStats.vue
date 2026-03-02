@@ -1,6 +1,9 @@
 <!-- MemoStats.vue - 动态统计卡片 -->
 <script setup lang="ts">
+import {useI18n} from 'vue-i18n'
 import type {MemoStatsResponse} from '@/api/memo'
+
+const {t, locale} = useI18n()
 
 /**
  * Props 定义
@@ -20,43 +23,44 @@ const formatWords = (count: number) => {
 }
 
 /**
- * 格式化最近发布日期（如 "Jan 15"），无数据时返回 "-"
+ * 格式化最近发布日期，无数据时返回 "-"
  */
 const formatLatestDate = (dateStr: string | null) => {
   if (!dateStr) return '-'
   const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})
+  const localeStr = locale.value === 'zh-CN' ? 'zh-CN' : 'en-US'
+  return date.toLocaleDateString(localeStr, {month: 'short', day: 'numeric'})
 }
 </script>
 
 <template>
   <div class="bento-card p-5">
-    <h3 class="text-xs font-semibold text-slate-400 tracking-widest mb-4">MEMO STATS</h3>
+    <h3 class="text-xs font-semibold text-slate-400 tracking-widest mb-4">{{ t('sidebar.memoStats') }}</h3>
     <!-- 双列统计网格（Total / Words / This Month / Latest） -->
     <div class="grid grid-cols-2 gap-2">
       <div class="text-center py-3 rounded-lg cursor-default group bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.totalCount }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">TOTAL</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.total') }}</div>
       </div>
       <div class="text-center py-3 rounded-lg cursor-default group bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ formatWords(stats.totalWords) }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">WORDS</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.words') }}</div>
       </div>
       <div class="text-center py-3 rounded-lg cursor-default group bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ stats.thisMonthCount }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">THIS MONTH</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.thisMonth') }}</div>
       </div>
       <div class="text-center py-3 rounded-lg cursor-default group bg-slate-50 border border-slate-100 hover:bg-slate-100 hover:border-slate-300 transition-colors">
         <div class="text-lg font-bold text-slate-600 tabular-nums group-hover:text-slate-900 leading-tight">
           {{ formatLatestDate(stats.latestDate) }}
         </div>
-        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">LATEST</div>
+        <div class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 tracking-widest mt-1">{{ t('sidebar.latest') }}</div>
       </div>
     </div>
   </div>
