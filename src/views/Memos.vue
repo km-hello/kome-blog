@@ -1,6 +1,7 @@
-<!-- Memos.vue - 碎碎念 / 微博客页面 -->
+<!-- Memos.vue - 动态页面 -->
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
+import {useI18n} from 'vue-i18n'
 import {Pin, Loader2} from 'lucide-vue-next'
 import {useInfiniteScroll} from '@vueuse/core'
 import AppHeader from '@/components/common/AppHeader.vue'
@@ -24,6 +25,7 @@ import {useSiteStore} from '@/stores/useSiteStore'
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
 const {render, renderMermaidCharts} = useMarkdown()
+const {t, locale} = useI18n()
 
 /**
  * 注册代码块复制功能（事件委托，自动管理生命周期）
@@ -81,14 +83,14 @@ const formatTime = (dateStr: string) => {
     const hours = Math.floor(diff / (1000 * 60 * 60))
     if (hours === 0) {
       const minutes = Math.floor(diff / (1000 * 60))
-      return minutes <= 1 ? 'Just now' : `${minutes}m ago`
+      return minutes <= 1 ? t('time.justNow') : t('time.minutesAgo', {n: minutes})
     }
-    return `${hours}h ago`
+    return t('time.hoursAgo', {n: hours})
   }
-  if (days === 1) return 'Yesterday'
-  if (days < 7) return `${days}d ago`
+  if (days === 1) return t('time.yesterday')
+  if (days < 7) return t('time.daysAgo', {n: days})
 
-  return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})
+  return date.toLocaleDateString(locale.value === 'zh-CN' ? 'zh-CN' : 'en-US', {month: 'short', day: 'numeric'})
 }
 
 /**
@@ -162,10 +164,10 @@ onMounted(async () => {
       <main class="lg:col-span-8 flex flex-col gap-6">
 
         <PageTitleCard
-            title="Memos"
-            subtitle="Fragments of thoughts, unfiltered."
+            :title="t('memos.title')"
+            :subtitle="t('memos.subtitle')"
             :count="total"
-            count-label="Total Memos"
+            :count-label="t('memos.countLabel')"
         />
 
         <!-- 初始加载骨架屏 -->
@@ -189,7 +191,7 @@ onMounted(async () => {
               />
               <div class="flex items-center gap-2 flex-1 min-w-0">
                 <span class="text-sm font-medium text-slate-800 truncate">
-                  {{ siteStore.siteInfo?.owner.nickname || 'Admin' }}
+                  {{ siteStore.siteInfo?.owner.nickname || t('common.admin') }}
                 </span>
                 <span class="text-slate-300">&middot;</span>
                 <span class="text-xs text-slate-400">{{ formatTime(memo.createTime) }}</span>
@@ -209,14 +211,14 @@ onMounted(async () => {
 
         <!-- 空状态 -->
         <div v-else-if="!loading && noMore" class="text-center py-16 text-sm text-slate-400">
-          {{ searchKeyword ? 'No matching memos.' : 'No memos yet.' }}
+          {{ searchKeyword ? t('memos.noMatchingMemos') : t('memos.noMemos') }}
         </div>
 
         <!-- 加载指示器 / 底部结束标记 -->
         <div v-if="memos.length > 0 || loading" class="text-center py-8">
           <Loader2 v-if="loading" class="size-5 animate-spin text-slate-300 mx-auto"/>
           <span v-else-if="noMore"
-                class="text-xs font-mono text-slate-300 tracking-wide">&mdash; End of Stream &mdash;</span>
+                class="text-xs font-mono text-slate-300 tracking-wide">{{ t('memos.endOfStream') }}</span>
         </div>
       </main>
 
@@ -227,7 +229,7 @@ onMounted(async () => {
             <ProfileCard v-if="siteStore.siteInfo" :owner="siteStore.siteInfo.owner" :stats="siteStore.siteInfo.stats"/>
             <SetupHint v-else-if="siteStore.initialized === false"/>
             <ProfileCardSkeleton v-else/>
-            <SearchBox placeholder="Search memos..." @search="handleSearch"/>
+            <SearchBox :placeholder="t('memos.searchPlaceholder')" @search="handleSearch"/>
             <MemoStats v-if="memoStats" :stats="memoStats"/>
             <MemoStatsSkeleton v-else/>
 

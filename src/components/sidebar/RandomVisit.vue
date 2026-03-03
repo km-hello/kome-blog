@@ -2,7 +2,10 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {Dice5, ExternalLink} from 'lucide-vue-next'
+import {useI18n} from 'vue-i18n'
 import type {LinkResponse} from '@/api/link'
+
+const {t} = useI18n()
 
 /**
  * Props 定义
@@ -29,10 +32,10 @@ const roll = () => {
 
 <template>
   <div class="bento-card p-5">
-    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Random Visit</h4>
+    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">{{ t('sidebar.randomVisit') }}</h4>
 
     <p class="text-[11px] text-slate-400 leading-relaxed mb-4">
-      Roll the dice and visit a random friend.
+      {{ t('sidebar.randomVisitDesc') }}
     </p>
 
     <!-- 选中的友链预览（头像 + 名称描述 + 外链图标） -->
@@ -59,7 +62,7 @@ const roll = () => {
         class="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed py-2 rounded-md text-[11px] font-semibold uppercase tracking-wide transition-all cursor-pointer"
     >
       <Dice5 :size="12"/>
-      I'm Feeling Lucky
+      {{ t('sidebar.feelingLucky') }}
     </button>
   </div>
 </template>

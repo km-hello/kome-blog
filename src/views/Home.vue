@@ -1,6 +1,7 @@
 <!-- Home.vue - 博客首页 -->
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
+import {useI18n} from 'vue-i18n'
 import AppHeader from '@/components/common/AppHeader.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
@@ -21,6 +22,7 @@ import {useSiteStore} from '@/stores/useSiteStore'
 
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
+const {t} = useI18n()
 
 /**
  * 文章列表
@@ -156,7 +158,7 @@ onMounted(async () => {
 
         <!-- 空状态 -->
         <div v-else class="text-center py-16 text-sm text-slate-400">
-          {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
+          {{ searchKeyword || selectedTagId ? t('home.noMatchingPosts') : t('home.noPosts') }}
         </div>
       </main>
 
@@ -172,7 +174,7 @@ onMounted(async () => {
             <SetupHint v-else-if="siteStore.initialized === false"/>
             <ProfileCardSkeleton v-else/>
 
-            <SearchBox placeholder="Search..." @search="handleSearch"/>
+            <SearchBox :placeholder="t('home.searchPlaceholder')" @search="handleSearch"/>
 
             <LatestMemo :memos="memos" :loading="loading"/>
 

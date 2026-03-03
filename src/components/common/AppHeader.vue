@@ -3,10 +3,12 @@
 import {ref, computed, watch} from 'vue'
 import {Menu, X, PanelRight} from 'lucide-vue-next'
 import {useRoute} from 'vue-router'
+import {useI18n} from 'vue-i18n'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 const route = useRoute()
 const {toggle: toggleSidebar} = useSidebarDrawer()
+const {t} = useI18n()
 
 /**
  * 移动端菜单展开状态
@@ -19,15 +21,15 @@ const mobileMenuOpen = ref(false)
 const showSidebarButton = computed(() => route.name !== 'PostDetail')
 
 /**
- * 导航菜单项
+ * 导航菜单项（响应式，支持语言切换）
  */
-const navItems = [
-  {label: 'Home', path: '/'},
-  {label: 'Archive', path: '/archive'},
-  {label: 'Memos', path: '/memos'},
-  {label: 'Links', path: '/links'},
-  {label: 'About', path: '/about'},
-]
+const navItems = computed(() => [
+  {label: t('nav.home'), path: '/'},
+  {label: t('nav.archive'), path: '/archive'},
+  {label: t('nav.memos'), path: '/memos'},
+  {label: t('nav.links'), path: '/links'},
+  {label: t('nav.about'), path: '/about'},
+])
 
 /**
  * 外部链接列表
@@ -62,11 +64,11 @@ watch(() => route.path, () => {
             class="size-9 bg-slate-900 rounded-md flex items-center justify-center text-white text-lg font-bold shadow-md">
           K
         </div>
-        <h1 class="font-bold text-slate-900 text-base">Kome Blog</h1>
+        <h1 class="font-bold text-slate-900 text-base">{{ t('brand.blogName') }}</h1>
       </router-link>
 
       <!-- 桌面导航（>= lg） -->
-      <nav class="hidden lg:flex gap-6 text-sm font-medium text-slate-500">
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-500">
         <router-link
             v-for="item in navItems"
             :key="item.path"

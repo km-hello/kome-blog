@@ -1,6 +1,7 @@
 <!-- About.vue - 关于页 -->
 <script setup lang="ts">
 import {onMounted} from 'vue'
+import {useI18n} from 'vue-i18n'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
 import ProfileCardSkeleton from '@/components/skeleton/ProfileCardSkeleton.vue'
@@ -15,6 +16,7 @@ import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
+const {t} = useI18n()
 
 /**
  * 博客功能特性列表（静态数据）
@@ -77,8 +79,8 @@ onMounted(() => {
       <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         <PageTitleCard
-            title="About"
-            subtitle="About this blog and the person behind it."
+            :title="t('about.title')"
+            :subtitle="t('about.subtitle')"
         />
 
         <!-- 项目介绍 + 功能特性 -->

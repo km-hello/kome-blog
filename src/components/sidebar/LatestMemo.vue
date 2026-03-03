@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import {ref, watch, nextTick} from 'vue'
 import {StickyNote} from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import type {MemoResponse} from '@/api/memo'
 import {useMarkdown} from '@/composables/useMarkdown'
@@ -17,6 +18,7 @@ const props = defineProps<{
 }>()
 
 const {render, renderMermaidCharts} = useMarkdown()
+const {t} = useI18n()
 
 /**
  * 缓存每个 Memo 内容容器的 DOM 引用
@@ -76,7 +78,7 @@ watch(() => props.memos, async () => {
   <div class="bento-card p-5">
     <!-- 标题栏 -->
     <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Latest Memos</h4>
+      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">{{ t('sidebar.latestMemos') }}</h4>
     </div>
 
     <!-- 加载骨架屏 -->
@@ -120,7 +122,7 @@ watch(() => props.memos, async () => {
 
     <!-- 空状态 -->
     <div v-if="!loading && memos.length === 0" class="text-center py-4 text-xs text-slate-400">
-      No memos yet
+      {{ t('sidebar.noMemos') }}
     </div>
   </div>
 </template>

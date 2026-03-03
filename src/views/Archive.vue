@@ -1,6 +1,7 @@
 <!-- Archive.vue - 文章归档页 -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import AppHeader from '@/components/common/AppHeader.vue'
 import ArchiveSkeleton from '@/components/skeleton/ArchiveSkeleton.vue'
 import ProfileCard from '@/components/sidebar/ProfileCard.vue'
@@ -20,11 +21,12 @@ import { useSidebarDrawer } from '@/composables/useSidebarDrawer'
 
 const siteStore = useSiteStore()
 const { isLg } = useSidebarDrawer()
+const { t, tm } = useI18n()
 
 /**
- * 月份缩写映射
+ * 月份缩写映射（响应式，跟随语言切换）
  */
-const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+const MONTH_NAMES = computed(() => tm('time.months') as string[])
 
 /**
  * 归档数据（按年份分组）
@@ -166,10 +168,10 @@ onUnmounted(() => {
       <!-- 主内容区（>= lg 占 8 栏） -->
       <main class="lg:col-span-8 flex flex-col gap-8">
         <PageTitleCard
-            title="Archive"
-            subtitle="Thinking about code, design, and life."
+            :title="t('archive.title')"
+            :subtitle="t('archive.subtitle')"
             :count="totalPosts"
-            count-label="Total Posts"
+            :count-label="t('archive.countLabel')"
         />
 
         <!-- 加载状态 -->
@@ -187,7 +189,7 @@ onUnmounted(() => {
             <div class="px-4 sm:px-6 md:px-8 py-5 border-b border-gray-50 flex justify-between items-center bg-slate-50/30">
               <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">{{ yearGroup.year }}</h2>
               <span class="text-[10px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
-                {{ yearGroup.total }} Posts
+                {{ yearGroup.total }} {{ t('archive.posts') }}
               </span>
             </div>
 
@@ -238,14 +240,14 @@ onUnmounted(() => {
           <!-- 底部结束标记 -->
           <div class="text-center text-xs text-slate-300 font-mono pb-8 flex items-center justify-center gap-2">
             <span class="size-1 rounded-full bg-slate-300"></span>
-            <span>THE BEGINNING</span>
+            <span>{{ t('archive.theBeginning') }}</span>
             <span class="size-1 rounded-full bg-slate-300"></span>
           </div>
         </template>
 
         <!-- 空状态 -->
         <div v-else class="text-center py-16 text-sm text-slate-400">
-          {{ searchKeyword || selectedTagId ? 'No matching posts.' : 'No posts yet.' }}
+          {{ searchKeyword || selectedTagId ? t('archive.noMatchingPosts') : t('archive.noPosts') }}
         </div>
       </main>
 
@@ -257,7 +259,7 @@ onUnmounted(() => {
             <SetupHint v-else-if="siteStore.initialized === false" />
             <ProfileCardSkeleton v-else />
 
-            <SearchBox placeholder="Filter archives..." @search="handleSearch" />
+            <SearchBox :placeholder="t('archive.searchPlaceholder')" @search="handleSearch" />
 
             <TimelineNav v-if="!loading" :archives="archives" :active-year="activeYear" @scroll-to-year="scrollToYear" />
             <TimelineNavSkeleton v-else />

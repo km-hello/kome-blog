@@ -2,6 +2,9 @@
 <script setup lang="ts">
 import {ref, computed, onMounted, onUnmounted} from 'vue'
 import {X, ZoomIn, ZoomOut, RotateCcw} from 'lucide-vue-next'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 /**
  * 模态框是否打开
@@ -180,7 +183,7 @@ onUnmounted(() => {
             <div class="flex items-center gap-2">
               <button
                   class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                  title="Ctrl + Scroll Down"
+                  :title="t('mermaid.zoomOut')"
                   @click="zoomOut"
               >
                 <ZoomOut :size="18"/>
@@ -188,14 +191,14 @@ onUnmounted(() => {
               <span class="text-sm text-slate-600 min-w-16 text-center">{{ Math.round(zoom * 100) }}%</span>
               <button
                   class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                  title="Ctrl + Scroll Up"
+                  :title="t('mermaid.zoomIn')"
                   @click="zoomIn"
               >
                 <ZoomIn :size="18"/>
               </button>
               <button
                   class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                  title="Reset"
+                  :title="t('mermaid.reset')"
                   @click="resetZoom"
               >
                 <RotateCcw :size="18"/>
@@ -203,7 +206,7 @@ onUnmounted(() => {
             </div>
             <button
                 class="p-2.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                title="Close (Esc)"
+                :title="t('mermaid.close')"
                 @click="closeModal"
             >
               <X :size="18"/>

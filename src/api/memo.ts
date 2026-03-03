@@ -10,7 +10,7 @@ import type { BaseQuery, PageResult } from '@/types/api'
 
 /**
  * 动态信息。
- * 类似微博/说说的短内容，用于动态列表展示。
+ * 类似微博的短内容，用于动态列表展示。
  */
 export interface MemoResponse {
     id: number                 // 动态 ID

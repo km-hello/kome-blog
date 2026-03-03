@@ -1,6 +1,9 @@
 <!-- TimelineNav.vue - 归档时间线导航组件 -->
 <script setup lang="ts">
 import type {PostArchiveResponse} from '@/api/post'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 /**
  * Props 定义
@@ -24,7 +27,7 @@ const emit = defineEmits<{
 <template>
   <div class="bento-card p-5">
     <div class="flex justify-between items-center mb-4">
-      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Timeline</h4>
+      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">{{ t('sidebar.timeline') }}</h4>
     </div>
 
     <!-- 时间线列表（左侧竖线 + 年份行，选中态加粗左缩进） -->
@@ -50,7 +53,7 @@ const emit = defineEmits<{
 
     <!-- 空状态 -->
     <div v-else class="text-center py-4 text-xs text-slate-400">
-      No posts yet
+      {{ t('sidebar.noPosts') }}
     </div>
   </div>
 </template>

@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance, type AxiosResponse, type AxiosError } from 'axios';
 import { toast } from 'vue-sonner';
 import type { Result } from '@/types/api';
+import i18n, { getAcceptLanguage } from '@/i18n';
 
 /**
  * Axios 实例配置。
@@ -13,6 +14,15 @@ const service: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+});
+
+/**
+ * 请求拦截器。
+ * 设置 Accept-Language header，告知服务端当前语言偏好。
+ */
+service.interceptors.request.use((config) => {
+    config.headers['Accept-Language'] = getAcceptLanguage();
+    return config;
 });
 
 /**
@@ -29,22 +39,22 @@ service.interceptors.response.use(
         }
 
         // 2. 业务失败：提取错误消息并 toast 提示
-        const errorMessage = res.message || '请求失败';
+        const errorMessage = res.message || i18n.global.t('error.requestFailed');
         toast.error(errorMessage);
         return Promise.reject(new Error(errorMessage));
     },
     (error: AxiosError) => {
         // 3. 网络/HTTP 错误：根据错误类型生成友好提示
-        let message = '请求失败';
+        let message = i18n.global.t('error.requestFailed');
 
         if (error.response?.data) {
             // 服务端返回了错误响应体
             const res = error.response.data as Result;
             message = res.message || message;
         } else if (error.message === 'Network Error') {
-            message = '网络连接失败';
+            message = i18n.global.t('error.networkError');
         } else if (error.code === 'ECONNABORTED') {
-            message = '请求超时';
+            message = i18n.global.t('error.timeout');
         }
 
         toast.error(message);
