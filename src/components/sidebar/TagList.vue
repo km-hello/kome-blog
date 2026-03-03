@@ -44,8 +44,9 @@ const handleTagClick = (tagId: number) => {
       <button
           v-if="activeTagId"
           @click="emit('select', null)"
-          class="text-[10px] text-slate-400 hover:text-slate-600 transition-colors"
+          class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 bg-slate-100 hover:bg-rose-50 hover:text-rose-500 border border-slate-200 hover:border-rose-200 px-2 py-0.5 rounded-full transition-all"
       >
+        <span class="leading-none">×</span>
         {{ t('sidebar.clearTags') }}
       </button>
     </div>
@@ -61,7 +62,7 @@ const handleTagClick = (tagId: number) => {
           @click="handleTagClick(tag.id)"
           class="px-3 py-1.5 rounded-md flex items-center gap-2 cursor-pointer border transition-colors"
           :class="activeTagId === tag.id
-            ? 'bg-slate-800 border-slate-700 text-white'
+            ? 'bg-slate-200 border-slate-300 text-slate-800'
             : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900'"
       >
         <span class="text-xs font-bold">{{ tag.name }}</span>
@@ -69,7 +70,7 @@ const handleTagClick = (tagId: number) => {
         <span
             class="text-[10px] font-mono px-1.5 rounded"
             :class="activeTagId === tag.id
-              ? 'bg-slate-700 text-slate-300 border border-slate-600'
+              ? 'bg-slate-100 text-slate-500 border border-slate-300'
               : 'bg-white text-slate-400 border border-slate-200'"
         >
           {{ tag.postCount }}
