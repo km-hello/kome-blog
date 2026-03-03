@@ -1,4 +1,4 @@
-<!-- Memos.vue - 碎碎念 / 微博客页面 -->
+<!-- Memos.vue - 动态页面 -->
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
 import {useI18n} from 'vue-i18n'
