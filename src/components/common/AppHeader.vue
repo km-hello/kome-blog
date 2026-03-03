@@ -1,15 +1,14 @@
 <!-- AppHeader.vue - 顶部导航栏 -->
 <script setup lang="ts">
 import {ref, computed, watch} from 'vue'
-import {Menu, X, PanelRight, Languages} from 'lucide-vue-next'
+import {Menu, X, PanelRight} from 'lucide-vue-next'
 import {useRoute} from 'vue-router'
 import {useI18n} from 'vue-i18n'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
-import {setLocale} from '@/i18n'
 
 const route = useRoute()
 const {toggle: toggleSidebar} = useSidebarDrawer()
-const {t, locale} = useI18n()
+const {t} = useI18n()
 
 /**
  * 移动端菜单展开状态
@@ -44,14 +43,6 @@ const externalLinks: { label: string; href: string }[] = []
 const isActive = (path: string) => {
   if (path === '/') return route.path === '/'
   return route.path.startsWith(path)
-}
-
-/**
- * 切换中英文语言
- */
-const toggleLanguage = () => {
-  const next = locale.value === 'en' ? 'zh-CN' : 'en'
-  setLocale(next as 'en' | 'zh-CN')
 }
 
 /**
@@ -97,17 +88,9 @@ watch(() => route.path, () => {
         >
           {{ link.label }}
         </a>
-        <!-- 语言切换按钮 -->
-        <button
-            class="p-2 rounded-md transition-colors hover:text-slate-900 hover:bg-slate-100"
-            :title="t('nav.toggleLanguage')"
-            @click="toggleLanguage"
-        >
-          <Languages :size="16"/>
-        </button>
       </nav>
 
-      <!-- 移动端按钮组（< lg）：侧边栏抽屉 + 语言切换 + 汉堡菜单 -->
+      <!-- 移动端按钮组（< lg）：侧边栏抽屉 + 汉堡菜单 -->
       <div class="flex items-center gap-1 lg:hidden">
         <!-- 侧边栏抽屉按钮（文章详情页隐藏） -->
         <button
@@ -116,15 +99,6 @@ watch(() => route.path, () => {
             @click="toggleSidebar"
         >
           <PanelRight :size="20"/>
-        </button>
-
-        <!-- 语言切换按钮 -->
-        <button
-            class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
-            :title="t('nav.toggleLanguage')"
-            @click="toggleLanguage"
-        >
-          <Languages :size="20"/>
         </button>
 
         <!-- 汉堡菜单按钮 -->
