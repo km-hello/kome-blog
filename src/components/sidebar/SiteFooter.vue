@@ -47,7 +47,7 @@ const runningDays = computed(() => {
 
       <!-- 右：运行天数 + 语言切换（图标，hover 展开文字） -->
       <div class="flex items-center gap-2">
-        <span class="group flex items-center gap-1 text-slate-400 cursor-default">
+        <span class="group flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors cursor-default">
           <span class="max-w-0 overflow-hidden group-hover:max-w-[120px] transition-all duration-300 ease-out whitespace-nowrap text-[10px] font-semibold tracking-widest">
             {{ t('sidebar.runningDays', { days: runningDays }) }}
           </span>
