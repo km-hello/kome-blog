@@ -35,7 +35,7 @@ watch(() => route.path, () => close())
 
   <!-- 抽屉面板（< lg，从右侧滑入，最大宽度 92vw） -->
   <aside
-      class="lg:hidden fixed top-0 right-0 bottom-0 z-50 w-[24rem] max-w-[92vw] bg-white shadow-2xl flex flex-col transition-transform duration-250 ease-out"
+      class="lg:hidden fixed top-0 right-0 bottom-0 z-50 w-[24rem] max-w-[92vw] bg-[oklch(0.965_0.003_261.0)] shadow-2xl flex flex-col transition-transform duration-250 ease-out"
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
   >
     <!-- 标题栏 -->
