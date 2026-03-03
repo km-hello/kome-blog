@@ -1,3 +1,5 @@
+import { watch } from 'vue'
+import type { Ref } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import i18n from '@/i18n'
 
@@ -75,11 +77,33 @@ const router = createRouter({
 })
 
 /**
+ * 根据路由 meta.title 和当前语言设置页面标题。
+ * 将 meta.title 转为 nav.{title} 翻译键，翻译失败时回退到原始英文值。
+ */
+function updateDocumentTitle(title?: string) {
+    if (title) {
+        const titleKey = `nav.${title.toLowerCase()}`
+        const translated = i18n.global.t(titleKey)
+        document.title = `${translated !== titleKey ? translated : title} - ${i18n.global.t('brand.blogName')}`
+    } else {
+        document.title = i18n.global.t('brand.blogName')
+    }
+}
+
+/**
  * 路由后置守卫：根据路由 meta.title 动态设置页面标题
  */
 router.afterEach((to) => {
-    const title = to.meta.title as string
-    document.title = title ? `${title} - ${i18n.global.t('brand.blogName')}` : i18n.global.t('brand.blogName')
+    updateDocumentTitle(to.meta.title as string)
+})
+
+/**
+ * 监听语言切换：实时更新当前页面标题（不依赖路由跳转）
+ */
+const localeRef = i18n.global.locale as unknown as Ref<string>
+watch(localeRef, () => {
+    const currentTitle = router.currentRoute.value.meta.title as string
+    updateDocumentTitle(currentTitle)
 })
 
 export default router
