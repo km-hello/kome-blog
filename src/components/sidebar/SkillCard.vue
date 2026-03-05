@@ -11,7 +11,7 @@ const { t } = useI18n()
  * @property skills 技能列表数据（默认空数组）
  */
 const props = withDefaults(defineProps<{
-  skills?: SkillItem[]
+  skills: SkillItem[] | null
 }>(), {
   skills: () => [],
 })
