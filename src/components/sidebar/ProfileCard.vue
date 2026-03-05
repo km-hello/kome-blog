@@ -45,17 +45,10 @@ const validLinks = computed(() =>
 )
 
 /**
- * 判断链接是否可点击
- * @param url 链接 URL
- */
-const isClickable = (url: string) => url && url !== '#'
-
-/**
  * 获取链接的 href（处理邮箱类型）
  * @param link 社交链接对象
  */
 const getLinkHref = (link: { platform: string; url: string }) => {
-  if (!isClickable(link.url)) return undefined
   if (link.platform === 'email') {
     return link.url.startsWith('mailto:') ? link.url : `mailto:${link.url}`
   }
@@ -111,23 +104,19 @@ const getLinkHref = (link: { platform: string; url: string }) => {
     <template v-if="validLinks.length > 0">
       <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
-      <!-- 社交链接图标组（四列网格，sm+ gap 加大；动态组件区分可点击 <a> / 禁用 <span>） -->
+      <!-- 社交链接图标组（四列网格） -->
       <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
-      <component
+      <a
           v-for="link in validLinks"
           :key="link.platform"
-          :is="isClickable(link.url) ? 'a' : 'span'"
           :href="getLinkHref(link)"
-          :target="isClickable(link.url) && link.platform !== 'email' ? '_blank' : undefined"
-          :rel="isClickable(link.url) ? 'noopener noreferrer' : undefined"
-          class="flex items-center justify-center h-10 rounded-lg border transition-colors"
-          :class="isClickable(link.url)
-            ? 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 cursor-pointer'
-            : 'bg-slate-50 border-slate-100 text-slate-300 cursor-default'"
-          :title="isClickable(link.url) ? link.url : undefined"
+          :target="link.platform !== 'email' ? '_blank' : undefined"
+          rel="noopener noreferrer"
+          class="flex items-center justify-center h-10 rounded-lg border transition-colors bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 cursor-pointer"
+          :title="link.url"
       >
         <component :is="getIcon(link.platform)" :size="18" />
-      </component>
+      </a>
       </div>
     </template>
   </div>
