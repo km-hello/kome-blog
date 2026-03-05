@@ -267,7 +267,7 @@ onUnmounted(() => {
             <!-- 标签列表（< md 独占一行 / >= md 右对齐） -->
             <div v-if="post.tags?.length" class="flex flex-wrap items-center gap-2 w-full md:w-auto md:ml-auto">
               <span
-                  v-for="tag in post.tags"
+                  v-for="tag in post.tags ?? []"
                   :key="tag.id"
                   class="px-2.5 py-1 rounded-md bg-slate-100 text-[10px] font-bold tracking-wide text-slate-400"
               >

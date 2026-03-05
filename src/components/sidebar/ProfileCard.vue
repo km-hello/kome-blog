@@ -1,10 +1,11 @@
 <!-- ProfileCard.vue - 个人资料卡片 -->
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Globe, Mail, Rss, Home, Link as LinkIcon } from 'lucide-vue-next'
-import { IconGithub, IconX } from '@/components/icons/BrandIcons'
+import { Globe, Mail, Home, Link as LinkIcon } from 'lucide-vue-next'
+import { IconGithub, IconX, IconTelegram } from '@/components/icons/BrandIcons'
 import { useI18n } from 'vue-i18n'
 import type { OwnerInfo, SiteStats } from '@/api/site'
+import { DEFAULT_AVATAR } from '@/constants'
 
 const {t} = useI18n()
 
@@ -27,7 +28,7 @@ const iconMap: Record<string, any> = {
   email: Mail,
   homepage: Home,
   website: Globe,
-  rss: Rss,
+  telegram: IconTelegram,
 }
 
 /**
@@ -40,7 +41,7 @@ const getIcon = (platform: string) => iconMap[platform] || LinkIcon
  * 过滤有效的社交链接（url 不为空）
  */
 const validLinks = computed(() =>
-    props.owner.socialLinks?.filter(link => link.url) || []
+    props.owner.socialLinks?.filter(link => link.url) ?? []
 )
 
 /**
@@ -68,7 +69,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
     <div class="flex items-center gap-4 mb-6">
       <div class="size-14 rounded-full overflow-hidden shrink-0 ring-2 ring-slate-100">
         <img
-            :src="owner.avatar"
+            :src="owner.avatar || DEFAULT_AVATAR"
             :alt="owner.nickname"
             class="size-full bg-slate-50 object-cover"
         >
@@ -107,10 +108,11 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       </div>
     </div>
 
-    <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
+    <template v-if="validLinks.length > 0">
+      <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
-    <!-- 社交链接图标组（四列网格，sm+ gap 加大；动态组件区分可点击 <a> / 禁用 <span>） -->
-    <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-1.5 sm:gap-2">
+      <!-- 社交链接图标组（四列网格，sm+ gap 加大；动态组件区分可点击 <a> / 禁用 <span>） -->
+      <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <component
           v-for="link in validLinks"
           :key="link.platform"
@@ -126,6 +128,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       >
         <component :is="getIcon(link.platform)" :size="18" />
       </component>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
