@@ -11,7 +11,7 @@ const { t } = useI18n()
  * @property skills 技能列表数据（默认空数组）
  */
 const props = withDefaults(defineProps<{
-  skills?: SkillItem[]
+  skills: SkillItem[] | null
 }>(), {
   skills: () => [],
 })
@@ -61,7 +61,7 @@ const levels = computed(() =>
 
 <template>
   <div class="bento-card p-5">
-    <h3 class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">{{ t('sidebar.skillsTitle') }}</h3>
+    <h3 class="text-xs font-semibold text-slate-400 tracking-widest uppercase mb-4">{{ t('sidebar.skillsTitle') }}</h3>
 
     <template v-if="hasSkills">
       <div class="space-y-3.5">

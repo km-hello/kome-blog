@@ -1,10 +1,11 @@
 <!-- ProfileCard.vue - 个人资料卡片 -->
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Globe, Mail, Rss, Home, Link as LinkIcon } from 'lucide-vue-next'
-import { IconGithub, IconX } from '@/components/icons/BrandIcons'
+import { Globe, Mail, Home, Link as LinkIcon } from 'lucide-vue-next'
+import { IconGithub, IconX, IconTelegram } from '@/components/icons/BrandIcons'
 import { useI18n } from 'vue-i18n'
 import type { OwnerInfo, SiteStats } from '@/api/site'
+import { DEFAULT_AVATAR } from '@/constants'
 
 const {t} = useI18n()
 
@@ -27,7 +28,7 @@ const iconMap: Record<string, any> = {
   email: Mail,
   homepage: Home,
   website: Globe,
-  rss: Rss,
+  telegram: IconTelegram,
 }
 
 /**
@@ -40,21 +41,14 @@ const getIcon = (platform: string) => iconMap[platform] || LinkIcon
  * 过滤有效的社交链接（url 不为空）
  */
 const validLinks = computed(() =>
-    props.owner.socialLinks?.filter(link => link.url) || []
+    props.owner.socialLinks?.filter(link => link.url) ?? []
 )
-
-/**
- * 判断链接是否可点击
- * @param url 链接 URL
- */
-const isClickable = (url: string) => url && url !== '#'
 
 /**
  * 获取链接的 href（处理邮箱类型）
  * @param link 社交链接对象
  */
 const getLinkHref = (link: { platform: string; url: string }) => {
-  if (!isClickable(link.url)) return undefined
   if (link.platform === 'email') {
     return link.url.startsWith('mailto:') ? link.url : `mailto:${link.url}`
   }
@@ -68,7 +62,7 @@ const getLinkHref = (link: { platform: string; url: string }) => {
     <div class="flex items-center gap-4 mb-6">
       <div class="size-14 rounded-full overflow-hidden shrink-0 ring-2 ring-slate-100">
         <img
-            :src="owner.avatar"
+            :src="owner.avatar || DEFAULT_AVATAR"
             :alt="owner.nickname"
             class="size-full bg-slate-50 object-cover"
         >
@@ -107,25 +101,23 @@ const getLinkHref = (link: { platform: string; url: string }) => {
       </div>
     </div>
 
-    <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
+    <template v-if="validLinks.length > 0">
+      <div class="border-t border-gray-100 mt-3 mb-5 mx-1"></div>
 
-    <!-- 社交链接图标组（四列网格，sm+ gap 加大；动态组件区分可点击 <a> / 禁用 <span>） -->
-    <div v-if="validLinks.length > 0" class="grid grid-cols-4 gap-1.5 sm:gap-2">
-      <component
+      <!-- 社交链接图标组（四列网格） -->
+      <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
+      <a
           v-for="link in validLinks"
           :key="link.platform"
-          :is="isClickable(link.url) ? 'a' : 'span'"
           :href="getLinkHref(link)"
-          :target="isClickable(link.url) && link.platform !== 'email' ? '_blank' : undefined"
-          :rel="isClickable(link.url) ? 'noopener noreferrer' : undefined"
-          class="flex items-center justify-center h-10 rounded-lg border transition-colors"
-          :class="isClickable(link.url)
-            ? 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 cursor-pointer'
-            : 'bg-slate-50 border-slate-100 text-slate-300 cursor-default'"
-          :title="isClickable(link.url) ? link.url : undefined"
+          :target="link.platform !== 'email' ? '_blank' : undefined"
+          rel="noopener noreferrer"
+          class="flex items-center justify-center h-10 rounded-lg border transition-colors bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 cursor-pointer"
+          :title="link.url"
       >
         <component :is="getIcon(link.platform)" :size="18" />
-      </component>
-    </div>
+      </a>
+      </div>
+    </template>
   </div>
 </template>

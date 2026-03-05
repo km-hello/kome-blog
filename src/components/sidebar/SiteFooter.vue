@@ -1,6 +1,6 @@
 <!-- SiteFooter.vue - 站点页脚 -->
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Timer, Languages } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import { useSiteStore } from '@/stores/useSiteStore'
@@ -10,16 +10,23 @@ const {t, locale} = useI18n()
 
 const siteStore = useSiteStore()
 
+const timerExpanded = ref(false)
+const langExpanded = ref(false)
+let langCollapseTimer: ReturnType<typeof setTimeout> | null = null
+
 /**
- * 切换中英文语言
+ * 切换中英文语言，移动端点击后短暂展示新语言标签再收起
  */
-const toggleLanguage = () => {
+const handleLangClick = () => {
   const next = locale.value === 'en' ? 'zh-CN' : 'en'
   setLocale(next as 'en' | 'zh-CN')
+  langExpanded.value = true
+  if (langCollapseTimer) clearTimeout(langCollapseTimer)
+  langCollapseTimer = setTimeout(() => { langExpanded.value = false }, 1500)
 }
 
 /**
- * 当前语言标签（hover 展开时显示当前语言名称）
+ * 当前语言标签（展开时显示）
  */
 const langLabel = computed(() => locale.value === 'en' ? 'EN' : '中文')
 
@@ -45,24 +52,44 @@ const runningDays = computed(() => {
         © {{ new Date().getFullYear() }} {{ t('brand.blogName') }}
       </a>
 
-      <!-- 右：运行天数 + 语言切换（图标，hover 展开文字） -->
+      <!-- 右：运行天数 + 语言切换 -->
       <div class="flex items-center gap-2">
-        <span class="group flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors cursor-default">
-          <span class="max-w-0 overflow-hidden group-hover:max-w-[120px] transition-all duration-300 ease-out whitespace-nowrap text-[10px] font-semibold tracking-widest">
+
+        <!-- 运行天数：桌面 hover 展开 / 移动 tap 切换 -->
+        <span
+            class="flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer select-none"
+            @mouseenter="timerExpanded = true"
+            @mouseleave="timerExpanded = false"
+            @click="timerExpanded = !timerExpanded"
+        >
+          <span
+              class="overflow-hidden whitespace-nowrap text-[10px] font-semibold tracking-widest transition-all duration-300 ease-out"
+              :class="timerExpanded ? 'max-w-30' : 'max-w-0'"
+          >
             {{ t('sidebar.runningDays', { days: runningDays }) }}
           </span>
           <Timer :size="11" class="shrink-0" />
         </span>
+
         <span class="w-px h-3 bg-slate-200 rounded-full"></span>
-        <button class="group flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors"
-                @click="toggleLanguage">
-          <span class="max-w-0 overflow-hidden group-hover:max-w-[40px] transition-all duration-300 ease-out whitespace-nowrap text-[10px] font-semibold tracking-widest">
+
+        <!-- 语言切换：桌面 hover 展开 / 移动点击后短暂展示新语言再收起 -->
+        <button
+            class="flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors"
+            @mouseenter="langExpanded = true"
+            @mouseleave="langExpanded = false"
+            @click="handleLangClick"
+        >
+          <span
+              class="overflow-hidden whitespace-nowrap text-[10px] font-semibold tracking-widest transition-all duration-300 ease-out"
+              :class="langExpanded ? 'max-w-10' : 'max-w-0'"
+          >
             {{ langLabel }}
           </span>
           <Languages :size="11" class="shrink-0" />
         </button>
-      </div>
 
+      </div>
     </div>
   </div>
 </template>

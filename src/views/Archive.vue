@@ -223,7 +223,7 @@ onUnmounted(() => {
                       </h3>
                       <div class="flex flex-wrap gap-2 shrink-0">
                         <span
-                            v-for="tag in post.tags"
+                            v-for="tag in post.tags ?? []"
                             :key="tag.id"
                             class="text-[9px] font-bold px-1.5 py-0.5 rounded tracking-wide bg-slate-50 border border-slate-100 text-slate-400 group-hover:text-slate-500 group-hover:border-slate-300 transition-colors"
                         >

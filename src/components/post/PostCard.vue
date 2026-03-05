@@ -87,7 +87,7 @@ const formattedDate = computed(() => {
         </div>
         <div class="flex flex-wrap gap-1.5 md:gap-2">
           <span
-              v-for="tag in post.tags"
+              v-for="tag in post.tags ?? []"
               :key="tag.id"
               class="px-2.5 py-0.5 md:py-1 rounded-md text-[10px] font-bold tracking-wider bg-slate-50 border border-slate-100 text-slate-400 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-600 transition-colors cursor-pointer"
           >

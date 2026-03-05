@@ -1,6 +1,7 @@
 <!-- Home.vue - 博客首页 -->
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
+import {ref, watch, onMounted, onActivated} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import {useI18n} from 'vue-i18n'
 import AppHeader from '@/components/common/AppHeader.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
@@ -23,6 +24,8 @@ import {useSiteStore} from '@/stores/useSiteStore'
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
 const {t} = useI18n()
+const route = useRoute()
+const router = useRouter()
 
 /**
  * 文章列表
@@ -37,9 +40,10 @@ const tags = ref<TagPostCountResponse[]>([])
  */
 const memos = ref<MemoResponse[]>([])
 /**
- * 当前页码
+ * 当前页码（从 URL query ?page= 初始化）。
+ * 页面刷新或直接访问 /?page=3 时可恢复到正确页码。
  */
-const currentPage = ref(1)
+const currentPage = ref(Number(route.query.page) || 1)
 /**
  * 每页条数
  */
@@ -93,6 +97,9 @@ const handleSearch = (keyword: string) => {
   searchKeyword.value = keyword
   currentPage.value = 1
   fetchPosts()
+  // 清除 URL 中的 page 参数（用 replace 不产生新历史记录），
+  // 防止用户刷新时仍停留在旧页码
+  if (route.query.page) router.replace({ query: {} })
 }
 
 /**
@@ -105,19 +112,31 @@ const handleTagSelect = (tagId: number | null) => {
   selectedTagId.value = tagId
   currentPage.value = 1
   fetchPosts()
+  // 同 handleSearch，清除 URL page 参数
+  if (route.query.page) router.replace({ query: {} })
 }
 
 /**
  * 处理分页切换事件。
- * 更新页码、重新加载数据并平滑滚动到页面顶部。
- *
- * @param page 目标页码。
+ * 仅更新 URL（push 新增历史条目，支持浏览器逐页回退），由 watcher 统一驱动数据刷新。
+ * 第 1 页不写入 page 参数，保持 URL 干净。
  */
 const handlePageChange = (page: number) => {
+  router.push({ query: { ...route.query, page: page > 1 ? String(page) : undefined } })
+}
+
+/**
+ * 监听 URL ?page 变化，统一驱动分页数据刷新。
+ * 触发场景：handlePageChange 的 push / 浏览器返回前进。
+ */
+watch(() => route.query.page, (newPage) => {
+  if (route.name !== 'Home') return          // KeepAlive 下离开 Home 时忽略
+  const page = Number(newPage) || 1
+  if (page === currentPage.value) return     // 页码未变，避免双重请求
   currentPage.value = page
   fetchPosts()
   window.scrollTo({top: 0, behavior: 'smooth'})
-}
+})
 
 /**
  * 页面挂载时并行加载文章、标签、最新动态和站点信息
@@ -129,6 +148,36 @@ onMounted(async () => {
     getLatestMemosApi(2).then(res => memos.value = res),
     siteStore.fetchSiteInfo(),
   ])
+})
+
+/**
+ * KeepAlive 激活回调 — 弥补 watcher 的盲区。
+ * 从 About 等页面通过导航链接回到 Home 时，route.query.page 不变（undefined→undefined），
+ * watcher 不触发，需要在此处对比 URL 页码和缓存页码来决定刷新策略。
+ */
+let firstActivation = true
+onActivated(() => {
+  if (firstActivation) { firstActivation = false; return } // 首次由 onMounted 处理
+
+  const urlPage = Number(route.query.page) || 1
+
+  if (urlPage !== currentPage.value) {
+    // 导航链接回 Home（URL 为 /）→ 重置页码，完整刷新
+    currentPage.value = urlPage
+    fetchPosts()
+    window.scrollTo({top: 0, behavior: 'smooth'})
+  } else {
+    // 浏览器返回到同一页 → 静默刷新（不触发 loading，保持滚动位置）
+    getPostsApi({
+      pageNum: currentPage.value,
+      pageSize,
+      keyword: searchKeyword.value || undefined,
+      tagId: selectedTagId.value ?? undefined,
+    }).then(res => {
+      posts.value = res.records
+      total.value = res.total
+    }).catch(() => {})
+  }
 })
 </script>
 

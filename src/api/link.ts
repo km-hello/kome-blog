@@ -15,8 +15,8 @@ export interface LinkResponse {
     id: number                 // 友链 ID
     name: string               // 站点名称
     url: string                // 站点 URL
-    avatar?: string            // 站点头像 URL
-    description?: string       // 站点描述
+    avatar: string | null      // 站点头像 URL
+    description: string | null // 站点描述
     status: number             // 状态: 0=草稿(Draft), 1=公开(Published)
     createTime: string         // 创建时间（ISO 格式）
 }

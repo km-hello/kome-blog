@@ -21,6 +21,7 @@ import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
 import {getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse} from '@/api/memo'
 import {useSiteStore} from '@/stores/useSiteStore'
+import {DEFAULT_AVATAR} from '@/constants'
 
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
@@ -185,7 +186,7 @@ onMounted(async () => {
             <!-- 头部：头像 + 昵称 + 相对时间 + 置顶图标 -->
             <div class="flex items-center gap-3 mb-3">
               <img
-                  :src="siteStore.siteInfo?.owner.avatar"
+                  :src="siteStore.siteInfo?.owner.avatar || DEFAULT_AVATAR"
                   class="size-8 rounded-full ring-1 ring-slate-100"
                   alt="avatar"
               />

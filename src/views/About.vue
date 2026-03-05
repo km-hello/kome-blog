@@ -132,8 +132,8 @@ onMounted(() => {
             <SetupHint v-else-if="siteStore.initialized === false"/>
             <ProfileCardSkeleton v-else/>
 
-            <SkillCard v-if="siteStore.siteInfo" :skills="siteStore.siteInfo?.owner?.skills"/>
-            <SkillCardSkeleton v-else/>
+            <SkillCardSkeleton v-if="siteStore.loading"/>
+            <SkillCard v-else :skills="siteStore.siteInfo?.owner.skills ?? null"/>
 
             <RepoCard/>
 
