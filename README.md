@@ -27,6 +27,7 @@ The public-facing blog frontend for the Kome blogging platform, built with Vue 3
 | Utilities  | VueUse                                      |
 | Icons      | Lucide Vue                                  |
 | Toasts     | vue-sonner                                  |
+| i18n       | vue-i18n                                    |
 | Markdown   | marked + highlight.js + KaTeX + Mermaid     |
 
 ## Features
@@ -38,6 +39,8 @@ The public-facing blog frontend for the Kome blogging platform, built with Vue 3
 - **Code Copy Button** — One-click copy on all code blocks with language label
 - **Infinite Scroll** — Memos page loads more content as you scroll
 - **Responsive Layout** — Desktop sidebar with mobile drawer, adapts across breakpoints
+- **About Page** — Owner profile, social links, and skill tags with proficiency levels
+- **Internationalization (i18n)** — English and Chinese UI, auto-detected from browser language
 - **Outdated Content Alert** — Warns readers if a post hasn't been updated in 180+ days
 - **SEO-friendly Slugs** — Posts accessed via readable `/post/:slug` URLs
 - **Admin Live Preview** — Exposes a `/preview` route consumed by kome-admin for real-time post preview during editing
@@ -83,6 +86,7 @@ src/
 │   └── skeleton/       # Loading skeleton components
 ├── views/              # Route page components
 │   ├── Home.vue        # Paginated posts + sidebar
+│   ├── About.vue       # Owner profile, social links, skills
 │   ├── Archive.vue     # Posts grouped by year/month
 │   ├── Memos.vue       # Micro-blog with infinite scroll
 │   ├── Links.vue       # Friend links directory
@@ -90,7 +94,8 @@ src/
 │   └── ...
 ├── router/             # Vue Router config (8 routes)
 ├── stores/             # Pinia store (site info)
-├── types/              # API response types (Result<T>, PageResult<T>)
+├── i18n/               # vue-i18n config + locale files (en.json, zh-CN.json)
+├── constants/          # Default avatar, app constants
 ├── style.css           # Global styles (~620 lines)
 └── main.ts             # App entry point
 ```
