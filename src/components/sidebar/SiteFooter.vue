@@ -64,7 +64,7 @@ const runningDays = computed(() => {
         >
           <span
               class="overflow-hidden whitespace-nowrap text-[10px] font-semibold tracking-widest transition-all duration-300 ease-out"
-              :class="timerExpanded ? 'max-w-[120px]' : 'max-w-0'"
+              :class="timerExpanded ? 'max-w-30' : 'max-w-0'"
           >
             {{ t('sidebar.runningDays', { days: runningDays }) }}
           </span>
@@ -82,7 +82,7 @@ const runningDays = computed(() => {
         >
           <span
               class="overflow-hidden whitespace-nowrap text-[10px] font-semibold tracking-widest transition-all duration-300 ease-out"
-              :class="langExpanded ? 'max-w-[40px]' : 'max-w-0'"
+              :class="langExpanded ? 'max-w-10' : 'max-w-0'"
           >
             {{ langLabel }}
           </span>
