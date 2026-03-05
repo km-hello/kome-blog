@@ -17,6 +17,7 @@ import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import {getLinksApi, type LinkResponse} from '@/api/link'
 import {useSiteStore} from '@/stores/useSiteStore'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
+import {DEFAULT_SITE_AVATAR} from '@/constants'
 
 const siteStore = useSiteStore()
 const {isLg} = useSidebarDrawer()
@@ -112,7 +113,7 @@ onMounted(async () => {
             <div
                 class="size-16 rounded-full bg-linear-to-br from-slate-100 to-slate-50 p-0.5 border border-slate-100 shrink-0 overflow-hidden mb-3 group-hover:scale-105 transition-transform">
               <img
-                  :src="link.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${link.name}`"
+                  :src="link.avatar || DEFAULT_SITE_AVATAR"
                   :alt="link.name"
                   class="size-full rounded-full bg-white object-cover"
               >
