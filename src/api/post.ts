@@ -17,14 +17,14 @@ export interface PostSimpleResponse {
     id: number                 // 文章 ID
     title: string              // 文章标题
     slug: string               // URL 友好的文章标识
-    summary?: string           // 文章摘要
-    coverImage?: string        // 封面图 URL
+    summary: string | null     // 文章摘要
+    coverImage: string | null  // 封面图 URL
     views: number              // 浏览量
-    readTime?: number          // 预计阅读时间（分钟）
+    readTime: number           // 预计阅读时间（分钟）
     isPinned: boolean          // 是否置顶
     status: number             // 状态: 0=草稿(Draft), 1=已发布(Published)
     createTime: string         // 创建时间（ISO 格式）
-    tags?: TagResponse[]       // 关联标签列表
+    tags: TagResponse[] | null // 关联标签列表
 }
 
 /**
@@ -42,21 +42,21 @@ export interface PostNavigation {
  * 包含文章完整内容及上下篇导航，用于文章详情页展示。
  */
 export interface PostDetailResponse {
-    id: number                 // 文章 ID
-    title: string              // 文章标题
-    slug: string               // URL 友好的文章标识
-    summary?: string           // 文章摘要
-    content: string            // 文章正文（Markdown 格式）
-    coverImage?: string        // 封面图 URL
-    views: number              // 浏览量
-    readTime?: number          // 预计阅读时间（分钟）
-    isPinned: boolean          // 是否置顶
-    status: number             // 状态: 0=草稿(Draft), 1=已发布(Published)
-    createTime: string         // 创建时间（ISO 格式）
-    updateTime: string         // 更新时间（ISO 格式）
-    tags?: TagResponse[]       // 关联标签列表
-    previous?: PostNavigation | null  // 上一篇文章导航
-    next?: PostNavigation | null      // 下一篇文章导航
+    id: number                        // 文章 ID
+    title: string                     // 文章标题
+    slug: string                      // URL 友好的文章标识
+    summary: string | null            // 文章摘要
+    content: string                   // 文章正文（Markdown 格式）
+    coverImage: string | null         // 封面图 URL
+    views: number                     // 浏览量
+    readTime: number                  // 预计阅读时间（分钟）
+    isPinned: boolean                 // 是否置顶
+    status: number                    // 状态: 0=草稿(Draft), 1=已发布(Published)
+    createTime: string                // 创建时间（ISO 格式）
+    updateTime: string                // 更新时间（ISO 格式）
+    tags: TagResponse[] | null        // 关联标签列表
+    previous: PostNavigation | null   // 上一篇文章导航
+    next: PostNavigation | null       // 下一篇文章导航
 }
 
 /**
@@ -87,7 +87,7 @@ export interface ArchiveSimplePost {
     id: number                 // 文章 ID
     title: string              // 文章标题
     slug: string               // URL 友好的文章标识
-    tags?: TagResponse[]       // 关联标签列表
+    tags: TagResponse[] | null // 关联标签列表
     createTime: string         // 创建时间（ISO 格式）
 }
 

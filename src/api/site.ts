@@ -23,7 +23,7 @@ export interface SocialLink {
 export interface SkillItem {
     name: string               // 技能名称
     level: number              // 熟练度: 1=了解(Basic), 2=熟悉(Familiar), 3=精通(Proficient)
-    order?: number             // 排序权重
+    order: number              // 排序权重
 }
 
 /**
@@ -31,12 +31,12 @@ export interface SkillItem {
  * 包含站长资料、社交链接和技能列表等信息。
  */
 export interface OwnerInfo {
-    nickname: string           // 昵称
-    avatar?: string            // 头像 URL
-    description?: string       // 个人简介
-    createdAt: string          // 站点创建时间（ISO 格式）
-    socialLinks?: SocialLink[] // 社交链接列表
-    skills?: SkillItem[]       // 技能列表
+    nickname: string                  // 昵称
+    avatar: string | null             // 头像 URL
+    description: string | null        // 个人简介
+    createdAt: string                 // 站点创建时间（ISO 格式）
+    socialLinks: SocialLink[] | null  // 社交链接列表
+    skills: SkillItem[] | null        // 技能列表
 }
 
 /**
