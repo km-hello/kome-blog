@@ -12,6 +12,7 @@ import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
 import MemoStatsSkeleton from '@/components/skeleton/MemoStatsSkeleton.vue'
+import OnThisDay from '@/components/sidebar/OnThisDay.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
@@ -19,7 +20,7 @@ import {useMarkdown} from '@/composables/useMarkdown'
 import {useCodeCopy} from '@/composables/useCodeCopy'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
-import {getMemosApi, getMemoStatsApi, type MemoResponse, type MemoStatsResponse} from '@/api/memo'
+import {getMemosApi, getMemoStatsApi, getMemosOnThisDayApi, type MemoResponse, type MemoStatsResponse} from '@/api/memo'
 import {useSiteStore} from '@/stores/useSiteStore'
 import {DEFAULT_AVATAR} from '@/constants'
 
@@ -41,6 +42,14 @@ const memos = ref<MemoResponse[]>([])
  * Memo 统计数据，独立接口获取
  */
 const memoStats = ref<MemoStatsResponse | null>(null)
+/**
+ * 往年今日 Memo 列表
+ */
+const onThisDayMemos = ref<MemoResponse[]>([])
+/**
+ * 往年今日加载状态
+ */
+const onThisDayLoading = ref(true)
 /**
  * Memo 总数，用于页面标题卡片展示
  */
@@ -151,6 +160,7 @@ onMounted(async () => {
     fetchMemos(),
     siteStore.fetchSiteInfo(),
     getMemoStatsApi().then(res => memoStats.value = res),
+    getMemosOnThisDayApi().then(res => onThisDayMemos.value = res).finally(() => onThisDayLoading.value = false),
   ])
 })
 </script>
@@ -233,13 +243,14 @@ onMounted(async () => {
             <SearchBox :placeholder="t('memos.searchPlaceholder')" @search="handleSearch"/>
             <MemoStats v-if="memoStats" :stats="memoStats"/>
             <MemoStatsSkeleton v-else/>
+            <OnThisDay :memos="onThisDayMemos" :loading="onThisDayLoading"/>
 
             <SiteFooter/>
           </div>
         </Teleport>
       </aside>
     </div>
-
+asdf的发达
     <!-- Mermaid 图表放大模态框 -->
     <MermaidModal/>
   </div>

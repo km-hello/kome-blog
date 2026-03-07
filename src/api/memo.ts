@@ -74,3 +74,13 @@ export const getLatestMemosApi = (limit: number = 2): Promise<MemoResponse[]> =>
 export const getMemoStatsApi = (): Promise<MemoStatsResponse> => {
     return request.get<MemoStatsResponse>('/api/memos/stats')
 }
+
+/**
+ * 获取往年今日的动态列表。
+ * 返回历史上同月同日发布的动态，用于侧边栏「往年今日」卡片展示。
+ *
+ * @returns 往年今日动态数组。
+ */
+export const getMemosOnThisDayApi = (): Promise<MemoResponse[]> => {
+    return request.get<MemoResponse[]>('/api/memos/on-this-day')
+}
