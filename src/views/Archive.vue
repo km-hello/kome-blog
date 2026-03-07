@@ -9,6 +9,7 @@ import ProfileCardSkeleton from '@/components/skeleton/ProfileCardSkeleton.vue'
 import SetupHint from '@/components/sidebar/SetupHint.vue'
 import SearchBox from '@/components/sidebar/SearchBox.vue'
 import TagList from '@/components/sidebar/TagList.vue'
+import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import TimelineNav from '@/components/sidebar/TimelineNav.vue'
 import TimelineNavSkeleton from '@/components/skeleton/TimelineNavSkeleton.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
@@ -265,11 +266,12 @@ onUnmounted(() => {
             <TimelineNavSkeleton v-else />
 
             <TagList
+                v-if="!loading"
                 :tags="tags"
                 :active-tag-id="selectedTagId"
-                :loading="loading"
                 @select="handleTagSelect"
             />
+            <SidebarSkeleton v-else variant="tags"/>
 
             <SiteFooter />
           </div>

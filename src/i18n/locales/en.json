@@ -87,6 +87,8 @@
     "familiar": "Familiar",
     "basic": "Basic",
     "noSkills": "No skills configured",
+    "onThisDay": "On This Day",
+    "noOnThisDay": "No memories on this day yet",
     "latestMemos": "Latest Memos",
     "noMemos": "No memos yet",
     "timeline": "Timeline",

@@ -1,6 +1,5 @@
 <!-- TagList.vue - 标签列表组件 -->
 <script setup lang="ts">
-import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import { useI18n } from 'vue-i18n'
 import type {TagPostCountResponse} from '@/api/tag'
 
@@ -10,12 +9,10 @@ const {t} = useI18n()
  * Props 定义
  * @property tags 标签数组（TagPostCountResponse[]，含名称和文章计数）
  * @property activeTagId 当前选中的标签 ID（null 表示无选中）
- * @property loading 加载状态（控制骨架屏显示）
  */
 defineProps<{
   tags: TagPostCountResponse[]
   activeTagId?: number | null
-  loading?: boolean
 }>()
 
 /**
@@ -51,11 +48,8 @@ const handleTagClick = (tagId: number) => {
       </button>
     </div>
 
-    <!-- 加载骨架屏 -->
-    <SidebarSkeleton v-if="loading && tags.length === 0" variant="tags"/>
-
     <!-- 标签按钮组（flex 换行，max-h-60 超出滚动，选中深色/未选中浅灰） -->
-    <div v-else class="flex flex-wrap gap-2 max-h-60 overflow-y-auto scrollbar-thin pr-1">
+    <div v-if="tags.length > 0" class="flex flex-wrap gap-2 max-h-60 overflow-y-auto scrollbar-thin pr-1">
       <button
           v-for="tag in tags"
           :key="tag.id"
@@ -79,7 +73,7 @@ const handleTagClick = (tagId: number) => {
     </div>
 
     <!-- 空状态提示 -->
-    <div v-if="!loading && tags.length === 0" class="text-center py-4 text-xs text-slate-400">
+    <div v-if="tags.length === 0" class="text-center py-4 text-xs text-slate-400">
       {{ t('sidebar.noTags') }}
     </div>
   </div>
