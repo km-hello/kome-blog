@@ -3,18 +3,15 @@
 import {ref, watch, nextTick} from 'vue'
 import {CalendarHeart} from 'lucide-vue-next'
 import {useI18n} from 'vue-i18n'
-import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import type {MemoResponse} from '@/api/memo'
 import {useMarkdown} from '@/composables/useMarkdown'
 
 /**
  * Props 定义
  * @property memos 往年今日 Memo 列表
- * @property loading 加载状态
  */
 const props = defineProps<{
   memos: MemoResponse[]
-  loading?: boolean
 }>()
 
 const {render} = useMarkdown()
@@ -70,11 +67,8 @@ watch(() => props.memos, async () => {
       <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">{{ t('sidebar.onThisDay') }}</h4>
     </div>
 
-    <!-- 加载骨架屏 -->
-    <SidebarSkeleton v-if="loading && memos.length === 0" variant="memos"/>
-
     <!-- Memo 列表（超过 4 条时出现滚动条） -->
-    <div v-else-if="memos.length > 0" class="space-y-3 max-h-[28rem] overflow-y-auto">
+    <div v-if="memos.length > 0" class="space-y-3 max-h-[28rem] overflow-y-auto">
       <router-link
           v-for="memo in memos"
           :key="memo.id"
@@ -110,7 +104,7 @@ watch(() => props.memos, async () => {
     </div>
 
     <!-- 空状态 -->
-    <div v-if="!loading && memos.length === 0" class="text-center py-4 text-xs text-slate-400">
+    <div v-if="memos.length === 0" class="text-center py-4 text-xs text-slate-400">
       {{ t('sidebar.noOnThisDay') }}
     </div>
   </div>
