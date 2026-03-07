@@ -13,6 +13,7 @@ import SearchBox from '@/components/sidebar/SearchBox.vue'
 import MemoStats from '@/components/sidebar/MemoStats.vue'
 import MemoStatsSkeleton from '@/components/skeleton/MemoStatsSkeleton.vue'
 import OnThisDay from '@/components/sidebar/OnThisDay.vue'
+import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import SiteFooter from '@/components/sidebar/SiteFooter.vue'
 import PageTitleCard from '@/components/common/PageTitleCard.vue'
 import MermaidModal from '@/components/common/MermaidModal.vue'
@@ -243,14 +244,14 @@ onMounted(async () => {
             <SearchBox :placeholder="t('memos.searchPlaceholder')" @search="handleSearch"/>
             <MemoStats v-if="memoStats" :stats="memoStats"/>
             <MemoStatsSkeleton v-else/>
-            <OnThisDay :memos="onThisDayMemos" :loading="onThisDayLoading"/>
+            <OnThisDay v-if="!onThisDayLoading" :memos="onThisDayMemos"/>
+            <SidebarSkeleton v-else variant="memos"/>
 
             <SiteFooter/>
           </div>
         </Teleport>
       </aside>
     </div>
-asdf的发达
     <!-- Mermaid 图表放大模态框 -->
     <MermaidModal/>
   </div>

@@ -13,6 +13,7 @@ import TagList from '@/components/sidebar/TagList.vue'
 import LatestMemo from '@/components/sidebar/LatestMemo.vue'
 import PostCard from '@/components/post/PostCard.vue'
 import PostCardSkeleton from '@/components/skeleton/PostCardSkeleton.vue'
+import SidebarSkeleton from '@/components/skeleton/SidebarSkeleton.vue'
 import Pagination from '@/components/common/Pagination.vue'
 import {useSidebarDrawer} from '@/composables/useSidebarDrawer'
 
@@ -225,14 +226,16 @@ onActivated(() => {
 
             <SearchBox :placeholder="t('home.searchPlaceholder')" @search="handleSearch"/>
 
-            <LatestMemo :memos="memos" :loading="loading"/>
+            <LatestMemo v-if="!loading" :memos="memos"/>
+            <SidebarSkeleton v-else variant="memos"/>
 
             <TagList
+                v-if="!loading"
                 :tags="tags"
                 :active-tag-id="selectedTagId"
-                :loading="loading"
                 @select="handleTagSelect"
             />
+            <SidebarSkeleton v-else variant="tags"/>
 
             <SiteFooter/>
           </div>
