@@ -6,7 +6,9 @@ defineProps<{
 </script>
 
 <template>
-  <div class="animate-pulse">
+  <div class="bento-card p-5 animate-pulse">
+    <div class="h-3 w-20 bg-slate-100 rounded mb-4" />
+
     <!-- 标签变体 -->
     <template v-if="variant === 'tags'">
       <div class="flex flex-wrap gap-2">
