@@ -44,7 +44,93 @@
   },
   "about": {
     "title": "About",
-    "subtitle": "About this blog and the person behind it."
+    "subtitle": "About this blog and the person behind it.",
+    "project": "Project",
+    "projectDesc": "Kome Blog is a modern, full-stack personal blog system composed of three parts: a public-facing blog, an admin dashboard, and a RESTful API backend.",
+    "techStack": "Tech Stack",
+    "features": {
+      "blog": {
+        "label": "Blog",
+        "articles": {
+          "title": "Articles",
+          "desc": "Marked-based rendering with highlight.js, KaTeX math, Mermaid fullscreen diagrams, pinned posts, reading time, auto TOC, one-click code copy, and tag/keyword filtering."
+        },
+        "archive": {
+          "title": "Archive",
+          "desc": "All posts on a year/month grouped timeline with sidebar year navigation, scroll-to-year positioning, viewport-aware highlighting, tag filtering, and keyword search."
+        },
+        "memos": {
+          "title": "Memos",
+          "desc": "Infinite-scroll microblog feed with pinned entries, relative timestamps, full Markdown rendering, statistics dashboard, and \"On This Day\" memories."
+        },
+        "links": {
+          "title": "Friend Links",
+          "desc": "Card-style blogroll directory with keyword search, random visit shuffle, and one-click exchange card copy."
+        },
+        "i18n": {
+          "title": "i18n",
+          "desc": "Full Chinese/English interface with one-click toggle, localStorage persistence, and Accept-Language API forwarding."
+        },
+        "about": {
+          "title": "Responsive Design",
+          "desc": "Mobile-adaptive layout with collapsible navigation menu, sidebar drawer, floating TOC bottom sheet, adaptive grids, and skeleton loading."
+        }
+      },
+      "admin": {
+        "label": "Admin",
+        "dashboard": {
+          "title": "Dashboard",
+          "desc": "Overview cards for posts, memos, tags, and links with quick-add buttons and recent posts/memos at a glance."
+        },
+        "content": {
+          "title": "Content Management",
+          "desc": "Full CRUD for posts, memos, tags, and links with pagination, status filtering, keyword search, tag filtering, and sortable columns."
+        },
+        "editor": {
+          "title": "Markdown Editor",
+          "desc": "CodeMirror-based editor with formatting toolbar, emoji picker, draggable split-view live preview, cover image extraction, and tag selector."
+        },
+        "ai": {
+          "title": "AI Integration",
+          "desc": "One-click article summary (Chinese) and SEO slug (English) generation via configurable OpenAI-compatible API."
+        },
+        "i18n": {
+          "title": "Responsive & i18n",
+          "desc": "Full Chinese/English interface with one-click toggle, localStorage persistence, and mobile-adaptive layout with collapsible sidebar navigation and responsive tables."
+        },
+        "auth": {
+          "title": "Authentication",
+          "desc": "JWT-based stateless authentication with remember-me, username/email login, first-time admin setup flow, and password strength validation."
+        }
+      },
+      "api": {
+        "label": "API",
+        "rest": {
+          "title": "RESTful Endpoints",
+          "desc": "Full CRUD for posts, memos, tags, and links with pagination, full-text search, archive grouping, and unified response wrapper."
+        },
+        "auth": {
+          "title": "Authentication",
+          "desc": "Stateless JWT with Spring Security, BCrypt hashing, username/email login, first-time admin setup flow, and configurable expiration."
+        },
+        "ai": {
+          "title": "AI Integration",
+          "desc": "OpenAI-compatible wrapper via WebFlux WebClient for async summary and slug generation with configurable model and timeout."
+        },
+        "db": {
+          "title": "Database",
+          "desc": "MySQL with Flyway migrations, MyBatis-Plus pagination and soft delete, and Jackson-based JSON fields for social links and skills."
+        },
+        "validation": {
+          "title": "Validation & i18n",
+          "desc": "Hibernate Validator with bilingual messages resolved via Accept-Language header and global exception handler for structured responses."
+        },
+        "docs": {
+          "title": "Monitoring & Docs",
+          "desc": "Springdoc OpenAPI with Swagger UI for API exploration and Spring Actuator health endpoint for service monitoring."
+        }
+      }
+    }
   },
   "post": {
     "published": "Published",

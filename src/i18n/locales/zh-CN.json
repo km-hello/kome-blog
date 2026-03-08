@@ -44,7 +44,39 @@
   },
   "about": {
     "title": "关于",
-    "subtitle": "关于这个博客以及背后的人。"
+    "subtitle": "关于这个博客以及背后的人。",
+    "project": "项目介绍",
+    "projectDesc": "Kome Blog 是一个现代化的全栈个人博客系统，由三部分组成：博客前台、管理后台和 RESTful API 后端。",
+    "techStack": "技术栈",
+    "features": {
+      "blog": {
+        "label": "博客前台",
+        "articles": { "title": "文章", "desc": "基于 Marked 的渲染，支持 highlight.js 语法高亮、KaTeX 公式、Mermaid 全屏图表、置顶文章、阅读时间、自动目录、一键复制代码和标签/关键词筛选。" },
+        "archive": { "title": "归档", "desc": "所有文章按年月分组的时间线，侧边栏年份导航、滚动定位、视口感知高亮，支持标签筛选和关键词搜索。" },
+        "memos": { "title": "动态", "desc": "无限滚动微博式信息流，支持置顶条目、相对时间、完整 Markdown 渲染、统计数据和「往年今日」回顾。" },
+        "links": { "title": "友链", "desc": "卡片式友链目录，支持关键词搜索、随机访问和一键复制交换卡片。" },
+        "i18n": { "title": "国际化", "desc": "完整中英双语界面，一键切换、localStorage 持久化和 Accept-Language 接口转发。" },
+        "about": { "title": "响应式设计", "desc": "移动自适应布局，可收起导航菜单、侧边栏抽屉、浮动目录底部面板、自适应网格和骨架屏加载。" }
+      },
+      "admin": {
+        "label": "管理后台",
+        "dashboard": { "title": "仪表盘", "desc": "文章、动态、标签和友链的总览卡片与快捷添加按钮，近期文章和动态一览。" },
+        "content": { "title": "内容管理", "desc": "文章、动态、标签和友链的完整增删改查，支持分页、状态筛选、关键词搜索、标签筛选和列排序。" },
+        "editor": { "title": "Markdown 编辑器", "desc": "基于 CodeMirror 的编辑器，配备格式化工具栏、表情选择器、可拖拽分割实时预览、封面提取和标签选择器。" },
+        "ai": { "title": "AI 集成", "desc": "一键生成文章摘要（中文）和 SEO 别名（英文），基于可配置的 OpenAI 兼容接口。" },
+        "i18n": { "title": "响应式与国际化", "desc": "完整中英双语界面一键切换、localStorage 持久化，移动端自适应布局、可收起侧边栏导航和响应式表格。" },
+        "auth": { "title": "身份认证", "desc": "基于 JWT 的无状态认证，支持记住我、用户名或邮箱登录、首次管理员设置流程和密码强度校验。" }
+      },
+      "api": {
+        "label": "后端接口",
+        "rest": { "title": "RESTful 端点", "desc": "文章、动态、标签和友链的完整增删改查，支持分页、全文搜索、归档分组和统一响应封装。" },
+        "auth": { "title": "身份认证", "desc": "Spring Security 无状态 JWT 认证，BCrypt 哈希，用户名或邮箱登录，首次管理员设置流程和可配置过期时间。" },
+        "ai": { "title": "AI 集成", "desc": "基于 WebFlux WebClient 的 OpenAI 兼容接口异步调用，支持配置模型和超时。" },
+        "db": { "title": "数据库", "desc": "MySQL 配合 Flyway 迁移、MyBatis-Plus 分页与软删除，以及 Jackson JSON 字段处理。" },
+        "validation": { "title": "校验与国际化", "desc": "Hibernate Validator 中英双语消息，通过 Accept-Language 解析，全局异常处理器返回结构化响应。" },
+        "docs": { "title": "监控与文档", "desc": "Springdoc OpenAPI 搭配 Swagger UI 用于 API 探索，Spring Actuator 健康端点用于服务监控。" }
+      }
+    }
   },
   "post": {
     "published": "发布于",
