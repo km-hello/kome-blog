@@ -1,0 +1,7 @@
+{
+  "_README": "Guestbook (Giscus) configuration. Get values from https://giscus.app — Docker Compose mounts this file to /usr/share/nginx/html/config.json",
+  "GISCUS_REPO": "owner/repo",
+  "GISCUS_REPO_ID": "R_...",
+  "GISCUS_CATEGORY": "Announcements",
+  "GISCUS_CATEGORY_ID": "DIC_..."
+}
