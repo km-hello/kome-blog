@@ -11,6 +11,7 @@ import i18n from '@/i18n'
  *   /archive       → Archive   归档（按年月分组）
  *   /memos         → Memos     动态列表
  *   /links         → Links     友情链接
+ *   /guestbook     → Guestbook 留言本
  *   /about         → About     关于页
  *   /post/:slug    → PostDetail 文章详情
  *   /preview       → Preview   管理端文章预览（iframe 接收端）
@@ -40,6 +41,12 @@ const routes: RouteRecordRaw[] = [
         name: 'Links',
         component: () => import('@/views/Links.vue'),
         meta: { title: 'Links' },
+    },
+    {
+        path: '/guestbook',
+        name: 'Guestbook',
+        component: () => import('@/views/Guestbook.vue'),
+        meta: { title: 'Guestbook' },
     },
     {
         path: '/about',
