@@ -34,7 +34,7 @@ const featureGroups = [
       { titleKey: 'about.features.blog.memos.title', descKey: 'about.features.blog.memos.desc' },
       { titleKey: 'about.features.blog.links.title', descKey: 'about.features.blog.links.desc' },
       { titleKey: 'about.features.blog.i18n.title', descKey: 'about.features.blog.i18n.desc' },
-      { titleKey: 'about.features.blog.about.title', descKey: 'about.features.blog.about.desc' },
+      { titleKey: 'about.features.blog.responsive.title', descKey: 'about.features.blog.responsive.desc' },
     ],
   },
   {
@@ -67,7 +67,7 @@ const featureGroups = [
 const techStacks = [
   {
     labelKey: 'about.features.blog.label',
-    items: ['Vue 3', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'Vue Router', 'Pinia', 'Axios', 'Lucide Icons', 'VueUse', 'vue-i18n', 'vue-sonner', 'Marked', 'highlight.js', 'KaTeX', 'Mermaid'],
+    items: ['Vue 3', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'Vue Router', 'Pinia', 'Axios', 'Lucide Icons', 'VueUse', 'vue-i18n', 'vue-sonner', 'Marked', 'highlight.js', 'KaTeX', 'Mermaid', 'Giscus'],
   },
   {
     labelKey: 'about.features.admin.label',

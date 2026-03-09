@@ -65,14 +65,14 @@
           "desc": "Infinite-scroll microblog feed with pinned entries, relative timestamps, full Markdown rendering, statistics dashboard, and \"On This Day\" memories."
         },
         "links": {
-          "title": "Friend Links",
-          "desc": "Card-style blogroll directory with keyword search, random visit shuffle, and one-click exchange card copy."
+          "title": "Links & Guestbook",
+          "desc": "Card-style blogroll directory with keyword search, random visit shuffle, one-click exchange card copy, and Giscus-powered guestbook via GitHub Discussions."
         },
         "i18n": {
           "title": "i18n",
           "desc": "Full Chinese/English interface with one-click toggle, localStorage persistence, and Accept-Language API forwarding."
         },
-        "about": {
+        "responsive": {
           "title": "Responsive Design",
           "desc": "Mobile-adaptive layout with collapsible navigation menu, sidebar drawer, floating TOC bottom sheet, adaptive grids, and skeleton loading."
         }

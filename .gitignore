@@ -33,6 +33,7 @@ nul
 
 # Claude Code / oh-my-claudecode
 .omc/
+CLAUDE.md
 
 # Test articles
 test-articles/

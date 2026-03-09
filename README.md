@@ -40,6 +40,7 @@ The public-facing blog frontend for the Kome blogging platform, built with Vue 3
 - **Infinite Scroll** — Memos page loads more content as you scroll
 - **Responsive Layout** — Desktop sidebar with mobile drawer, adapts across breakpoints
 - **About Page** — Owner profile, social links, and skill tags with proficiency levels
+- **Guestbook** — Giscus-powered comment wall via GitHub Discussions, runtime config via `config.json` or env vars, reactive i18n
 - **Internationalization (i18n)** — English and Chinese UI, auto-detected from browser language
 - **Outdated Content Alert** — Warns readers if a post hasn't been updated in 180+ days
 - **SEO-friendly Slugs** — Posts accessed via readable `/post/:slug` URLs
@@ -87,6 +88,7 @@ src/
 ├── views/              # Route page components
 │   ├── Home.vue        # Paginated posts + sidebar
 │   ├── About.vue       # Owner profile, social links, skills
+│   ├── Guestbook.vue   # Giscus-powered guestbook
 │   ├── Archive.vue     # Posts grouped by year/month
 │   ├── Memos.vue       # Micro-blog with infinite scroll
 │   ├── Links.vue       # Friend links directory
@@ -106,3 +108,7 @@ src/
 |------------------------|-----------------------------|--------------------|
 | `VITE_API_BASE_URL`    | Backend API base URL        | `""` (same origin) |
 | `VITE_ALLOWED_ORIGINS` | Allowed origins for preview | —                  |
+| `VITE_GISCUS_REPO`    | Giscus GitHub repo (dev)    | —                  |
+| `VITE_GISCUS_REPO_ID` | Giscus repo ID (dev)        | —                  |
+| `VITE_GISCUS_CATEGORY` | Giscus category name (dev) | —                  |
+| `VITE_GISCUS_CATEGORY_ID` | Giscus category ID (dev) | —                 |
