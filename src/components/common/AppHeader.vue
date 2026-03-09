@@ -28,6 +28,7 @@ const navItems = computed(() => [
   {label: t('nav.archive'), path: '/archive'},
   {label: t('nav.memos'), path: '/memos'},
   {label: t('nav.links'), path: '/links'},
+  {label: t('nav.guestbook'), path: '/guestbook'},
   {label: t('nav.about'), path: '/about'},
 ])
 

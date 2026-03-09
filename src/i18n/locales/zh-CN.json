@@ -7,6 +7,7 @@
     "archive": "归档",
     "memos": "动态",
     "links": "友链",
+    "guestbook": "留言本",
     "about": "关于",
     "toggleLanguage": "切换语言"
   },
@@ -77,6 +78,11 @@
         "docs": { "title": "监控与文档", "desc": "Springdoc OpenAPI 搭配 Swagger UI 用于 API 探索，Spring Actuator 健康端点用于服务监控。" }
       }
     }
+  },
+  "guestbook": {
+    "title": "留言本",
+    "subtitle": "留下你的足迹，分享你的想法。",
+    "notConfigured": "请配置 Giscus 以启用留言本。"
   },
   "post": {
     "published": "发布于",
