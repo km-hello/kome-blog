@@ -13,7 +13,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@types/katex": "^0.16.8",
     "@vueuse/core": "^14.1.0",
-    "axios": "^1.13.3",
+    "axios": "1.13.5",
     "highlight.js": "^11.11.1",
     "katex": "^0.16.28",
     "lucide-vue-next": "^0.563.0",
