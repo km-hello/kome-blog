@@ -45,20 +45,16 @@ export interface OwnerInfo {
  */
 export interface SiteStats {
     publishedPostCount: number   // 已发布文章数
-    draftPostCount: number       // 草稿文章数
     usedTagCount: number         // 已使用标签数
-    unusedTagCount: number       // 未使用标签数
     publishedMemoCount: number   // 已发布动态数
-    draftMemoCount: number       // 草稿动态数
     publishedLinkCount: number   // 已审核友链数
-    draftLinkCount: number       // 待审核友链数
 }
 
 /**
  * 站点公开信息。
  * 聚合站长个人信息和站点统计数据，作为站点信息接口的响应结构。
  */
-export interface SiteInfoResponse {
+export interface PublicSiteInfoResponse {
     owner: OwnerInfo           // 站长个人信息
     stats: SiteStats           // 站点统计数据
 }
@@ -71,8 +67,8 @@ export interface SiteInfoResponse {
  *
  * @returns 站点公开信息。
  */
-export const getSiteInfoApi = (): Promise<SiteInfoResponse> => {
-    return request.get<SiteInfoResponse>('/api/site/info')
+export const getSiteInfoApi = (): Promise<PublicSiteInfoResponse> => {
+    return request.get<PublicSiteInfoResponse>('/api/site/info')
 }
 
 /**
