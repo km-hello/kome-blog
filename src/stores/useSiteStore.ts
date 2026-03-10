@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { getSiteInfoApi, checkInitializedApi, type SiteInfoResponse } from '@/api/site';
+import { getSiteInfoApi, checkInitializedApi, type PublicSiteInfoResponse } from '@/api/site';
 
 /**
  * 站点信息的全局状态存储。
@@ -19,7 +19,7 @@ export const useSiteStore = defineStore('site', () => {
     /**
      * 站点信息（包含站长资料与统计数据）
      */
-    const siteInfo = ref<SiteInfoResponse | null>(null);
+    const siteInfo = ref<PublicSiteInfoResponse | null>(null);
 
     /**
      * 是否正在加载中

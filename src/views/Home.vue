@@ -1,6 +1,6 @@
 <!-- Home.vue - 博客首页 -->
 <script setup lang="ts">
-import {ref, watch, onMounted, onActivated} from 'vue'
+import {ref, watch, onMounted, onActivated, onDeactivated} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useI18n} from 'vue-i18n'
 import AppHeader from '@/components/common/AppHeader.vue'
@@ -65,6 +65,11 @@ const selectedTagId = ref<number | null>(null)
  * 是否正在加载
  */
 const loading = ref(true)
+/**
+ * 控制缓存页面在移动端抽屉中的 Teleport 内容挂载。
+ * Home 被 KeepAlive 缓存时，离开页面不会卸载，需要在失活时显式移除抽屉内容。
+ */
+const sidebarActive = ref(true)
 
 
 /**
@@ -158,6 +163,7 @@ onMounted(async () => {
  */
 let firstActivation = true
 onActivated(() => {
+  sidebarActive.value = true
   if (firstActivation) { firstActivation = false; return } // 首次由 onMounted 处理
 
   const urlPage = Number(route.query.page) || 1
@@ -179,6 +185,10 @@ onActivated(() => {
       total.value = res.total
     }).catch(() => {})
   }
+})
+
+onDeactivated(() => {
+  sidebarActive.value = false
 })
 </script>
 
@@ -215,7 +225,7 @@ onActivated(() => {
       <!-- 侧边栏（< lg Teleport 至抽屉 / >= lg sticky 右侧） -->
       <aside class="lg:col-span-4 relative">
         <Teleport to="#sidebar-drawer-content" :disabled="isLg">
-          <div class="sticky top-24 space-y-5">
+          <div v-if="sidebarActive || isLg" class="sticky top-24 space-y-5">
             <ProfileCard
                 v-if="siteStore.siteInfo"
                 :owner="siteStore.siteInfo.owner"
