@@ -18,7 +18,7 @@
   },
   "archive": {
     "title": "归档",
-    "subtitle": "关于代码、设计与生活的思考。",
+    "subtitle": "代码、设计与生活的思考沉淀。",
     "countLabel": "文章总数",
     "theBeginning": "最初的起点",
     "posts": "篇",
@@ -28,7 +28,7 @@
   },
   "memos": {
     "title": "动态",
-    "subtitle": "随手记录的想法与片段。",
+    "subtitle": "未经修饰的思绪与只言片语。",
     "countLabel": "动态总数",
     "noMatchingMemos": "没有匹配的动态。",
     "noMemos": "暂无动态。",
@@ -36,8 +36,8 @@
     "searchPlaceholder": "搜索动态..."
   },
   "links": {
-    "title": "友情链接",
-    "subtitle": "与数字世界的朋友们相连。",
+    "title": "友链",
+    "subtitle": "连接数字世界的邻居。",
     "countLabel": "友链总数",
     "noMatchingLinks": "没有匹配的友链。",
     "noLinks": "暂无友链。",
@@ -45,7 +45,7 @@
   },
   "about": {
     "title": "关于",
-    "subtitle": "关于这个博客以及背后的人。",
+    "subtitle": "探索这片空间的底层逻辑与细节。",
     "project": "项目介绍",
     "projectDesc": "Kome Blog 是一个现代化的全栈个人博客系统，由三部分组成：博客前台、管理后台和 RESTful API 后端。",
     "techStack": "技术栈",
@@ -81,8 +81,8 @@
   },
   "guestbook": {
     "title": "留言本",
-    "subtitle": "留下你的足迹，分享你的想法。",
-    "notConfigured": "请配置 Giscus 以启用留言本。"
+    "subtitle": "很高兴遇见，留个印记吧。",
+    "notConfigured": "留言本暂不可用。"
   },
   "post": {
     "published": "发布于",
@@ -121,9 +121,9 @@
     "clearTags": "清除",
     "noTags": "暂无标签",
     "skillsTitle": "技能",
-    "proficient": "精通",
+    "proficient": "熟练",
     "familiar": "熟悉",
-    "basic": "了解",
+    "basic": "入门",
     "noSkills": "暂无技能配置",
     "onThisDay": "往年今日",
     "noOnThisDay": "今日暂无往年回忆",

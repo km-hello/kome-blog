@@ -17,7 +17,7 @@ const origin = window.location.origin
 const fields = computed(() => [
   {key: 'name', label: t('sidebar.exchangeName'), value: 'Kome Blog'},
   {key: 'link', label: t('sidebar.exchangeLink'), value: origin},
-  {key: 'desc', label: t('sidebar.exchangeDesc'), value: 'A collection of thoughts.'},
+  {key: 'desc', label: t('sidebar.exchangeDesc'), value: t('archive.subtitle')},
   {key: 'avatar', label: t('sidebar.exchangeAvatar'), value: `${origin}/favicon.svg`},
 ])
 

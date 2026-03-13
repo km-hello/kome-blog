@@ -18,7 +18,7 @@
   },
   "archive": {
     "title": "Archive",
-    "subtitle": "Thinking about code, design, and life.",
+    "subtitle": "Reflections on code, design, and life.",
     "countLabel": "Total Posts",
     "theBeginning": "THE BEGINNING",
     "posts": "Posts",
@@ -45,7 +45,7 @@
   },
   "about": {
     "title": "About",
-    "subtitle": "About this blog and the person behind it.",
+    "subtitle": "Under the hood of this digital space.",
     "project": "Project",
     "projectDesc": "Kome Blog is a modern, full-stack personal blog system composed of three parts: a public-facing blog, an admin dashboard, and a RESTful API backend.",
     "techStack": "Tech Stack",
@@ -135,8 +135,8 @@
   },
   "guestbook": {
     "title": "Guestbook",
-    "subtitle": "Leave a message, share your thoughts.",
-    "notConfigured": "Please configure Giscus to enable the guestbook."
+    "subtitle": "Say hello, and leave a trace.",
+    "notConfigured": "Guestbook unavailable."
   },
   "post": {
     "published": "Published",
