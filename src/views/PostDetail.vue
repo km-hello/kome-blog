@@ -11,6 +11,7 @@ import axios from 'axios'
 import {getPostDetailApi, type PostDetailResponse} from '@/api/post'
 import {useMarkdown} from '@/composables/useMarkdown'
 import {useCodeCopy} from '@/composables/useCodeCopy'
+import {setCustomDocumentTitle} from '@/router'
 
 const route = useRoute()
 const router = useRouter()
@@ -154,6 +155,8 @@ const fetchData = async () => {
   loading.value = true
   try {
     post.value = await getPostDetailApi(slug)
+    // 文章详情标题依赖接口数据，加载完成后覆盖路由默认标题
+    setCustomDocumentTitle(post.value.title)
 
     // 数据加载完成后立即计算一次 TOC 高亮状态
     await nextTick()
@@ -212,6 +215,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  // 离开详情页时清除自定义标题，恢复路由默认标题逻辑
+  setCustomDocumentTitle(null)
   window.removeEventListener('scroll', handleScroll)
 })
 </script>

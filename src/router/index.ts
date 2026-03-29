@@ -4,6 +4,12 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import i18n from '@/i18n'
 
 /**
+ * 页面级自定义标题。
+ * 用于文章详情这类异步数据页，在数据返回后覆盖路由默认标题。
+ */
+let customDocumentTitle: string | null = null
+
+/**
  * 路由配置表。
  *
  * 路由结构：
@@ -83,25 +89,43 @@ const router = createRouter({
     },
 })
 
+
+function resolveRouteTitle(title?: string) {
+    if (!title) return ''
+
+    const titleKey = `nav.${title.toLowerCase()}`
+    const translated = i18n.global.t(titleKey)
+    return translated !== titleKey ? translated : title
+}
+
 /**
- * 根据路由 meta.title 和当前语言设置页面标题。
- * 将 meta.title 转为 nav.{title} 翻译键，翻译失败时回退到原始英文值。
+ * 组合最终页面标题。
+ * 优先使用页面主动设置的标题，否则回退到路由 meta.title。
  */
-function updateDocumentTitle(title?: string) {
-    if (title) {
-        const titleKey = `nav.${title.toLowerCase()}`
-        const translated = i18n.global.t(titleKey)
-        document.title = `${translated !== titleKey ? translated : title} - ${i18n.global.t('brand.blogName')}`
-    } else {
-        document.title = i18n.global.t('brand.blogName')
-    }
+function syncDocumentTitle(routeTitle?: string) {
+    const title = customDocumentTitle || resolveRouteTitle(routeTitle)
+    document.title = title
+        ? `${title} - ${i18n.global.t('brand.blogName')}`
+        : i18n.global.t('brand.blogName')
+}
+
+/**
+ * 设置页面级自定义标题。
+ * 供文章详情这类异步页面在数据加载后同步浏览器标题。
+ *
+ * @param title 页面标题；为空时清除自定义标题。
+ */
+export function setCustomDocumentTitle(title?: string | null) {
+    customDocumentTitle = title?.trim() || null
+    syncDocumentTitle(router.currentRoute.value.meta.title as string | undefined)
 }
 
 /**
  * 路由后置守卫：根据路由 meta.title 动态设置页面标题
  */
 router.afterEach((to) => {
-    updateDocumentTitle(to.meta.title as string)
+    customDocumentTitle = null
+    syncDocumentTitle(to.meta.title as string)
 })
 
 /**
@@ -109,8 +133,7 @@ router.afterEach((to) => {
  */
 const localeRef = i18n.global.locale as unknown as Ref<string>
 watch(localeRef, () => {
-    const currentTitle = router.currentRoute.value.meta.title as string
-    updateDocumentTitle(currentTitle)
+    syncDocumentTitle(router.currentRoute.value.meta.title as string)
 })
 
 export default router
