@@ -1,160 +1,183 @@
 <!-- MermaidModal.vue - Mermaid 图表放大模态框 -->
 <script setup lang="ts">
-import {ref, computed, onMounted, onUnmounted} from 'vue'
+import {ref, computed, nextTick, onMounted, onUnmounted} from 'vue'
 import {X, ZoomIn, ZoomOut, RotateCcw} from 'lucide-vue-next'
 import {useI18n} from 'vue-i18n'
 
 const {t} = useI18n()
 
-/**
- * 模态框是否打开
- */
+const DEFAULT_SVG_WIDTH = 600
+const DEFAULT_SVG_HEIGHT = 400
+const SVG_PADDING = 16
+const ZOOM_STEP = 0.25
+const MIN_ZOOM = 0.25
+const MAX_ZOOM = 5
+
+/** 模态框是否打开 */
 const modalOpen = ref(false)
-/**
- * 模态框中渲染的 SVG 字符串（已移除固定尺寸，改由 CSS 控制）
- */
+/** 模态框中展示的 Mermaid SVG 字符串 */
 const svgContent = ref('')
-/**
- * 当前缩放倍率，默认 1 = 100%
- */
+/** 当前缩放倍率，1 = 100% */
 const zoom = ref(1)
-/**
- * SVG 原始宽高，作为缩放计算的基准
- */
+/** SVG 基准尺寸，用于计算缩放后的展示宽高 */
 const originalWidth = ref(0)
 const originalHeight = ref(0)
+/** SVG 挂载容器，用于在真实 DOM 中测量图形尺寸 */
+const svgStage = ref<HTMLElement | null>(null)
 
-/**
- * 打开 Mermaid 放大模态框
- * 1. 解析 SVG 字符串，提取原始宽高（优先 width/height 属性，其次 viewBox）
- * 2. 移除 SVG 的固定尺寸属性，改为 100% 填充容器
- * 3. 锁定 body 滚动，防止背景页面跟随滚动
- */
-const openModal = (content: string) => {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(content, 'image/svg+xml')
-  const svg = doc.querySelector('svg')
-  if (!svg) return
+/** 读取 SVG 的基础宽高，优先 width/height，其次 viewBox */
+const resolveSvgSize = (svg: SVGSVGElement) => {
+  let width = parseFloat(svg.getAttribute('width') || '0')
+  let height = parseFloat(svg.getAttribute('height') || '0')
+  const viewBox = svg.getAttribute('viewBox')?.split(/\s+/).map(Number)
 
-  // 提取原始尺寸：优先读取 width/height 属性，回退到 viewBox
-  let w = parseFloat(svg.getAttribute('width') || '0')
-  let h = parseFloat(svg.getAttribute('height') || '0')
-  if (!w || !h) {
-    const vb = svg.getAttribute('viewBox')?.split(/\s+/).map(Number)
-    if (vb && vb.length === 4) {
-      w = vb[2] ?? 0
-      h = vb[3] ?? 0
-    }
+  if ((!width || !height) && viewBox && viewBox.length === 4) {
+    width = viewBox[2] ?? 0
+    height = viewBox[3] ?? 0
   }
 
-  // 兜底默认值，避免 0 宽高导致不可见
-  originalWidth.value = w || 600
-  originalHeight.value = h || 400
-
-  // 移除固定尺寸，改为自适应容器
-  svg.removeAttribute('width')
-  svg.removeAttribute('height')
-  svg.setAttribute('style', 'width: 100%; height: 100%;')
-
-  svgContent.value = svg.outerHTML
-  zoom.value = 1
-  modalOpen.value = true
-  document.body.style.overflow = 'hidden'
+  return {
+    width: width || DEFAULT_SVG_WIDTH,
+    height: height || DEFAULT_SVG_HEIGHT,
+  }
 }
 
-/**
- * 关闭模态框并恢复页面滚动
- */
+/** 根据图形真实包围盒修正 viewBox，避免放大视图裁切右侧或底部内容 */
+const expandSvgViewBox = (svg: SVGSVGElement, width: number, height: number) => {
+  try {
+    const bbox = svg.getBBox()
+    if (bbox.width <= 0 || bbox.height <= 0) {
+      return {width, height}
+    }
+
+    const boxX = Math.floor(bbox.x - SVG_PADDING)
+    const boxY = Math.floor(bbox.y - SVG_PADDING)
+    const boxWidth = Math.ceil(bbox.width + SVG_PADDING * 2)
+    const boxHeight = Math.ceil(bbox.height + SVG_PADDING * 2)
+
+    svg.setAttribute('viewBox', `${boxX} ${boxY} ${boxWidth} ${boxHeight}`)
+    return {
+      width: Math.max(width, boxWidth),
+      height: Math.max(height, boxHeight),
+    }
+  } catch (error) {
+    console.warn('Mermaid modal bbox measure failed:', error)
+    return {width, height}
+  }
+}
+
+/** 去除 Mermaid 默认尺寸约束，交由外层容器控制缩放 */
+const applySvgLayout = (svg: SVGSVGElement) => {
+  svg.removeAttribute('width')
+  svg.removeAttribute('height')
+  svg.style.width = '100%'
+  svg.style.height = '100%'
+  svg.style.maxWidth = 'none'
+  svg.style.maxHeight = 'none'
+  svg.style.display = 'block'
+  svg.style.overflow = 'visible'
+}
+
+/** 锁定或恢复 body 滚动 */
+const setBodyScrollLocked = (locked: boolean) => {
+  document.body.style.overflow = locked ? 'hidden' : ''
+}
+
+/** 打开 Mermaid 放大模态框并在真实 DOM 中校正 SVG 尺寸 */
+const openModal = async (content: string) => {
+  svgContent.value = content
+  originalWidth.value = DEFAULT_SVG_WIDTH
+  originalHeight.value = DEFAULT_SVG_HEIGHT
+  zoom.value = 1
+  modalOpen.value = true
+  setBodyScrollLocked(true)
+
+  await nextTick()
+
+  const svg = svgStage.value?.querySelector('svg') as SVGSVGElement | null
+  if (!svg) {
+    closeModal()
+    return
+  }
+
+  const baseSize = resolveSvgSize(svg)
+  const finalSize = expandSvgViewBox(svg, baseSize.width, baseSize.height)
+  originalWidth.value = finalSize.width
+  originalHeight.value = finalSize.height
+  applySvgLayout(svg)
+}
+
+/** 关闭模态框并恢复页面滚动 */
 const closeModal = () => {
   modalOpen.value = false
   svgContent.value = ''
   zoom.value = 1
-  document.body.style.overflow = ''
+  setBodyScrollLocked(false)
 }
 
-/**
- * 根据缩放倍率计算实际显示尺寸
- */
+/** 根据缩放倍率计算实际显示尺寸 */
 const displayWidth = computed(() => originalWidth.value * zoom.value)
 const displayHeight = computed(() => originalHeight.value * zoom.value)
 
-/**
- * 放大：每次 +25%，上限 500%
- */
+/** 每次放大 25%，上限 500% */
 const zoomIn = () => {
-  zoom.value = Math.min(zoom.value + 0.25, 5)
+  zoom.value = Math.min(zoom.value + ZOOM_STEP, MAX_ZOOM)
 }
 
-/**
- * 缩小：每次 -25%，下限 25%
- */
+/** 每次缩小 25%，下限 25% */
 const zoomOut = () => {
-  zoom.value = Math.max(zoom.value - 0.25, 0.25)
+  zoom.value = Math.max(zoom.value - ZOOM_STEP, MIN_ZOOM)
 }
 
-/**
- * 重置缩放为 100%
- */
+/** 重置缩放为 100% */
 const resetZoom = () => {
   zoom.value = 1
 }
 
-/**
- * Mermaid 图表点击放大
- * 通过事件委托监听 document 的 click 事件，匹配已渲染的 .mermaid-container
- */
+/** 通过事件委托监听正文中的 Mermaid 图表点击 */
 const handleClick = (e: MouseEvent) => {
   const container = (e.target as HTMLElement).closest('.mermaid-container.mermaid-rendered') as HTMLElement | null
   if (!container) return
 
   const svg = container.querySelector('svg')
-  if (svg) {
-    openModal(svg.outerHTML)
-  }
+  if (!svg) return
+
+  openModal(svg.outerHTML).catch((error) => {
+    console.error('Mermaid modal render error:', error)
+  })
 }
 
-/**
- * ESC 键关闭模态框
- */
+/** ESC 键关闭模态框 */
 const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && modalOpen.value) {
     closeModal()
   }
 }
 
-/**
- * Ctrl/Cmd + 滚轮 缩放 Mermaid 图表
- * passive: false 允许 preventDefault 阻止浏览器默认缩放行为
- */
+/** Ctrl/Cmd + 滚轮缩放图表，并阻止浏览器默认页面缩放 */
 const handleWheel = (e: WheelEvent) => {
   if (!modalOpen.value) return
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
-    // deltaY 转换为缩放增量，每次变化约 0.1%（连续滚动体验更平滑）
     const delta = -e.deltaY * 0.001
-    const newZoom = Math.min(5, Math.max(0.25, zoom.value + delta))
+    const newZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom.value + delta))
     zoom.value = Math.round(newZoom * 100) / 100
   }
 }
 
-/**
- * 注册事件委托：Mermaid 点击放大、ESC 关闭、Ctrl+滚轮缩放
- */
+/** 注册 Mermaid 弹窗相关事件 */
 onMounted(() => {
   document.addEventListener('click', handleClick)
   document.addEventListener('keydown', handleKeydown)
   document.addEventListener('wheel', handleWheel, {passive: false})
 })
 
-/**
- * 移除事件监听并恢复页面滚动
- */
+/** 移除事件监听并恢复页面滚动 */
 onUnmounted(() => {
   document.removeEventListener('click', handleClick)
   document.removeEventListener('keydown', handleKeydown)
   document.removeEventListener('wheel', handleWheel)
-  // 确保组件卸载时恢复 body 滚动
-  document.body.style.overflow = ''
+  setBodyScrollLocked(false)
 })
 </script>
 
@@ -217,6 +240,7 @@ onUnmounted(() => {
           <div class="flex-1 overflow-auto scrollbar-thin p-6 bg-slate-50 rounded-b-xl">
             <div class="inline-flex min-h-full min-w-full items-center justify-center">
               <div
+                  ref="svgStage"
                   class="shrink-0 transition-[width,height] duration-200 [&_svg]:block [&_svg]:size-full"
                   :style="{ width: displayWidth + 'px', height: displayHeight + 'px' }"
                   v-html="svgContent"
