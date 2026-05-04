@@ -70,10 +70,19 @@ const initMermaid = async () => {
     mermaidInitialized = true
 }
 
+/** 将 data-code 中的 HTML 实体还原为 Mermaid 原始源码 */
+const decodeMermaidCode = (code: string) => {
+    return code
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+}
+
 /**
- * 渲染页面中所有未处理的 Mermaid 图表。
- * 查找 .mermaid-container:not(.mermaid-rendered)，解码 data-code 中的源码并渲染为 SVG。
- * 成功后添加 .mermaid-rendered 防止重复渲染。
+ * 渲染页面中所有尚未处理的 Mermaid 图表。
+ * 成功后添加 .mermaid-rendered，避免重复渲染。
  */
 export const renderMermaidCharts = async () => {
     await initMermaid()
@@ -86,15 +95,7 @@ export const renderMermaidCharts = async () => {
 
         try {
             const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`
-            // data-code 存的是 escaped html，需要解码回原字符串
-            const decodedCode = code
-                .replace(/&amp;/g, '&')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&quot;/g, '"')
-                .replace(/&#39;/g, "'")
-
-            const { svg } = await mermaid.render(id, decodedCode)
+            const { svg } = await mermaid.render(id, decodeMermaidCode(code))
             el.innerHTML = svg
             el.classList.add('mermaid-rendered')
         } catch (e) {
